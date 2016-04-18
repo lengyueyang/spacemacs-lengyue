@@ -1,4 +1,4 @@
-* spacemacs-private
+* spacemacs-lengyue
 My personal spacemacs private layer.
 
 #+BEGIN_SRC shell

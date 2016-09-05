@@ -16,6 +16,7 @@
       '(
         ;; package names go here
         org-mac-link
+        fcitx
         ;; realgud
         org-bullets
         org
@@ -34,6 +35,13 @@
 ;; For each package, define a function lengyueyang/init-<package-name>
 ;;
 
+
+(defun lengyueyang/init-fcitx  ()
+  (use-package fcitx
+    :defer t
+    :init
+    (fcitx-aggressive-setup)
+    ))
 
 (defun lengyueyang/init-org-caldav ()
   (use-package org-caldav
@@ -100,19 +108,19 @@
 
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
-           "* TODO %?\n %i %U" 
+           "* TODO %?\n%i%U" 
            :empty-lines 1)
           ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
-           "* INBOX %?\n  %i %U"
+           "* INBOX %?\n%i%U"
            :empty-lines 1)
           ("e" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick Notes")
-           "* NOTE %?\n  %i %U"
+           "* NOTE %?\n%i%U"
            :empty-lines 1)
           ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
-           "* TODO %?\n  %i %U"
+           "* TODO %?\n%i%U"
            :empty-lines 1)
           ("m" "Someday/Maybe" entry (file+headline org-agenda-file-gtd "Someday/Maybe")
-           "* SOMEDAY %?\n  %i %U"
+           "* SOMEDAY %?\n%i%U"
            :empty-lines 1)))
 
 
@@ -140,6 +148,7 @@
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
   (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+  
   ;; used by org-clock-sum-today-by-tags
   (defun filter-by-tags ()
     (let ((head-tags (org-get-tags-at)))
@@ -253,13 +262,3 @@
 
   )
 
-
-(defun zilongshanren/init-plain-org-wiki ()
-  (use-package plain-org-wiki
-    :init
-    (setq pow-directory "~/Emacs-lengyue/Wiki-lengyue")))
-;; Often the body of an initialize function uses `use-package'
-;; For more info on `use-package', see readme:
-;; https://github.com/jwiegley/use-package
-  ;; update the list of LaTeX classes and associated header (encoding, etc.)
-  ;; and structure

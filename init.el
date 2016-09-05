@@ -38,6 +38,7 @@ values."
      git
      github
      javascript
+;;     blog-admin
      (latex :variables latex-enable-auto-fill t)
      c-c++
      (ess :variables ess-enable-smart-equals t)

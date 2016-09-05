@@ -1,0 +1,9 @@
+# Compiled
+*.elc
+
+# Packaging
+.cask
+
+sandbox
+
+README.org

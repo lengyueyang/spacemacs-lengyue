@@ -131,22 +131,12 @@ org-files and bookmarks"
     (candidate-number-limit)
     (action . (("Open" . (lambda (x) (funcall x)))))))
 
+
 (defun lengyueyang/start-erc ()
   "Connect to IRC"
   (interactive)
   (when (y-or-n-p "Do you want to start IRC? ")
     (erc :server "irc.freenode.net" :port 6666 :nick erc-nick)))
-
-
-(defun lengyueyang//notify (title message)
-  (let ((terminal-notifier-command (executable-find "terminal-notifier")))
-    (start-process "terminal-notifier"
-                   "*terminal-notifier*"
-                   terminal-notifier-command
-                   "-title" title
-                   "-message" message
-                   "-activate" "org.gnu.Emacs"
-                   "-sender" "org.gnu.Emacs")))
 
 (defun lengyueyang//org-archive-tasks (prefix)
   (org-map-entries
@@ -154,7 +144,6 @@ org-files and bookmarks"
      (org-archive-subtree)
      (setq org-map-continue-from (outline-previous-heading)))
    (format "/%s" prefix) 'file))
-
 
 (defun lengyueyang/org-archive-all-tasks ()
   (interactive)

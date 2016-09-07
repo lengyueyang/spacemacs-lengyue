@@ -24,55 +24,56 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (auto-completion :variables
-                       auto-completion-return-key-behavior 'complete
-                       auto-completion-tab-key-behavior 'cycle
-                       auto-completion-complete-with-key-sequence nil
-                       auto-completion-complete-with-key-sequence-delay 0
-                       auto-completion-private-snippets-directory nil
-                       auto-completion-enable-snippets-in-popup t
-                       auto-completion-enable-help-tooltip t
-                       auto-completion-enable-sort-by-usage t)
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-complete-with-key-sequence-delay 0
+                      auto-completion-private-snippets-directory nil
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-sort-by-usage t)
      better-defaults
      chinese
      emacs-lisp
      git
      github
      javascript
-;;     blog-admin
+     ;;blog-admin
      (latex :variables latex-enable-auto-fill t)
      c-c++
      (ess :variables ess-enable-smart-equals t)
      racket
      (python :variables 
-              python-test-runner 'node
-              python-enable-yapf-format-on-save t)
+             python-test-runner 'node
+             python-enable-yapf-format-on-save t)
      ipython-notebook
      markdown
      org
      (shell :variables 
-         shell-default-shell 'eshell)
+            shell-default-shell 'eshell)
      (syntax-checking :variables
                       syntax-checking-enable-by-default t
                       syntax-checking-enable-tooltips t)    
      (spell-checking :variables 
-                      ;;"spell-checking-enable-auto-dictionary t"
-                      spell-checking-enable-by-default t)
+                     ;;"spell-checking-enable-auto-dictionary t"
+                     spell-checking-enable-by-default t)
      version-control
      (colors :variables
              colors-enable-nyan-cat-progress-bar t)
      lengyueyang
      pandoc
-     ;;chinese
+     
      ;;zilongshanren
      (elfeed :variables 
-              ;;elfeed-enable-web-interface t                
-              rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
+             ;;elfeed-enable-web-interface t                
+             rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(nodejs-repl
+                                      youdao-dictionary)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -185,7 +186,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -221,6 +222,12 @@ values."
    ))
 
 (defun dotspacemacs/user-init ()
+
+  (setq configuration-layer--elpa-archives
+      '(("melpa-cn" . "http://elpa.zilongshanren.com/melpa/")
+        ("org-cn"   . "http://elpa.zilongshanren.com/org/")
+        ("gnu-cn"   . "http://elpa.zilongshanren.com/gnu/")))
+
   (setq python-fill-column 99)
   (add-hook 'R-mode-hook 'smartparens-mode)
   (add-hook 'R-mode-hook 'flycheck-mode)
@@ -311,9 +318,12 @@ values."
   (global-set-key (kbd "C-SPC") 'nil)
 
 ;;  (setq fcitx-active-evil-states '(insert emacs hybrid))
-  (fcitx-aggressive-setup)
+  (fcitx-evil-turn-on)
   (fcitx-prefix-keys-add "M-m")
   (setq fcitx-use-dbus t)
+  (fcitx-M-x-turn-on)
+;;  (fcitx-shell-command-turn-on)
+  (fcitx-eval-expression-turn-on)
 
 "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after

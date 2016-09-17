@@ -43,18 +43,18 @@ values."
      c-c++
      (ess :variables ess-enable-smart-equals t)
      racket
-     (python :variables 
+     (python :variables
              python-test-runner 'node
              python-enable-yapf-format-on-save t)
      ipython-notebook
      markdown
      org
-     (shell :variables 
+     (shell :variables
             shell-default-shell 'eshell)
      (syntax-checking :variables
                       syntax-checking-enable-by-default t
-                      syntax-checking-enable-tooltips t)    
-     (spell-checking :variables 
+                      syntax-checking-enable-tooltips t)
+     (spell-checking :variables
                      ;;"spell-checking-enable-auto-dictionary t"
                      spell-checking-enable-by-default t)
      version-control
@@ -62,10 +62,11 @@ values."
              colors-enable-nyan-cat-progress-bar t)
      lengyueyang
      pandoc
-     
+     emacs-lisp
+     semantic
      ;;zilongshanren
-     (elfeed :variables 
-             ;;elfeed-enable-web-interface t                
+     (elfeed :variables
+             ;;elfeed-enable-web-interface t
              rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
      )
    ;; List of additional packages that will be installed without being
@@ -224,9 +225,9 @@ values."
 (defun dotspacemacs/user-init ()
 
   (setq configuration-layer--elpa-archives
-      '(("melpa-cn" . "http://elpa.zilongshanren.com/melpa/")
-        ("org-cn"   . "http://elpa.zilongshanren.com/org/")
-        ("gnu-cn"   . "http://elpa.zilongshanren.com/gnu/")))
+        '(("melpa-cn" . "http://elpa.zilongshanren.com/melpa/")
+          ("org-cn"   . "http://elpa.zilongshanren.com/org/")
+          ("gnu-cn"   . "http://elpa.zilongshanren.com/gnu/")))
 
   (setq python-fill-column 99)
   (add-hook 'R-mode-hook 'smartparens-mode)
@@ -245,6 +246,18 @@ values."
   (setq-default dotspacemacs-line-numbers t)
   (setq-default dotspacemacs-smartparens-strict-mode t)
 
+  (add-hook 'org-pomodoro-finished-hook
+            (lambda ()
+              (lengyueyang//org-notify "Pomodoro completed!" "Time for a break.")))
+  (add-hook 'org-pomodoro-break-finished-hook
+            (lambda ()
+              (lengyueyang//org-notify "Pomodoro Short Break Finished" "Ready for Another?")))
+  (add-hook 'org-pomodoro-long-break-finished-hook
+            (lambda ()
+              (lengyueyang//org-notify "Pomodoro Long Break Finished" "Ready for Another?")))
+  (add-hook 'org-pomodoro-killed-hook
+            (lambda ()
+              (lengyueyang//org-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
 
   "Initialization function for user code.It is called immediately after `dotspacemacs/init'.  You are free to put any user code."
   )
@@ -260,75 +273,79 @@ values."
   (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
 
   (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
-                                    ("STYLE_ALL" . "habit"))))
+                                      ("STYLE_ALL" . "habit"))))
 
 
 
   (setq org-latex-pdf-process
-     '("xelatex -interaction nonstopmode -output-directory %o %f" 
-       "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f" 
-       "xelatex -interaction nonstopmode -output-directory %o %f"
-       "xelatex -interaction nonstopmode -output-directory %o %f"))
+        '("xelatex -interaction nonstopmode -output-directory %o %f" 
+          "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f" 
+          "xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"))
 
   (setq org-agenda-files (list "~/Emacs-lengyue/GTD-lengyue"))
 
   (add-to-load-path "~/.spacemacs.d/package/org-subtask-reset")
   (require 'org-subtask-reset)
 
-;; It's wrong to load org-archive-subtree-hierarchical, so add here
+  (add-to-load-path "~/.spacemacs.d/package/org-checklist")
+  (require 'org-checklist)
+
+  ;; It's wrong to load org-archive-subtree-hierarchical, so add here
   (load "~/.spacemacs.d/package/org-archive-subtree-hierarchical/org-archive-subtree-hierarchical.el")
 
   (add-to-load-path "~/.spacemacs.d/package/blog-admin")
   (require 'blog-admin)
 
-;;  (setq blog-admin-backend-type 'org-page)
-;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
-;;  (setq blog-admin-backend-new-post-in-drafts t)
-;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
-;;  (setq blog-admin-backend-org-page-drafts "_drafts")
+  ;;  (setq blog-admin-backend-type 'org-page)
+  ;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
+  ;;  (setq blog-admin-backend-new-post-in-drafts t)
+  ;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
+  ;;  (setq blog-admin-backend-org-page-drafts "_drafts")
 
-;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
-;;  (setq op/site-domain "http://lengyueyang.github.io") 
-;;  (setq op/personal-disqus-shortname "lengyueyang")
+  ;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
+  ;;  (setq op/site-domain "http://lengyueyang.github.io") 
+  ;;  (setq op/personal-disqus-shortname "lengyueyang")
 
   (setq blog-admin-backend-type 'hexo)
   (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
   (setq blog-admin-backend-new-post-in-drafts t)
   (setq blog-admin-backend-new-post-with-same-name-dir t)
 
-;;  (with-eval-after-load 'org-agenda
-;;    (define-key org-agenda-mode-map (kbd "RET") 'org-agenda-goto))
+  ;;  (with-eval-after-load 'org-agenda
+  ;;    (define-key org-agenda-mode-map (kbd "RET") 'org-agenda-goto))
 
-;;  (global-linum-mode t)
-;;  (add-to-load-path "~/.spacemacs.d/package/ox-pandoc")
-;;  (require 'ox-pandoc)
+  ;;  (global-linum-mode t)
+  ;;  (add-to-load-path "~/.spacemacs.d/package/ox-pandoc")
+  ;;  (require 'ox-pandoc)
 
 
   (require 'org-notify)
   (org-notify-start)
   (org-notify-add 'appt
-                  '(:time "-30d" :period "3h" :duration 100
-                    :actions (-message -ding))
+                  '(:time "-1s" :period "20s" :duration 10
+                          :actions (-message -ding))
                   '(:time "15m" :period "2m" :duration 100
-                    :actions -notify)
-                  '(:time "2h" :period "5m" :actions -message)
+                          :actions -notify)
+                  '(:time "2h" :period "10m" :actions -message)
                   '(:time "3d" :period "12h" :actions -message)
-                  '(:time "7d" :actions -email))
+                  '(:time "7d" :period "24h" :actions -message)
+                  '(:time "30d" :actions -email))
 
   (global-set-key (kbd "C-SPC") 'nil)
 
-;;  (setq fcitx-active-evil-states '(insert emacs hybrid))
+  ;;  (setq fcitx-active-evil-states '(insert emacs hybrid))
   (fcitx-evil-turn-on)
   (fcitx-prefix-keys-add "M-m")
   (setq fcitx-use-dbus t)
   (fcitx-M-x-turn-on)
-;;  (fcitx-shell-command-turn-on)
+  ;;  (fcitx-shell-command-turn-on)
   (fcitx-eval-expression-turn-on)
 
-"Configuration function for user code.
+  "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-)
+  )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.

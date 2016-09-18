@@ -38,7 +38,8 @@ values."
      git
      github
      javascript
-     ;;blog-admin
+     bibtex
+     ivy
      (latex :variables latex-enable-auto-fill t)
      c-c++
      (ess :variables ess-enable-smart-equals t)
@@ -335,12 +336,16 @@ values."
   (global-set-key (kbd "C-SPC") 'nil)
 
   ;;  (setq fcitx-active-evil-states '(insert emacs hybrid))
-  (fcitx-evil-turn-on)
-  (fcitx-prefix-keys-add "M-m")
-  (setq fcitx-use-dbus t)
-  (fcitx-M-x-turn-on)
+  ;;(fcitx-evil-turn-on)
+  ;;(fcitx-prefix-keys-add "M-m")
+  ;;(setq fcitx-use-dbus t)
+  ;;(fcitx-M-x-turn-on)
   ;;  (fcitx-shell-command-turn-on)
-  (fcitx-eval-expression-turn-on)
+  ;;(fcitx-eval-expression-turn-on)
+
+  (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
+        org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
+        org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
 
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after

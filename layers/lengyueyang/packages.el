@@ -15,7 +15,6 @@
 (setq lengyueyang-packages
       '(
         ;; package names go here
-        org-mac-link
         fcitx
         ;; realgud
         org-bullets
@@ -47,11 +46,6 @@
   (use-package org-caldav
     ))
 
-(defun lengyueyang/init-org-mac-link  ()
-  (use-package org-mac-link
-    :defer t
-    :init (add-hook'org-mode-hook (lambda () (require 'org-mac-link)))
-    ))
 
 
 (defun lengyueyang/init-uimage ()

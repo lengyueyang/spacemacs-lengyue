@@ -65,6 +65,7 @@ values."
      pandoc
      emacs-lisp
      semantic
+     graphviz
      ;;zilongshanren
      (elfeed :variables
              ;;elfeed-enable-web-interface t
@@ -247,18 +248,7 @@ values."
   (setq-default dotspacemacs-line-numbers t)
   (setq-default dotspacemacs-smartparens-strict-mode t)
 
-  (add-hook 'org-pomodoro-finished-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro completed!" "Time for a break.")))
-  (add-hook 'org-pomodoro-break-finished-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro Short Break Finished" "Ready for Another?")))
-  (add-hook 'org-pomodoro-long-break-finished-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro Long Break Finished" "Ready for Another?")))
-  (add-hook 'org-pomodoro-killed-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+
 
   "Initialization function for user code.It is called immediately after `dotspacemacs/init'.  You are free to put any user code."
   )
@@ -321,6 +311,8 @@ values."
   ;;  (require 'ox-pandoc)
 
 
+
+
   (require 'org-notify)
   (org-notify-start)
   (org-notify-add 'appt
@@ -333,8 +325,49 @@ values."
                   '(:time "7d" :period "24h" :actions -message)
                   '(:time "30d" :actions -email))
 
+  (defun notify-osx (title message)
+    (call-process "gol"
+                  nil 0 nil
+                  "-group" "Emacs"
+                  "-title" title
+                  "-sender" "org.gnu.Emacs"
+                  "-message" message
+                  "-activate" "oeg.gnu.Emacs"))
+  (add-hook 'org-pomodoro-finished-hook
+            (lambda ()
+              (notify-osx "Pomodoro completed!" "Time for a break.")))
+  (add-hook 'org-pomodoro-break-finished-hook
+            (lambda ()
+              (notify-osx "Pomodoro Short Break Finished" "Ready for Another?")))
+  (add-hook 'org-pomodoro-long-break-finished-hook
+            (lambda ()
+              (notify-osx "Pomodoro Long Break Finished" "Ready for Another?")))
+  (add-hook 'org-pomodoro-killed-hook
+            (lambda ()
+              (notify-osx "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+  ;;  (add-hook 'org-pomodoro-finished-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro completed!" "Time for a break.")))
+  ;;(add-hook 'org-pomodoro-break-finished-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro Short Break Finished" "Ready for Another?")))
+  ;;(add-hook 'org-pomodoro-long-break-finished-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro Long Break Finished" "Ready for Another?")))
+  ;;(add-hook 'org-pomodoro-killed-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+
   (global-set-key (kbd "C-SPC") 'nil)
 
+  (defun org-mode-my-init ()
+    (define-key org-mode-map (kbd "×") (kbd "*"))
+    (define-key org-mode-map (kbd "－") (kbd "-"))
+    (define-key org-mode-map (kbd "（") (kbd ")"))
+    (define-key org-mode-map (kbd "）") (kbd ")"))
+    )
+
+  (add-hook 'org-mode-hook 'org-mode-my-init)
   ;;  (setq fcitx-active-evil-states '(insert emacs hybrid))
   ;;(fcitx-evil-turn-on)
   ;;(fcitx-prefix-keys-add "M-m")
@@ -346,6 +379,29 @@ values."
   (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
         org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
         org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+
+  (setq org-plantuml-jar-path
+        (expand-file-name "/opt/plantuml/plantuml.jar"))
+  ;; (setq org-ditta-jar-path
+  ;;  (expand-file-name "/usr/share/java/ditaa/ditaa-0_9.jar"))
+  (setq org-confirm-babel-evaluate nil)
+
+  (require 'org-latex)
+  (setq org-export-latex-listings t)
+  (add-to-list 'org-export-latex-packages-alist
+               '(("AUTO" "inputenc" t)))
+  (add-to-list 'org-export-latex-classes
+               '("org-article"
+                 "\\documentclass{org-article}
+             [NO-DEFAULT-PACKAGES]
+             [PACKAGES]
+             [EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
 
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -365,7 +421,12 @@ layers configuration. You are free to put any user code."
  '(magit-log-section-arguments (quote ("--decorate" "-n256")))
  '(org-agenda-files
    (quote
-    ("/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org"))))
+    ("/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org")))
+ '(org-pomodoro-length 1)
+ '(org-pomodoro-short-break-length 1)
+ '(package-selected-packages
+   (quote
+    (with-editor skewer-mode fringe-helper git-gutter+ git-gutter julia-mode noflet powerline elfeed websocket chinese-pyim-basedict biblio-core counsel ess smartparens flycheck projectile magit js2-mode ivy graphviz-dot-mode xterm-color ws-butler window-numbering which-key volatile-highlights use-package toc-org spaceline shell-pop restart-emacs rainbow-delimiters racket-mode pyvenv py-isort pip-requirements persp-mode paradox pandoc-mode ox-pandoc orgit org-ref org-pomodoro alert org-plus-contrib open-junk-file neotree multi-term move-text markdown-toc markdown-mode magit-gitflow macrostep js2-refactor info+ indent-guide ido-vertical-mode hl-todo highlight-numbers help-fns+ helm-make helm-bibtex helm helm-core google-translate github-clone gitconfig-mode git-timemachine git-messenger git-link expand-region exec-path-from-shell evil-unimpaired evil-surround evil-search-highlight-persist evil-nerd-commenter evil-mc evil-matchit evil-magit evil-iedit-state iedit evil-exchange evil-escape eshell-prompt-extras elfeed-web elfeed-org org yapfify wgrep web-beautify vi-tilde-fringe uuidgen uimage stickyfunc-enhance srefactor spinner spacemacs-theme smex smeargle rainbow-mode rainbow-identifiers quelpa pytest pyenv-mode pcre2el parsebib parent-mode pangu-spacing org-projectile org-present org-download org-caldav org-bullets nodejs-repl mwim multiple-cursors mmm-mode magit-gh-pulls lorem-ipsum log4e livid-mode live-py-mode linum-relative link-hint key-chord json-mode js-doc ivy-hydra hy-mode hungry-delete htmlize hl-sexp highlight-parentheses highlight-indentation golden-ratio gnuplot gntp gitignore-mode github-search github-browse-file gitattributes-mode git-gutter-fringe git-gutter-fringe+ gist gh-md flyspell-correct-ivy flycheck-pos-tip flx-ido find-by-pinyin-dired fill-column-indicator fancy-battery faceup eyebrowse evil-visualstar evil-visual-mark-mode evil-tutor evil-numbers evil-lisp-state evil-indent-plus evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z esh-help elisp-slime-nav elfeed-goodies ein dumb-jump disaster diminish diff-hl define-word cython-mode counsel-projectile company-tern company-statistics company-quickhelp company-c-headers company-auctex company-anaconda column-enforce-mode color-identifiers-mode coffee-mode cmake-mode clean-aindent-mode clang-format chinese-pyim bind-key biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-pinyin ace-link ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -267,10 +267,224 @@ values."
                                       ("STYLE_ALL" . "habit"))))
 
 
+  (add-to-list 'org-export-latex-classes
+               '("cn-article"
+                 "\\documentclass[10pt,a4paper]{article}
+\\usepackage{graphicx}
+\\usepackage{xcolor}
+\\usepackage{xeCJK}
+\\usepackage{lmodern}
+\\usepackage{verbatim}
+\\usepackage{fixltx2e}
+\\usepackage{longtable}
+\\usepackage{float}
+\\usepackage{tikz}
+\\usepackage{wrapfig}
+\\usepackage{soul}
+\\usepackage{textcomp}
+\\usepackage{listings}
+\\usepackage{geometry}
+\\usepackage{algorithm}
+\\usepackage{algorithmic}
+\\usepackage{marvosym}
+\\usepackage{wasysym}
+\\usepackage{latexsym}
+\\usepackage{natbib}
+\\usepackage{fancyhdr}
+\\usepackage[xetex,colorlinks=true,CJKbookmarks=true,
+linkcolor=blue,
+urlcolor=blue,
+menucolor=blue]{hyperref}
+\\usepackage{fontspec,xunicode,xltxtra}
+\\setmainfont[BoldFont=Adobe Heiti Std]{Adobe Song Std}  
+\\setsansfont[BoldFont=Adobe Heiti Std]{AR PL UKai CN}  
+\\setmonofont{Bitstream Vera Sans Mono}  
+\\newcommand\\fontnamemono{AR PL UKai CN}%等宽字体
+\\newfontinstance\\MONO{\\fontnamemono}
+\\newcommand{\\mono}[1]{{\\MONO #1}}
+\\setCJKmainfont[Scale=0.9]{Adobe Heiti Std}%中文字体
+\\setCJKmonofont[Scale=0.9]{Adobe Heiti Std}
+\\hypersetup{unicode=true}
+\\geometry{a4paper, textwidth=6.5in, textheight=10in,
+marginparsep=7pt, marginparwidth=.6in}
+\\definecolor{foreground}{RGB}{220,220,204}%浅灰
+\\definecolor{background}{RGB}{62,62,62}%浅黑
+\\definecolor{preprocess}{RGB}{250,187,249}%浅紫
+\\definecolor{var}{RGB}{239,224,174}%浅肉色
+\\definecolor{string}{RGB}{154,150,230}%浅紫色
+\\definecolor{type}{RGB}{225,225,116}%浅黄
+\\definecolor{function}{RGB}{140,206,211}%浅天蓝
+\\definecolor{keyword}{RGB}{239,224,174}%浅肉色
+\\definecolor{comment}{RGB}{180,98,4}%深褐色
+\\definecolor{doc}{RGB}{175,215,175}%浅铅绿
+\\definecolor{comdil}{RGB}{111,128,111}%深灰
+\\definecolor{constant}{RGB}{220,162,170}%粉红
+\\definecolor{buildin}{RGB}{127,159,127}%深铅绿
+\\punctstyle{kaiming}
+\\title{}
+\\fancyfoot[C]{\\bfseries\\thepage}
+\\chead{\\MakeUppercase\\sectionmark}
+\\pagestyle{fancy}
+\\tolerance=1000
+[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]"
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+("\\paragraph{%s}" . "\\paragraph*{%s}")
+("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+;; 使用Listings宏包格式化源代码(只是把代码框用listing环境框起来，还需要额外的设置)
+(setq org-export-latex-listings t)
+;; Options for \lset command（reference to listing Manual)
+(setq org-export-latex-listings-options
+      '(
+        ("basicstyle" "\\color{foreground}\\small\\mono")           ; 源代码字体样式
+        ("keywordstyle" "\\color{function}\\bfseries\\small\\mono") ; 关键词字体样式
+        ("identifierstyle" "\\color{doc}\\small\\mono")
+        ("commentstyle" "\\color{comment}\\small\\itshape")         ; 批注样式
+        ("stringstyle" "\\color{string}\\small")                    ; 字符串样式
+        ("showstringspaces" "false")                                ; 字符串空格显示
+        ("numbers" "left")                                          ; 行号显示
+        ("numberstyle" "\\color{preprocess}")                       ; 行号样式
+        ("stepnumber" "1")                                          ; 行号递增
+        ("backgroundcolor" "\\color{background}")                   ; 代码框背景色
+        ("tabsize" "4")                                             ; TAB等效空格数
+        ("captionpos" "t")                                          ; 标题位置 top or buttom(t|b)
+        ("breaklines" "true")                                       ; 自动断行
+        ("breakatwhitespace" "true")                                ; 只在空格分行
+        ("showspaces" "false")                                      ; 显示空格
+        ("columns" "flexible")                                      ; 列样式
+        ("frame" "single")                                          ; 代码框：阴影盒
+        ("frameround" "tttt")                                       ; 代码框： 圆角
+        ("framesep" "0pt")
+        ("framerule" "8pt")
+        ("rulecolor" "\\color{background}")
+        ("fillcolor" "\\color{white}")
+        ("rulesepcolor" "\\color{comdil}")
+        ("framexleftmargin" "10mm")
+        ))
+
+                                        ; org-mode export to latex
+  (require 'ox-latex)
+  (setq org-export-latex-listings t)
+                                        ; org-mode source code setup in exporting to latex
+  (add-to-list 'org-latex-listings '("" "listings"))
+  (add-to-list 'org-latex-listings '("" "color"))
+
+  (add-to-list 'org-latex-packages-alist
+               '("" "hyperref" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "xcolor" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "listings" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "fontspec" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "indentfirst" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "xunicode" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "amsmath"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "graphicx" t))
+
+  (add-to-list 'org-latex-classes
+               '("my-org-book-zh"
+                 "\\documentclass{book}
+  \\usepackage[slantfont, boldfont]{xeCJK}
+  % chapter set
+  \\usepackage[Lenny]{fncychap}
+  [NO-DEFAULT-PACKAGES]
+  [PACKAGES]
+  \\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setCJKsansfont{WenQuanYi Micro Hei}
+  \\setCJKmonofont{WenQuanYi Micro Hei Mono}
+  \\parindent 2em
+
+  \\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setsansfont{WenQuanYi Micro Hei}
+  \\setmonofont{WenQuanYi Micro Hei Mono}
+
+  %\\setmainfont{DejaVu Sans} % 英文衬线字体
+  %\\setsansfont{DejaVu Serif} % 英文无衬线字体
+  %\\setmonofont{DejaVu Sans Mono} % 英文等宽字体
+  %\\punctstyle{DejaVu Sans} % 开明式标点格式
+  \\defaultfontfeatures{Mapping=tex-text} %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+
+  % 中文断行
+  \\XeTeXlinebreaklocale \"zh\"
+  \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+  % 代码设置
+  \\lstset{numbers=left,
+  numberstyle= \\tiny,
+  keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+  frame=shadowbox,
+  breaklines=true,
+  rulesepcolor= \\color{ red!20!green!20!blue!20}
+  }
+
+  [EXTRA]
+  "
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (add-to-list 'org-latex-classes
+               '("my-org-article-zh"
+                 "\\documentclass{article}
+  \\usepackage[slantfont, boldfont]{xeCJK}
+  [NO-DEFAULT-PACKAGES]
+  [PACKAGES]
+  \\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setCJKsansfont{WenQuanYi Micro Hei}
+  \\setCJKmonofont{WenQuanYi Micro Hei Mono} 
+
+  \\parindent 2em
+
+  \\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setsansfont{WenQuanYi Micro Hei}
+  \\setmonofont{WenQuanYi Micro Hei Mono} 
+
+  %\\setmainfont{DejaVu Sans} % 英文衬线字体
+  %\\setsansfont{DejaVu Serif} % 英文无衬线字体
+  %\\setmonofont{DejaVu Sans Mono} % 英文等宽字体
+  %\\punctstyle{DejaVu Sans} % 开明式标点格式
+ 
+ 
+  \\defaultfontfeatures{Mapping=tex-text} %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+ 
+  % 中文断行
+  \\XeTeXlinebreaklocale \"zh\"
+  \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+  % 代码设置
+  \\lstset{numbers=left, 
+  numberstyle= \\tiny, 
+  keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50}, 
+  frame=shadowbox, 
+  breaklines=true,
+  rulesepcolor= \\color{ red!20!green!20!blue!20} 
+  } 
+
+  [EXTRA]
+  "
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+
 
   (setq org-latex-pdf-process
-        '("xelatex -interaction nonstopmode -output-directory %o %f" 
-          "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f" 
+        '("xelatex -interaction nonstopmode -output-directory %o %f"
+          ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+          "bibtex %b"
           "xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"))
 
@@ -363,7 +577,7 @@ values."
   (defun org-mode-my-init ()
     (define-key org-mode-map (kbd "×") (kbd "*"))
     (define-key org-mode-map (kbd "－") (kbd "-"))
-    (define-key org-mode-map (kbd "（") (kbd ")"))
+    (define-key org-mode-map (kbd "（") (kbd "("))
     (define-key org-mode-map (kbd "）") (kbd ")"))
     )
 
@@ -421,12 +635,12 @@ layers configuration. You are free to put any user code."
  '(magit-log-section-arguments (quote ("--decorate" "-n256")))
  '(org-agenda-files
    (quote
-    ("/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org")))
+    ("/media/My Data/DCH/CPG/肺癌临床路径/肺癌临床路径.org" "/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org")))
  '(org-pomodoro-length 1)
  '(org-pomodoro-short-break-length 1)
  '(package-selected-packages
    (quote
-    (with-editor skewer-mode fringe-helper git-gutter+ git-gutter julia-mode noflet powerline elfeed websocket chinese-pyim-basedict biblio-core counsel ess smartparens flycheck projectile magit js2-mode ivy graphviz-dot-mode xterm-color ws-butler window-numbering which-key volatile-highlights use-package toc-org spaceline shell-pop restart-emacs rainbow-delimiters racket-mode pyvenv py-isort pip-requirements persp-mode paradox pandoc-mode ox-pandoc orgit org-ref org-pomodoro alert org-plus-contrib open-junk-file neotree multi-term move-text markdown-toc markdown-mode magit-gitflow macrostep js2-refactor info+ indent-guide ido-vertical-mode hl-todo highlight-numbers help-fns+ helm-make helm-bibtex helm helm-core google-translate github-clone gitconfig-mode git-timemachine git-messenger git-link expand-region exec-path-from-shell evil-unimpaired evil-surround evil-search-highlight-persist evil-nerd-commenter evil-mc evil-matchit evil-magit evil-iedit-state iedit evil-exchange evil-escape eshell-prompt-extras elfeed-web elfeed-org org yapfify wgrep web-beautify vi-tilde-fringe uuidgen uimage stickyfunc-enhance srefactor spinner spacemacs-theme smex smeargle rainbow-mode rainbow-identifiers quelpa pytest pyenv-mode pcre2el parsebib parent-mode pangu-spacing org-projectile org-present org-download org-caldav org-bullets nodejs-repl mwim multiple-cursors mmm-mode magit-gh-pulls lorem-ipsum log4e livid-mode live-py-mode linum-relative link-hint key-chord json-mode js-doc ivy-hydra hy-mode hungry-delete htmlize hl-sexp highlight-parentheses highlight-indentation golden-ratio gnuplot gntp gitignore-mode github-search github-browse-file gitattributes-mode git-gutter-fringe git-gutter-fringe+ gist gh-md flyspell-correct-ivy flycheck-pos-tip flx-ido find-by-pinyin-dired fill-column-indicator fancy-battery faceup eyebrowse evil-visualstar evil-visual-mark-mode evil-tutor evil-numbers evil-lisp-state evil-indent-plus evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z esh-help elisp-slime-nav elfeed-goodies ein dumb-jump disaster diminish diff-hl define-word cython-mode counsel-projectile company-tern company-statistics company-quickhelp company-c-headers company-auctex company-anaconda column-enforce-mode color-identifiers-mode coffee-mode cmake-mode clean-aindent-mode clang-format chinese-pyim bind-key biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-pinyin ace-link ac-ispell))))
+    (anaconda-mode yasnippet magit-popup git-commit async f s with-editor skewer-mode fringe-helper git-gutter+ git-gutter julia-mode noflet powerline elfeed websocket chinese-pyim-basedict biblio-core counsel ess smartparens flycheck projectile magit js2-mode ivy graphviz-dot-mode xterm-color ws-butler window-numbering which-key volatile-highlights use-package toc-org spaceline shell-pop restart-emacs rainbow-delimiters racket-mode pyvenv py-isort pip-requirements persp-mode paradox pandoc-mode ox-pandoc orgit org-ref org-pomodoro alert org-plus-contrib open-junk-file neotree multi-term move-text markdown-toc markdown-mode magit-gitflow macrostep js2-refactor info+ indent-guide ido-vertical-mode hl-todo highlight-numbers help-fns+ helm-make helm-bibtex helm helm-core google-translate github-clone gitconfig-mode git-timemachine git-messenger git-link expand-region exec-path-from-shell evil-unimpaired evil-surround evil-search-highlight-persist evil-nerd-commenter evil-mc evil-matchit evil-magit evil-iedit-state iedit evil-exchange evil-escape eshell-prompt-extras elfeed-web elfeed-org org yapfify wgrep web-beautify vi-tilde-fringe uuidgen uimage stickyfunc-enhance srefactor spinner spacemacs-theme smex smeargle rainbow-mode rainbow-identifiers quelpa pytest pyenv-mode pcre2el parsebib parent-mode pangu-spacing org-projectile org-present org-download org-caldav org-bullets nodejs-repl mwim multiple-cursors mmm-mode magit-gh-pulls lorem-ipsum log4e livid-mode live-py-mode linum-relative link-hint key-chord json-mode js-doc ivy-hydra hy-mode hungry-delete htmlize hl-sexp highlight-parentheses highlight-indentation golden-ratio gnuplot gntp gitignore-mode github-search github-browse-file gitattributes-mode git-gutter-fringe git-gutter-fringe+ gist gh-md flyspell-correct-ivy flycheck-pos-tip flx-ido find-by-pinyin-dired fill-column-indicator fancy-battery faceup eyebrowse evil-visualstar evil-visual-mark-mode evil-tutor evil-numbers evil-lisp-state evil-indent-plus evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z esh-help elisp-slime-nav elfeed-goodies ein dumb-jump disaster diminish diff-hl define-word cython-mode counsel-projectile company-tern company-statistics company-quickhelp company-c-headers company-auctex company-anaconda column-enforce-mode color-identifiers-mode coffee-mode cmake-mode clean-aindent-mode clang-format chinese-pyim bind-key biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-pinyin ace-link ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

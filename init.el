@@ -65,6 +65,7 @@ values."
      pandoc
      emacs-lisp
      semantic
+     graphviz
      ;;zilongshanren
      (elfeed :variables
              ;;elfeed-enable-web-interface t
@@ -247,27 +248,16 @@ values."
   (setq-default dotspacemacs-line-numbers t)
   (setq-default dotspacemacs-smartparens-strict-mode t)
 
-  (add-hook 'org-pomodoro-finished-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro completed!" "Time for a break.")))
-  (add-hook 'org-pomodoro-break-finished-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro Short Break Finished" "Ready for Another?")))
-  (add-hook 'org-pomodoro-long-break-finished-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro Long Break Finished" "Ready for Another?")))
-  (add-hook 'org-pomodoro-killed-hook
-            (lambda ()
-              (lengyueyang//org-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+
 
   "Initialization function for user code.It is called immediately after `dotspacemacs/init'.  You are free to put any user code."
   )
 
 (defun dotspacemacs/user-config ()
 
-  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) 
-  (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil))) 
-  (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil))) 
+  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+  (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
+  (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
 
   (spacemacs//set-monospaced-font   "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
 
@@ -278,9 +268,209 @@ values."
 
 
 
+
+  (setq org-confirm-babel-evaluate nil)
+
+  ;;org-mode export to latex
+  (require 'ox-latex)
+  (setq org-export-latex-listings t)
+
+  ;;org-mode source code setup in exporting to latex
+  (add-to-list 'org-latex-listings '("" "listings"))
+  (add-to-list 'org-latex-listings '("" "color"))
+
+  (add-to-list 'org-latex-packages-alist
+               '("" "xcolor" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "listings" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "fontspec" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "indentfirst" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "xunicode" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "geometry"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "float"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "longtable"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "tikz"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "fancyhdr"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "textcomp"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "amsmath"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "tabularx" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "booktabs" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "grffile" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "wrapfig" t))
+  (add-to-list 'org-latex-packages-alist
+               '("normalem" "ulem" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "amssymb" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "capt-of" t))
+  (add-to-list 'org-latex-packages-alist
+               '("figuresright" "rotating" t))
+  (add-to-list 'org-latex-packages-alist
+               '("Lenny" "fncychap" t))
+
+  (add-to-list 'org-latex-classes
+               '("lengyue-org-book"
+                 "\\documentclass{book}
+\\usepackage[slantfont, boldfont]{xeCJK}
+% chapter set
+\\usepackage{titlesec}
+\\usepackage{hyperref}
+
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+
+\\setlength{\parindent}{2em}
+
+\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+\\setCJKsansfont{WenQuanYi Micro Hei}
+\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+\\setmainfont{DejaVu Sans} % 英文衬线字体
+\\setsansfont{DejaVu Serif} % 英文无衬线字体
+\\setmonofont{DejaVu Sans Mono}
+%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+%\\setsansfont{WenQuanYi Micro Hei}
+%\\setmonofont{WenQuanYi Micro Hei Mono}
+
+%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+\\defaultfontfeatures{Mapping=tex-text}
+
+% 中文断行
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+% 代码设置
+\\lstset{numbers=left,
+numberstyle= \\tiny,
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+frame=shadowbox,
+breaklines=true,
+rulesepcolor= \\color{ red!20!green!20!blue!20}
+}
+
+[EXTRA]
+"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (add-to-list 'org-latex-classes
+               '("lengyue-org-article"
+                 "\\documentclass{article}
+\\usepackage[slantfont, boldfont]{xeCJK}
+\\usepackage{titlesec}
+\\usepackage{hyperref}
+
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+
+\\parindent 2em
+
+\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+\\setCJKsansfont{WenQuanYi Micro Hei}
+\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+\\setmainfont{DejaVu Sans} % 英文衬线字体
+\\setsansfont{DejaVu Serif} % 英文无衬线字体
+\\setmonofont{DejaVu Sans Mono}
+%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+%\\setsansfont{WenQuanYi Micro Hei}
+%\\setmonofont{WenQuanYi Micro Hei Mono}
+
+%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+\\defaultfontfeatures{Mapping=tex-text}
+
+% 中文断行
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+% 代码设置
+\\lstset{numbers=left,
+numberstyle= \\tiny,
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+frame=shadowbox,
+breaklines=true,
+rulesepcolor= \\color{ red!20!green!20!blue!20}
+}
+
+[EXTRA]
+"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (add-to-list 'org-latex-classes
+               '("lengyue-org-beamer"
+                 "\\documentclass{beamer}
+\\usepackage[slantfont, boldfont]{xeCJK}
+% beamer set
+\\usepackage[none]{hyphenat}
+\\usepackage[abs]{overpic}
+
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+
+\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+\\setCJKsansfont{WenQuanYi Micro Hei}
+\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+\\setmainfont{DejaVu Sans} % 英文衬线字体
+\\setsansfont{DejaVu Serif} % 英文无衬线字体
+\\setmonofont{DejaVu Sans Mono}
+%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+%\\setsansfont{WenQuanYi Micro Hei}
+%\\setmonofont{WenQuanYi Micro Hei Mono}
+
+%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+\\defaultfontfeatures{Mapping=tex-text}
+
+% 中文断行
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+% 代码设置
+\\lstset{numbers=left,
+numberstyle= \\tiny,
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+frame=shadowbox,
+breaklines=true,
+rulesepcolor= \\color{ red!20!green!20!blue!20}
+}
+
+[EXTRA]
+"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+
+
+
   (setq org-latex-pdf-process
-        '("xelatex -interaction nonstopmode -output-directory %o %f" 
-          "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f" 
+        '("xelatex -interaction nonstopmode -output-directory %o %f"
+          ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+          "bibtex %b"
           "xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"))
 
@@ -321,6 +511,8 @@ values."
   ;;  (require 'ox-pandoc)
 
 
+
+
   (require 'org-notify)
   (org-notify-start)
   (org-notify-add 'appt
@@ -333,8 +525,49 @@ values."
                   '(:time "7d" :period "24h" :actions -message)
                   '(:time "30d" :actions -email))
 
+  (defun notify-osx (title message)
+    (call-process "gol"
+                  nil 0 nil
+                  "-group" "Emacs"
+                  "-title" title
+                  "-sender" "org.gnu.Emacs"
+                  "-message" message
+                  "-activate" "oeg.gnu.Emacs"))
+  (add-hook 'org-pomodoro-finished-hook
+            (lambda ()
+              (notify-osx "Pomodoro completed!" "Time for a break.")))
+  (add-hook 'org-pomodoro-break-finished-hook
+            (lambda ()
+              (notify-osx "Pomodoro Short Break Finished" "Ready for Another?")))
+  (add-hook 'org-pomodoro-long-break-finished-hook
+            (lambda ()
+              (notify-osx "Pomodoro Long Break Finished" "Ready for Another?")))
+  (add-hook 'org-pomodoro-killed-hook
+            (lambda ()
+              (notify-osx "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+  ;;  (add-hook 'org-pomodoro-finished-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro completed!" "Time for a break.")))
+  ;;(add-hook 'org-pomodoro-break-finished-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro Short Break Finished" "Ready for Another?")))
+  ;;(add-hook 'org-pomodoro-long-break-finished-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro Long Break Finished" "Ready for Another?")))
+  ;;(add-hook 'org-pomodoro-killed-hook
+  ;;  (lambda ()
+  ;;  (lengyueyang//org-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+
   (global-set-key (kbd "C-SPC") 'nil)
 
+  (defun org-mode-my-init ()
+    (define-key org-mode-map (kbd "×") (kbd "*"))
+    (define-key org-mode-map (kbd "－") (kbd "-"))
+    (define-key org-mode-map (kbd "（") (kbd "("))
+    (define-key org-mode-map (kbd "）") (kbd ")"))
+    )
+
+  (add-hook 'org-mode-hook 'org-mode-my-init)
   ;;  (setq fcitx-active-evil-states '(insert emacs hybrid))
   ;;(fcitx-evil-turn-on)
   ;;(fcitx-prefix-keys-add "M-m")
@@ -346,6 +579,12 @@ values."
   (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
         org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
         org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+
+  (setq org-plantuml-jar-path
+        (expand-file-name "/opt/plantuml/plantuml.jar"))
+  ;; (setq org-ditta-jar-path
+  ;;  (expand-file-name "/usr/share/java/ditaa/ditaa-0_9.jar"))
+
 
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -359,13 +598,19 @@ layers configuration. You are free to put any user code."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-engine (quote xetex))
  '(custom-safe-themes
    (quote
     ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default)))
  '(magit-log-section-arguments (quote ("--decorate" "-n256")))
  '(org-agenda-files
    (quote
-    ("/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org"))))
+    ("/media/My Data/DCH/CPG/肺癌临床路径/肺癌临床路径.org" "/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org")))
+ '(org-pomodoro-length 1)
+ '(org-pomodoro-short-break-length 1)
+ '(package-selected-packages
+   (quote
+    (youdao-dictionary names chinese-word-at-point smooth-scrolling py-yapf page-break-lines org-repo-todo leuven-theme helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-gitignore helm-flyspell helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag fcitx buffer-move bracketed-paste ace-jump-helm-line swiper auctex anzu undo-tree flyspell-correct dash ht ivy-purpose window-purpose imenu-list hide-comnt anaconda-mode yasnippet magit-popup git-commit async f s with-editor skewer-mode fringe-helper git-gutter+ git-gutter julia-mode noflet powerline elfeed websocket chinese-pyim-basedict biblio-core counsel ess smartparens flycheck projectile magit js2-mode ivy graphviz-dot-mode xterm-color ws-butler window-numbering which-key volatile-highlights use-package toc-org spaceline shell-pop restart-emacs rainbow-delimiters racket-mode pyvenv py-isort pip-requirements persp-mode paradox pandoc-mode ox-pandoc orgit org-ref org-pomodoro alert org-plus-contrib open-junk-file neotree multi-term move-text markdown-toc markdown-mode magit-gitflow macrostep js2-refactor info+ indent-guide ido-vertical-mode hl-todo highlight-numbers help-fns+ helm-make helm-bibtex helm helm-core google-translate github-clone gitconfig-mode git-timemachine git-messenger git-link expand-region exec-path-from-shell evil-unimpaired evil-surround evil-search-highlight-persist evil-nerd-commenter evil-mc evil-matchit evil-magit evil-iedit-state iedit evil-exchange evil-escape eshell-prompt-extras elfeed-web elfeed-org org yapfify wgrep web-beautify vi-tilde-fringe uuidgen uimage stickyfunc-enhance srefactor spinner spacemacs-theme smex smeargle rainbow-mode rainbow-identifiers quelpa pytest pyenv-mode pcre2el parsebib parent-mode pangu-spacing org-projectile org-present org-download org-caldav org-bullets nodejs-repl mwim multiple-cursors mmm-mode magit-gh-pulls lorem-ipsum log4e livid-mode live-py-mode linum-relative link-hint key-chord json-mode js-doc ivy-hydra hy-mode hungry-delete htmlize hl-sexp highlight-parentheses highlight-indentation golden-ratio gnuplot gntp gitignore-mode github-search github-browse-file gitattributes-mode git-gutter-fringe git-gutter-fringe+ gist gh-md flyspell-correct-ivy flycheck-pos-tip flx-ido find-by-pinyin-dired fill-column-indicator fancy-battery faceup eyebrowse evil-visualstar evil-visual-mark-mode evil-tutor evil-numbers evil-lisp-state evil-indent-plus evil-ediff evil-args evil-anzu eval-sexp-fu ess-smart-equals ess-R-object-popup ess-R-data-view eshell-z esh-help elisp-slime-nav elfeed-goodies ein dumb-jump disaster diminish diff-hl define-word cython-mode counsel-projectile company-tern company-statistics company-quickhelp company-c-headers company-auctex company-anaconda column-enforce-mode color-identifiers-mode coffee-mode cmake-mode clean-aindent-mode clang-format chinese-pyim bind-key biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-pinyin ace-link ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

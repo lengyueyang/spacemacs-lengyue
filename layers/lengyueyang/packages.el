@@ -13,11 +13,7 @@
 ;; List of all packages to install and/or initialize. Built-in packages
 ;; which require an initialization must be listed explicitly in the list.
 (setq lengyueyang-packages
-      '(
-        ;; package names go here
-        fcitx
-        ;; realgud
-        org-bullets
+      '(org-bullets
         org
         org-plus-contrib
         uimage
@@ -25,7 +21,7 @@
         aggressive-indent
         sws-mode
         org-caldav
-        (plain-org-wiki :location local)
+;
         ))
 
 ;; List of packages to exclude.
@@ -34,13 +30,6 @@
 ;; For each package, define a function lengyueyang/init-<package-name>
 ;;
 
-
-(defun lengyueyang/init-fcitx  ()
-  (use-package fcitx
-    :defer t
-    :init
-    (fcitx-aggressive-setup)
-    ))
 
 (defun lengyueyang/init-org-caldav ()
   (use-package org-caldav

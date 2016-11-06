@@ -50,6 +50,7 @@ values."
                  typescript-fmt-on-save nil
                  typescript-fmt-tool 'typescript-formatter)
      bibtex
+     ;; helm
      ivy
      yaml
      (latex :variables latex-enable-auto-fill t)

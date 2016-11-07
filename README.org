@@ -1,5 +1,5 @@
 * spacemacs-lengyue
-My personal spacemacs private layer.
+My personal spacemacs layer.
 
 #+BEGIN_SRC shell
   git clone https://github.com/lengyueyang/spacemacs-lengyue ~/.spacemacs.d

@@ -1,0 +1,15 @@
+* Turn off menu bar
+
+#+BEGIN_SRC emacs-lisp
+
+(setq user-full-name "Tom Willemse"
+      user-mail-address "tom@ryuslash.org")
+
+#+END_SRC
+
+* sfs
+
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode 1)
+#+END_SRC
+

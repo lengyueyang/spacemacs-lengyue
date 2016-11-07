@@ -288,6 +288,8 @@ values."
 
 (defun dotspacemacs/user-config ()
 
+
+
   (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
@@ -617,6 +619,12 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
         (expand-file-name "/opt/plantuml/plantuml.jar"))
   ;; (setq org-ditta-jar-path
   ;;  (expand-file-name "/usr/share/java/ditaa/ditaa-0_9.jar"))
+
+
+  (require 'ob-tangle)
+  (org-babel-load-file
+    (expand-file-name "lengyueyang.org"
+                      dotspacemacs-directory))
 
 
   "Configuration function for user code.

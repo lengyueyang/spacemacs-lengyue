@@ -813,7 +813,8 @@ org-files and bookmarks"
 
 #+BEGIN_SRC emacs-lisp
 
-  (add-to-load-path "~/.spacemacs.d/package/blog-admin")
+  ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
+  
   (require 'blog-admin)
 
   ;;  (setq blog-admin-backend-type 'org-page)

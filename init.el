@@ -109,7 +109,8 @@ values."
    dotspacemacs-additional-packages '(nodejs-repl
                                       youdao-dictionary
                                       chinese-yasdcv
-                                      req-package)
+                                      req-package
+                                      blog-admin)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -276,7 +277,7 @@ values."
   (org-babel-load-file
     (expand-file-name "lengyueyang.org"
                       dotspacemacs-directory))
-
+  (setenv "PATH" "/usr/bin/python3")
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."

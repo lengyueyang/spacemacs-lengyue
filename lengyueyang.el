@@ -505,7 +505,8 @@ org-files and bookmarks"
              chinese-char chinese-char-and-punc english-word
              (+ chinese-char english-word)))))
 
-(add-to-load-path "~/.spacemacs.d/package/blog-admin")
+;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
+
 (require 'blog-admin)
 
 ;;  (setq blog-admin-backend-type 'org-page)

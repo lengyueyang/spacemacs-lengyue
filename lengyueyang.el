@@ -3,7 +3,16 @@
 ;;; an org file.
 ;;; ------------------------------------------
 
+(require 'req-package)
+
+(require 'chinese-yasdcv)
 (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+
+(defun open-my-init-file()
+  (interactive)
+  (find-file "~/.spacemacs.d/lengyueyang.org"))
+
+(global-set-key (kbd "<f2>") 'open-my-init-file)
 
 (when (configuration-layer/layer-usedp 'markdown)
   (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
@@ -11,6 +20,11 @@
   (setq auto-mode-alist (cons '("\\.mdown$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.mdt$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
+
+(setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
+
+(setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
+                                    ("STYLE_ALL" . "habit"))))
 
 (defun lengyueyang/org-ispell ()
   "Configure `ispell-skip-region-alist' for `org-mode'."
@@ -125,6 +139,14 @@
            "* SOMEDAY %?\n%i%U"
            :empty-lines 1)))
 
+(setq org-confirm-babel-evaluate nil)
+
+(setq org-plantuml-jar-path
+      (expand-file-name "/opt/plantuml/plantuml.jar"))
+;; (setq org-ditta-jar-path
+;;  (expand-file-name "/usr/share/java/ditaa/ditaa-0_9.jar"))
+
+
 (eval-after-load 'org
   '(progn
      (defun lengyueyang/org-insert-src-block (src-code-type)
@@ -178,8 +200,240 @@
 ;; Do not prompt to resume an active clock
 (setq org-clock-persist-query-resume nil)
 
+;;org-mode export to latex
+  (require 'ox-latex)
+  (setq org-export-latex-listings t)
+
+  ;;org-mode source code setup in exporting to latex
+  (add-to-list 'org-latex-listings '("" "listings"))
+  (add-to-list 'org-latex-listings '("" "color"))
+
+  (add-to-list 'org-latex-packages-alist
+               '("" "xcolor" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "listings" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "fontspec" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "indentfirst" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "xunicode" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "geometry"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "float"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "longtable"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "tikz"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "fancyhdr"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "textcomp"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "amsmath"))
+  (add-to-list 'org-latex-packages-alist
+               '("" "tabularx" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "booktabs" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "grffile" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "wrapfig" t))
+  (add-to-list 'org-latex-packages-alist
+               '("normalem" "ulem" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "amssymb" t))
+  (add-to-list 'org-latex-packages-alist
+               '("" "capt-of" t))
+  (add-to-list 'org-latex-packages-alist
+               '("figuresright" "rotating" t))
+  (add-to-list 'org-latex-packages-alist
+               '("Lenny" "fncychap" t))
+
+  (add-to-list 'org-latex-classes
+               '("lengyue-org-book"
+                 "\\documentclass{book}
+\\usepackage[slantfont, boldfont]{xeCJK}
+% chapter set
+\\usepackage{titlesec}
+\\usepackage{hyperref}
+
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+
+\\setlength{\parindent}{2em}
+
+\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+\\setCJKsansfont{WenQuanYi Micro Hei}
+\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+\\setmainfont{DejaVu Sans} % 英文衬线字体
+\\setsansfont{DejaVu Serif} % 英文无衬线字体
+\\setmonofont{DejaVu Sans Mono}
+%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+%\\setsansfont{WenQuanYi Micro Hei}
+%\\setmonofont{WenQuanYi Micro Hei Mono}
+
+%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+\\defaultfontfeatures{Mapping=tex-text}
+
+% 中文断行
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+% 代码设置
+\\lstset{numbers=left,
+numberstyle= \\tiny,
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+frame=shadowbox,
+breaklines=true,
+rulesepcolor= \\color{ red!20!green!20!blue!20}
+}
+
+[EXTRA]
+"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (add-to-list 'org-latex-classes
+               '("lengyue-org-article"
+                 "\\documentclass{article}
+\\usepackage[slantfont, boldfont]{xeCJK}
+\\usepackage{titlesec}
+\\usepackage{hyperref}
+
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+
+\\parindent 2em
+
+\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+\\setCJKsansfont{WenQuanYi Micro Hei}
+\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+\\setmainfont{DejaVu Sans} % 英文衬线字体
+\\setsansfont{DejaVu Serif} % 英文无衬线字体
+\\setmonofont{DejaVu Sans Mono}
+%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+%\\setsansfont{WenQuanYi Micro Hei}
+%\\setmonofont{WenQuanYi Micro Hei Mono}
+
+%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+\\defaultfontfeatures{Mapping=tex-text}
+
+% 中文断行
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+% 代码设置
+\\lstset{numbers=left,
+numberstyle= \\tiny,
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+frame=shadowbox,
+breaklines=true,
+rulesepcolor= \\color{ red!20!green!20!blue!20}
+}
+
+[EXTRA]
+"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (add-to-list 'org-latex-classes
+               '("lengyue-org-beamer"
+                 "\\documentclass{beamer}
+\\usepackage[slantfont, boldfont]{xeCJK}
+% beamer set
+\\usepackage[none]{hyphenat}
+\\usepackage[abs]{overpic}
+
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+
+\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+\\setCJKsansfont{WenQuanYi Micro Hei}
+\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+\\setmainfont{DejaVu Sans} % 英文衬线字体
+\\setsansfont{DejaVu Serif} % 英文无衬线字体
+\\setmonofont{DejaVu Sans Mono}
+%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+%\\setsansfont{WenQuanYi Micro Hei}
+%\\setmonofont{WenQuanYi Micro Hei Mono}
+
+%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+\\defaultfontfeatures{Mapping=tex-text}
+
+% 中文断行
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+% 代码设置
+\\lstset{numbers=left,
+numberstyle= \\tiny,
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+frame=shadowbox,
+breaklines=true,
+rulesepcolor= \\color{ red!20!green!20!blue!20}
+}
+
+[EXTRA]
+"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (setq org-latex-pdf-process
+        '("xelatex -interaction nonstopmode -output-directory %o %f"
+          ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+          "bibtex %b"
+          "xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"))
+
+(add-to-load-path "~/.spacemacs.d/package/org-subtask-reset")
+(require 'org-subtask-reset)
+
+(add-to-load-path "~/.spacemacs.d/package/org-checklist")
+(require 'org-checklist)
+
+;; It's wrong to load org-archive-subtree-hierarchical, so add here
+(load "~/.spacemacs.d/package/org-archive-subtree-hierarchical/org-archive-subtree-hierarchical.el")
+
+(setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
+      org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
+      org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+
+(add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'R-mode-hook 'smartparens-mode)
+(add-hook 'R-mode-hook 'flycheck-mode)
+(add-hook 'R-mode-hook 'flyspell-mode)
+(add-hook 'inferior-ess-mode-hook 'company-mode)
+(add-hook 'inferior-ess-mode-hook 'smartparens-mode)
+(add-hook 'inferior-ess-mode-hook 'flycheck-mode)
+(add-hook 'inferior-ess-mode-hook 'flyspell-mode)
+
+(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+(setq python-fill-column 80)
+(add-hook 'inferior-python-mode-hook 'flycheck-mode)
+(add-hook 'inferior-python-mode-hook 'flyspell-mode)
+
 (setq user-full-name "lengyuyang"
       user-mail-address "maoxiaoweihl@gmail.com")
+
+(req-package hungry-delete
+  :init (global-hungry-delete-mode))
+
+(spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
 
 (defun lengyueyang/hotspots ()
   "helm interface to my hotspots, which includes my locations,
@@ -251,6 +505,24 @@ org-files and bookmarks"
              chinese-char chinese-char-and-punc english-word
              (+ chinese-char english-word)))))
 
+(add-to-load-path "~/.spacemacs.d/package/blog-admin")
+(require 'blog-admin)
+
+;;  (setq blog-admin-backend-type 'org-page)
+;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
+;;  (setq blog-admin-backend-new-post-in-drafts t)
+;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
+;;  (setq blog-admin-backend-org-page-drafts "_drafts")
+
+;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
+;;  (setq op/site-domain "http://lengyueyang.github.io") 
+;;  (setq op/personal-disqus-shortname "lengyueyang")
+
+(setq blog-admin-backend-type 'hexo)
+(setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
+(setq blog-admin-backend-new-post-in-drafts t)
+(setq blog-admin-backend-new-post-with-same-name-dir t)
+
 (require'cl)
 
 (setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
@@ -305,3 +577,5 @@ You can run this function in dired or a hexo article."
                                   nil)
                (message (format "The article has been moved to %s" dest-dir))))
     (message "You have to run this in a hexo article buffer or dired"))
+
+(req-package-finish)

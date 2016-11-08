@@ -100,7 +100,6 @@ values."
      (elfeed :variables
              ;;elfeed-enable-web-interface t
              rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
-     lengyueyang
 
      )
    ;; List of additional packages that will be installed without being

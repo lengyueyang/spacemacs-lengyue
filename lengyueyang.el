@@ -3,5 +3,305 @@
 ;;; an org file.
 ;;; ------------------------------------------
 
+(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+
+(when (configuration-layer/layer-usedp 'markdown)
+  (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.md$" . gfm-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.mdown$" . gfm-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.mdt$" . gfm-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
+
+(defun lengyueyang/org-ispell ()
+  "Configure `ispell-skip-region-alist' for `org-mode'."
+  (make-local-variable 'ispell-skip-region-alist)
+  (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+  (add-to-list 'ispell-skip-region-alist '("~" "~"))
+  (add-to-list 'ispell-skip-region-alist '("=" "="))
+  (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+(add-hook 'org-mode-hook #'lengyueyang/org-ispell)
+
+(defun lengyueyang/post-init-org-bullets ()
+  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+(add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
+
+(setq org-agenda-dir "~/Emacs-lengyue/GTD-lengyue")
+    (setq org-agenda-file-gtd (expand-file-name "GTD-lengyue.org" org-agenda-dir))
+    (setq org-agenda-files `(,org-agenda-file-gtd))
+
+    (setq org-default-notes-file org-agenda-file-gtd)
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d)")
+            (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "HOLD(h@/!)" "CANCELLED(c@/!)")
+            (sequence "INBOX(i)" "|" "NOTE(e)" "PHONE(p)" "MEETING(m)")
+            (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
+(setq org-refile-targets
+        '(("GTD-lengyue.org" :maxlevel . 1)))
+
+(setq org-log-into-drawer t)
+
+(setq org-agenda-custom-commands
+        '(
+          ("i" "Inbox" todo "INBOX")
+          ("h" "Holdtodo" todo "HOLD")
+          ("e" "Note" todo "NOTE")
+          ("s" "Someday/Maybe" todo "SOMEDAY")
+          ("b" "Blog" tags-todo "BLOG")
+          ("w" . " 任务安排 ")
+          ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
+          ("wb" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
+          ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
+          ("p" . " 项目安排 ")
+          ("W" "Weekly Review"
+           ((stuck "")            ;; review stuck projects as designated by org-stuck-projects
+            (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
+            ))))
+
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)  ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+  
+  ;;used by org-clock-sum-today-by-tags
+(defun filter-by-tags ()
+    (let ((head-tags (org-get-tags-at)))
+      (member current-tag head-tags)))
+
+
+  (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+    (interactive "P")
+    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+           (files (org-add-archive-files (org-agenda-files)))
+           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
+           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+           (output-string "")
+           (tstart (or tstart
+                       (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
+                       (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+                       (org-time-today)))
+           (tend (or tend
+                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+                     (+ tstart 86400)))
+           h m file item prompt donesomething)
+      (while (setq file (pop files))
+        (setq org-agenda-buffer (if (file-exists-p file)
+                                    (org-get-agenda-file-buffer file)
+                                  (error "No such file %s" file)))
+        (with-current-buffer org-agenda-buffer
+          (dolist (current-tag include-tags)
+            (org-clock-sum tstart tend'filter-by-tags)
+            (setcdr (assoc current-tag tags-time-alist)
+                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+      (while (setq item (pop tags-time-alist))
+        (unless (equal (cdr item) 0)
+          (setq donesomething t)
+          (setq h (/ (cdr item) 60)
+                m (- (cdr item) (* 60 h)))
+          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+      (unless donesomething
+        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+      (unless noinsert
+        (insert output-string))
+      output-string))
+
+(define-key global-map (kbd "<f9>") 'org-capture)
+
+(setq org-capture-templates
+        '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
+           "* TODO %?\n%i%U" 
+           :empty-lines 1)
+          ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
+           "* INBOX %?\n%i%U"
+           :empty-lines 1)
+          ("e" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick Notes")
+           "* NOTE %?\n%i%U"
+           :empty-lines 1)
+          ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
+           "* TODO %?\n%i%U"
+           :empty-lines 1)
+          ("m" "Someday/Maybe" entry (file+headline org-agenda-file-gtd "Someday/Maybe")
+           "* SOMEDAY %?\n%i%U"
+           :empty-lines 1)))
+
+(eval-after-load 'org
+  '(progn
+     (defun lengyueyang/org-insert-src-block (src-code-type)
+       "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+       (interactive
+        (let ((src-code-types
+               '("emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css"
+                 "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
+                 "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
+                 "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
+                 "scheme" "sqlite")))
+          (list (ido-completing-read "Source code type: " src-code-types))))
+       (progn
+         (newline-and-indent)
+         (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+         (newline-and-indent)
+         (insert "#+END_SRC\n")
+         (previous-line 2)
+         (org-edit-src-code)))
+
+     (add-hook 'org-mode-hook '(lambda ()
+                                 ;; keybinding for editing source code blocks
+                                 ;; keybinding for inserting code blocks
+                                 (local-set-key (kbd "C-c i s")
+                                                'lengyueyang/org-insert-src-block)
+                                 ))
+
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((perl . t)
+        (ruby . t)
+        (sh . t)
+        (js . t)
+        (python . t)
+        (emacs-lisp . t)
+        (plantuml . t)
+        (R . t)
+        (dot . t)
+        (gnuplot . t)
+        (latex . t)
+        (C . t)
+        (ditaa . t)))
+     )
+  )
+
+
+;; Resume clocking task when emacs is restarted
+(org-clock-persistence-insinuate)
+;; Save the running clock and all clock history when exiting Emacs, load it on startup
+(setq org-clock-persist t)
+;; Do not prompt to resume an active clock
+(setq org-clock-persist-query-resume nil)
+
 (setq user-full-name "lengyuyang"
       user-mail-address "maoxiaoweihl@gmail.com")
+
+(defun lengyueyang/hotspots ()
+  "helm interface to my hotspots, which includes my locations,
+org-files and bookmarks"
+  (interactive)
+  (helm :buffer "*helm: utities*"
+        :sources `(,(lengyueyang//hotspots-sources))))
+
+(defun lengyueyang//hotspots-sources ()
+  "Construct the helm sources for my hotspots"
+  `((name . "lengyueyang's center")
+    (candidates . (
+                   ("Agenda" . (lambda () (org-agenda "" "a")))
+                   ("Blog" . (lambda() (blog-admin-start)))
+                   ("Elfeed" . (lambda () (elfeed)))
+                   ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
+                   ("Agenda Menu" . (lambda () (org-agenda)))
+                   ("Open Github" . (lambda() (browse-url "https://github.com/lengyueyang")))
+                   ("Open Blog" . (lambda() (browse-url "http://lengyueyang.github.io")))))
+    (candidate-number-limit)
+    (action . (("Open" . (lambda (x) (funcall x)))))))
+
+(define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
+
+(defun lengyueyang/word-count-for-chinese ()
+  "「較精確地」統計中 / 日 / 英文字數。
+- 文章中的註解不算在字數內。
+- 平假名與片假名亦包含在「中日文字數」內，每個平 / 片假名都算單獨一個字（但片假
+  名不含連音「ー」）。
+- 英文只計算「單字數」，不含標點。
+- 韓文不包含在內。
+※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
+。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
+中間的點也被 Emacs 算為一個字而不是標點符號。"
+  (interactive)
+  (let* ((v-buffer-string
+          (progn
+            (if (eq major-mode 'org-mode) ; 去掉 org 文件的 OPTIONS（以 #+ 開頭）
+                (setq v-buffer-string (replace-regexp-in-string "^#\\+.+" ""
+                                                                (buffer-substring-no-properties (point-min) (point-max))))
+              (setq v-buffer-string (buffer-substring-no-properties (point-min) (point-max))))
+            (replace-regexp-in-string (format "^ *%s *.+" comment-start) "" v-buffer-string)))
+                                        ; 把註解行刪掉（不把註解算進字數）。
+         (chinese-char-and-punc 0)
+         (chinese-punc 0)
+         (english-word 0)
+         (chinese-char 0))
+    (with-temp-buffer
+      (insert v-buffer-string)
+      (goto-char (point-min))
+      ;; 中文（含標點、片假名）
+      (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
+        (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
+      ;; 中文標點符號
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
+        (setq chinese-punc (1+ chinese-punc)))
+      ;; 英文字數（不含標點）
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-english-word nil :no-error)
+        (setq english-word (1+ english-word))))
+    (setq chinese-char (- chinese-char-and-punc chinese-punc))
+    (message
+     (format " 中日文字數（不含標點）：%s
+ 中日文字數（包含標點）：%s
+ 英文字數（不含標點）：%s
+=======================
+ 中英文合計（不含標點）：%s"
+             chinese-char chinese-char-and-punc english-word
+             (+ chinese-char english-word)))))
+
+(require'cl)
+
+(setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
+
+(defun lengyueyang/hexo-publish (commit-msg)
+  "git add . & git commit & git push & hexo d"
+  (interactive "sInput commit message:")
+  (async-shell-command (format "cd %s ;git add . ;git commit -m \"%s\" ;git push ;hexo clean; hexo g; hexo d -g"
+                               hexo-dir
+                               commit-msg)))
+
+(defun lengyueyang/hexo-org-add-read-more ()
+  "add <!--more-->"
+  (interactive)
+  (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
+
+(defun lengyueyang/hexo-org-new-open-post (post-name)
+  "create a hexo org post"
+  (interactive "sInput post name:")
+  (find-file (format "%s/source/_posts/%s.org" hexo-dir post-name))
+  (insert (format "#+TITLE: %s
+#+DATE: %s
+#+LAYOUT: post
+#+TAGS:
+#+CATEGORIES:
+"  post-name (format-time-string "<%Y-%m-%d %a %H:%M>"))))
+
+(defun lengyueyang/hexo-org-source ()
+  "use dired open hexo source dir"
+  (interactive)
+  (ido-find-file-in-dir (format "%s/source/" hexo-dir))
+  )
+
+(defun lengyueyang/hexo-move-article ()
+  "Move current file between _post and _draft;
+You can run this function in dired or a hexo article."
+  (interactive)
+  (if (string-match "/\\(_posts/\\|_drafts/\\)$" default-directory)
+      (let* ((parent-dir (file-truename (concat default-directory "../")))
+             (dest-dir (if (string-match "_drafts/$" default-directory) "_posts/" "_drafts/"))))
+        (cond (or (eq major-mode 'markdown-mode) (eq major-mode 'org-mode))
+               (let* ((cur-file (buffer-file-name))
+                      (new-file (concat parent-dir dest-dir (buffer-name))))
+                 (save-buffer)
+                 (kill-buffer)
+                 (rename-file cur-file new-file)
+                 (find-file new-file)
+                 (message (format "Now in %s" dest-dir))))
+              ((eq major-mode 'dired-mode)
+               (dired-rename-file (dired-get-filename nil)
+                                  (concat parent-dir dest-dir (dired-get-filename t))
+                                  nil)
+               (message (format "The article has been moved to %s" dest-dir))))
+    (message "You have to run this in a hexo article buffer or dired"))

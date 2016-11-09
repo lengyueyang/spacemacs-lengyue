@@ -110,7 +110,9 @@ values."
                                       youdao-dictionary
                                       chinese-yasdcv
                                       req-package
-                                      blog-admin)
+                                      blog-admin
+                                      ob-ipython
+                                      auctex-latexmk)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -179,7 +181,7 @@ values."
    ;; Emacs commands (M-x).
    ;; By default the command key is `:' so ex-commands are executed like in Vim
    ;; with `:' and Emacs commands are executed with `<leader> :'.
-   dotspacemacs-command-key ":"
+   dotspacemacs-command-key "SPC"
    ;; If non nil `Y' is remapped to `y$'. (default t)
    dotspacemacs-remap-Y-to-y$ t
    ;; Location where to auto-save files. Possible values are `original' to
@@ -244,6 +246,10 @@ values."
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
+
+   dotspacemacs-display-default-layout nil
+   dotspacemacs-default-layout-name "Default"
+   dotspacemacs-auto-resume-layouts nil
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
@@ -277,7 +283,7 @@ values."
   (org-babel-load-file
     (expand-file-name "lengyueyang.org"
                       dotspacemacs-directory))
-  (setenv "PATH" "/usr/bin/python3")
+
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."

@@ -21,6 +21,28 @@
   (setq auto-mode-alist (cons '("\\.mdt$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
 
+(defun lengyueyang/load-my-layout ()
+  (interactive)
+  (persp-load-state-from-file (concat persp-save-dir "lengyueyang")))
+(spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
+
+(defun lengyueyang/save-my-layout ()
+  (interactive)
+  (persp-save-state-to-file (concat persp-save-dir "lengyueyang")))
+
+(spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
+
+;;(defun zilongshanren-misc/post-init-persp-mode ()
+;;  (setq persp-kill-foreign-buffer-action 'kill)
+;;  (setq persp-lighter nil)
+;;  (when (fboundp 'spacemacs|define-custom-layout)
+;;    (spacemacs|define-custom-layout "@Cocos2D-X"
+;;      :binding "c"
+;;      :body
+;;      (find-file "~/cocos2d-x/cocos/ui/UIWidget.cpp")
+;;      (split-window-right)
+;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
+
 (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
 
 (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
@@ -157,7 +179,7 @@
                  "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
                  "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
                  "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
-                 "scheme" "sqlite")))
+                 "scheme" "sqlite" "ipython")))
           (list (ido-completing-read "Source code type: " src-code-types))))
        (progn
          (newline-and-indent)
@@ -181,6 +203,7 @@
         (sh . t)
         (js . t)
         (python . t)
+        (ipython . t)
         (emacs-lisp . t)
         (plantuml . t)
         (R . t)
@@ -199,6 +222,12 @@
 (setq org-clock-persist t)
 ;; Do not prompt to resume an active clock
 (setq org-clock-persist-query-resume nil)
+
+(require 'ob-ipython)
+;; (setq org-babel-python-command "/usr/bin/ipython --pylab --pdb --nosep")
+(setq python-shell-prompt-detect-failure-warning nil)
+
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
 ;;org-mode export to latex
   (require 'ox-latex)

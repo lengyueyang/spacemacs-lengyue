@@ -143,6 +143,33 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
 
 #+END_SRC
+** Spacemacs-layout
+
+#+BEGIN_SRC emacs-lisp
+
+(defun lengyueyang/load-my-layout ()
+  (interactive)
+  (persp-load-state-from-file (concat persp-save-dir "lengyueyang")))
+(spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
+
+(defun lengyueyang/save-my-layout ()
+  (interactive)
+  (persp-save-state-to-file (concat persp-save-dir "lengyueyang")))
+
+(spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
+
+;;(defun zilongshanren-misc/post-init-persp-mode ()
+;;  (setq persp-kill-foreign-buffer-action 'kill)
+;;  (setq persp-lighter nil)
+;;  (when (fboundp 'spacemacs|define-custom-layout)
+;;    (spacemacs|define-custom-layout "@Cocos2D-X"
+;;      :binding "c"
+;;      :body
+;;      (find-file "~/cocos2d-x/cocos/ui/UIWidget.cpp")
+;;      (split-window-right)
+;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
+
+#+END_SRC
 
 * Org-mode configuration
 
@@ -165,6 +192,7 @@ This part is the customization to org-mode.
 
   (add-hook 'org-mode-hook 'org-mode-my-init)
 
+(setq org-startup-indented t)
 
 #+END_SRC
 ** Org columns and properties
@@ -391,7 +419,7 @@ This part is the customization to org-mode.
                    "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
                    "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
                    "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
-                   "scheme" "sqlite")))
+                   "scheme" "sqlite" "ipython")))
             (list (ido-completing-read "Source code type: " src-code-types))))
          (progn
            (newline-and-indent)
@@ -415,6 +443,7 @@ This part is the customization to org-mode.
           (sh . t)
           (js . t)
           (python . t)
+          (ipython . t)
           (emacs-lisp . t)
           (plantuml . t)
           (R . t)
@@ -436,6 +465,18 @@ This part is the customization to org-mode.
 
 
 #+END_SRC
+** Ob-ipython and Jupter notebook
+
+#+BEGIN_SRC emacs-lisp
+
+(require 'ob-ipython)
+;; (setq org-babel-python-command "/usr/bin/ipython --pylab --pdb --nosep")
+(setq python-shell-prompt-detect-failure-warning nil)
+
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+#+END_SRC
+
 ** Org-latex to pdf
 
 #+BEGIN_SRC emacs-lisp

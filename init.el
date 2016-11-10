@@ -175,6 +175,7 @@
         '(("melpa-cn" . "http://elpa.zilongshanren.com/melpa/")
           ("org-cn"   . "http://elpa.zilongshanren.com/org/")
           ("gnu-cn"   . "http://elpa.zilongshanren.com/gnu/")))
+  (setq org-startup-indented t)
   )
 
 (defun dotspacemacs/user-config ()

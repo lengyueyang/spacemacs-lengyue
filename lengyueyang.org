@@ -178,10 +178,15 @@ This part is the customization to org-mode.
 ** Better defaults to org
 
 #+BEGIN_SRC emacs-lip
+;;(defun lengyueyang/post-init-org ()
+;;  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)) t)
+;;  (with-eval-after-load 'org
+;;    (progn 
+;;      (setq org-startup-indented t))))
 
-  (add-hook 'org-mode-hook 'smartparens-mode)
-  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)) t)
-  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+ ;; (add-hook 'org-mode-hook 'smartparens-mode)
+ ;; (add-hook 'org-mode-hook (lambda () (org-indent-mode t)) t)
+ ;; (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 
   (defun org-mode-my-init ()
     (define-key org-mode-map (kbd "×") (kbd "*"))
@@ -191,8 +196,6 @@ This part is the customization to org-mode.
     )
 
   (add-hook 'org-mode-hook 'org-mode-my-init)
-
-(setq org-startup-indented t)
 
 #+END_SRC
 ** Org columns and properties

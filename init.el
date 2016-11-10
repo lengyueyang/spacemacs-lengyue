@@ -5,6 +5,8 @@
 (defun dotspacemacs/layers ()
   (setq-default
    dotspacemacs-distribution 'spacemacs
+   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-ask-for-lazy-installation nil
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
    '(
@@ -92,17 +94,24 @@
                                       chinese-yasdcv
                                       req-package
                                       blog-admin
-                                      ob-ipython
-                                      auctex-latexmk)
+                                      ob-ipython)
+   dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
-   dotspacemacs-delete-orphan-packages t))
+   dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
   (setq-default
+   dotspacemacs-elpa-https t
+   dotspacemacs-elpa-timeout 5
+   dotspacemacs-check-for-update nil
+   dotspacemacs-elpa-subdirectory nil
    dotspacemacs-editing-style 'vim
    dotspacemacs-verbose-loading nil
    dotspacemacs-startup-banner 'official
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists '((recents . 5)
+                                (projects . 7))
+   dotspacemacs-startup-buffer-responsive t
+   dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(spacemacs-dark
                          spacemacs-light
                          solarized-light
@@ -117,34 +126,48 @@
                                :width normal
                                :powerline-scale 1.1)
    dotspacemacs-leader-key "SPC"
+   dotspacemacs-emacs-command-key "SPC"
+   dotspacemacs-ex-command-key ":"
    dotspacemacs-emacs-leader-key "M-m"
    dotspacemacs-major-mode-leader-key ","
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
-   dotspacemacs-command-key "SPC"
+   dotspacemacs-distinguish-gui-tab nil
    dotspacemacs-remap-Y-to-y$ t
+   dotspacemacs-retain-visual-state-on-shift t
+   dotspacemacs-visual-line-move-text nil
+   dotspacemacs-ex-substitute-global nil
+   dotspacemacs-default-layout-name "Default"
+   dotspacemacs-display-default-layout nil
+   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-large-file-size 1
    dotspacemacs-auto-save-file-location 'cache
-   dotspacemacs-use-ido nil
+   dotspacemacs-max-rollback-slots 5
    dotspacemacs-helm-resize nil
    dotspacemacs-helm-no-header nil
    dotspacemacs-helm-position 'bottom
-   dotspacemacs-enable-paste-micro-state nil
+   dotspacemacs-helm-use-fuzzy 'always
+   dotspacemacs-enable-paste-transient-state nil
    dotspacemacs-which-key-delay 0.4
    dotspacemacs-which-key-position 'bottom
+   dotspacemacs-loading-progress-bar t
    dotspacemacs-fullscreen-at-startup nil
    dotspacemacs-fullscreen-use-non-native nil
    dotspacemacs-maximized-at-startup t
    dotspacemacs-active-transparency 90
    dotspacemacs-inactive-transparency 90
+   dotspacemacs-show-transient-state-title t
+   dotspacemacs-show-transient-state-color-guide t
    dotspacemacs-mode-line-unicode-symbols t
    dotspacemacs-smooth-scrolling t
-   dotspacemacs-smartparens-strict-mode nil
-   dotspacemacs-display-default-layout nil
-   dotspacemacs-default-layout-name "Default"
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-line-numbers t
+   dotspacemacs-folding-method 'evil
+   dotspacemacs-smartparens-strict-mode t
+   dotspacemacs-smart-closing-parenthesis t
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil
-   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("pt" "ag" "ack" "grep")
    dotspacemacs-default-package-repository nil
+   dotspacemacs-whitespace-cleanup nil
    ))
 
 (defun dotspacemacs/user-init ()

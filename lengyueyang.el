@@ -291,7 +291,6 @@
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
 
-\\setlength{\parindent}{2em}
 
 \\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
 \\setCJKsansfont{WenQuanYi Micro Hei}

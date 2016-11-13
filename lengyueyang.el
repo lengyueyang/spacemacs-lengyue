@@ -21,14 +21,15 @@
   (setq auto-mode-alist (cons '("\\.mdt$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
 
+(setq lengyueyang-configuration-path "~/.spacemacs.d/")
 (defun lengyueyang/load-my-layout ()
   (interactive)
-  (persp-load-state-from-file (concat persp-save-dir "lengyueyang")))
+  (persp-load-state-from-file (concat lengyueyang-configuration-path "lengyueyang")))
 (spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
 
 (defun lengyueyang/save-my-layout ()
   (interactive)
-  (persp-save-state-to-file (concat persp-save-dir "lengyueyang")))
+  (persp-save-state-to-file (concat lengyueyang-configuration-path "lengyueyang")))
 
 (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
 

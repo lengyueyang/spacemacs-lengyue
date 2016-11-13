@@ -773,6 +773,15 @@ to delete all whitespace in the direction you are deleting.
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 
 #+END_SRC
+** truncate lines automatically
+
+#+BEGIN_SRC emacs-lisp
+
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+
+#+END_SRC
 
 ** Set the  chinese font alignment
 

@@ -465,6 +465,10 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 (add-hook 'spacemacs-buffer-mode-hook (lambda ()
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+
 (spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
 
 (defun lengyueyang/hotspots ()

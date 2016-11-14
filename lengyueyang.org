@@ -10,8 +10,7 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+DESCRIPTION: A literate programming style exposition of my Emacs configuration beyond my spacemacs configuration
 #+KEYWORDS:
-#+LANGUAGE: en
-#+BABEL: :cache yes
+#+LANGUAGE: zh
 
 #+LATEX_CLASS: lengyue-org-article
 #+LATEX_CLASS_OPTIONS: [oneside,A4paper,12pt]
@@ -19,11 +18,7 @@
 #+LaTeX_HEADER: \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 #+LaTeX_HEADER: \graphicspath{{pic/}}
 #+LaTeX_HEADER: \hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
-#+LaTeX_HEADER: \setcounter{secnumdepth}{4}
-#+LaTeX_HEADER: \titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 #+LaTeX_HEADER: \linespread{1.2}
-
-#+STARTUP: overview align
 
 #+NAME: Note
 #+BEGIN_SRC emacs-lisp
@@ -377,28 +372,43 @@ This part is the customization to org-mode.
 
 #+END_SRC
 
+** Add bookmark to orgmode
+
+#+BEGIN_SRC emacs-lisp
+
+(add-to-load-path "~/.spacemacs.d/package/org-protocol-capture-html")
+(server-start)
+(require 'org-protocol)
+(require 'org-protocol-capture-html)
+
+
+#+END_SRC
+
 ** Org-capture
 
 #+BEGIN_SRC emacs-lisp
 
-(define-key global-map (kbd "<f9>") 'org-capture)
+  (define-key global-map (kbd "<f9>") 'org-capture)
 
-(setq org-capture-templates
-        '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
-           "* TODO %?\n%i%U" 
-           :empty-lines 1)
-          ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
-           "* INBOX %?\n%i%U"
-           :empty-lines 1)
-          ("e" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick Notes")
-           "* NOTE %?\n%i%U"
-           :empty-lines 1)
-          ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("m" "Someday/Maybe" entry (file+headline org-agenda-file-gtd "Someday/Maybe")
-           "* SOMEDAY %?\n%i%U"
-           :empty-lines 1)))
+  (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
+             "* TODO %?\n%i%U"
+             :empty-lines 1)
+            ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+             "* %c :website:\n%?\n%U %:initial"
+            :empty-lines 1)
+            ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
+             "* INBOX %?\n%i%U"
+             :empty-lines 1)
+            ("e" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick Notes")
+             "* NOTE %?\n%i%U"
+             :empty-lines 1)
+            ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
+             "* TODO %?\n%i%U"
+             :empty-lines 1)
+            ("m" "Someday/Maybe" entry (file+headline org-agenda-file-gtd "Someday/Maybe")
+             "* SOMEDAY %?\n%i%U"
+             :empty-lines 1)))
 
 #+END_SRC
 ** Org-babel customizaton
@@ -701,7 +711,6 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
   (load "~/.spacemacs.d/package/org-archive-subtree-hierarchical/org-archive-subtree-hierarchical.el")
 
 #+END_SRC
-
 ** Org-ref customize
 
 #+BEGIN_SRC emacs-lisp

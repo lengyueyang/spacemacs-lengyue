@@ -1,0 +1,342 @@
+#+PROPERTY: LOGGING nil
+
+#+BEGIN_HTML
+<a href=https://alphapapa.github.io/dont-tread-on-emacs/><img src="dont-tread-on-emacs-150.png" align="right"></a>
+#+END_HTML
+
+* org-protocol-capture-html
+
+org-protocol is awesome, but browsers do a pretty poor job of turning a page's HTML content into plain-text.  However, Pandoc supports converting /from/ HTML /to/ org-mode, so we can use it to turn HTML into Org-mode content!  It can even turn HTML tables into Org tables!
+
+* Screenshot
+
+Here's an example of what you get in Emacs from capturing [[http://kitchingroup.cheme.cmu.edu/blog/2014/07/17/Pandoc-does-org-mode-now/][this page]]:
+
+[[screenshot.png]]
+
+* Contents :TOC:
+ - [[#requirements][Requirements]]
+ - [[#installation][Installation]]
+     - [[#emacs][Emacs]]
+     - [[#bookmarklets][Bookmarklets]]
+ - [[#shell-script][Shell script]]
+ - [[#usage][Usage]]
+ - [[#changelog][Changelog]]
+ - [[#credits][Credits]]
+ - [[#appendix][Appendix]]
+     - [[#org-protocol-instructions][org-protocol Instructions]]
+     - [[#selection-grabbing-function][Selection-grabbing function]]
+ - [[#to-do][To-Do]]
+     - [[#use-eww-readable][Use eww-readable]]
+     - [[#file-based-capturing][File-based capturing]]
+     - [[#handle-long-chunks-of-html][Handle long chunks of HTML]]
+     - [[#package-for-melpa][Package for MELPA]]
+
+* Requirements
+
++ *[[http://orgmode.org/worg/org-contrib/org-protocol.html][org-protocol]]*: This is what connects org-mode to the "outside world" using a MIME protocol handler.  The instructions on the org-protocol page are a bit out of date, so you might want to try [[#org-protocol-instructions][these instructions]] instead.
++ *Pandoc*: Version 1.8 or later is required.
++ *[[https://github.com/buriy/python-readability][python-readability]]*: This is optional but very handy.  It lets you automatically capture just the article or main content from a page.
++ The shell script uses =curl= to download URLs (if you use it in that mode).
+
+* Installation
+** Emacs
+
+Put =org-protocol-capture-html.el= in your =load-path= and add to your init file:
+
+#+BEGIN_SRC elisp
+(require 'org-protocol-capture-html)
+#+END_SRC
+
+*** org-capture Template
+
+You need a suitable =org-capture= template.  I recommend this one.  Whatever you choose, the default selection key is =w=, so if you want to use a different key, you'll need to modify the script and the bookmarklets.
+
+#+BEGIN_SRC elisp
+("w" "Web site" entry
+  (file "")
+  "* %a :website:\n\n%U %?\n\n%:initial")
+#+END_SRC
+
+** Bookmarklets
+
+Now you need to make a bookmarklet in your browser(s) of choice.  You can select text in the page when you capture and it will be copied into the template, or you can just capture the page title and URL.  A [[#selection-grabbing-function][selection-grabbing function]] is used to capture the selection.
+
+*Note:* The =w= in the URL in these bookmarklets chooses the corresponding capture template. You can leave it out if you want to be prompted for the template, or change it to another letter for a different template key.
+
+*** Firefox
+
+This bookmarklet captures what is currently selected in the browser.  Or if nothing is selected, it just captures the page's URL and title.
+
+#+BEGIN_SRC js
+  javascript:location.href = 'org-protocol://capture-html://w/' + encodeURIComponent(location.href) + '/' + encodeURIComponent(document.title || "[untitled page]") + '/' + encodeURIComponent(function () {var html = ""; if (typeof document.getSelection != "undefined") {var sel = document.getSelection(); if (sel.rangeCount) {var container = document.createElement("div"); for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());} html = container.innerHTML;}} else if (typeof document.selection != "undefined") {if (document.selection.type == "Text") {html = document.selection.createRange().htmlText;}} var relToAbs = function (href) {var a = document.createElement("a"); a.href = href; var abs = a.protocol + "//" + a.host + a.pathname + a.search + a.hash; a.remove(); return abs;}; var elementTypes = [['a', 'href'], ['img', 'src']]; var div = document.createElement('div'); div.innerHTML = html; elementTypes.map(function(elementType) {var elements = div.getElementsByTagName(elementType[0]); for (var i = 0; i < elements.length; i++) {elements[i].setAttribute(elementType[1], relToAbs(elements[i].getAttribute(elementType[1])));}}); return div.innerHTML;}());
+#+END_SRC
+
+This one uses =python-readability= to capture the article or main content of the page.
+
+#+BEGIN_SRC js
+  javascript:location.href = 'org-protocol://capture-readability://w/' + encodeURIComponent(location.href) + '/' + encodeURIComponent(document.title || "[untitled page]") + '/';
+#+END_SRC
+
+*Note:* When you click on one of these bookmarklets for the first time, Firefox will ask what program to use to handle the =org-protocol= protocol.  You can simply choose the default program that appears (=org-protocol=).
+
+*** Pentadactyl
+
+If you use [[http://5digits.org/pentadactyl/][Pentadactyl]], you can use the Firefox *bookmarklets* above, or you can put these *commands* in your =.pentadactylrc=:
+
+#+BEGIN_SRC js
+map -modes=n,v ch -javascript content.location.href = 'org-protocol://capture-html://w/' + encodeURIComponent(content.location.href) + '/' + encodeURIComponent(content.document.title || "[untitled page]") + '/' + encodeURIComponent(function () {var html = ""; if (typeof content.document.getSelection != "undefined") {var sel = content.document.getSelection(); if (sel.rangeCount) {var container = document.createElement("div"); for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());} html = container.innerHTML;}} else if (typeof document.selection != "undefined") {if (document.selection.type == "Text") {html = document.selection.createRange().htmlText;}} var relToAbs = function (href) {var a = content.document.createElement("a"); a.href = href; var abs = a.protocol + "//" + a.host + a.pathname + a.search + a.hash; a.remove(); return abs;}; var elementTypes = [['a', 'href'], ['img', 'src']]; var div = content.document.createElement('div'); div.innerHTML = html; elementTypes.map(function(elementType) {var elements = div.getElementsByTagName(elementType[0]); for (var i = 0; i < elements.length; i++) {elements[i].setAttribute(elementType[1], relToAbs(elements[i].getAttribute(elementType[1])));}}); return div.innerHTML;}());
+map -modes=n,v cr -javascript content.location.href = 'org-protocol://capture-readability://w/' + encodeURIComponent(content.location.href) + '/' + encodeURIComponent(content.document.title || "[untitled page]") + '/';
+#+END_SRC
+
+*Note:* The JavaScript objects are slightly different for running as Pentadactyl commands since it has its own chrome.
+
+*** Chrome
+
+These bookmarklets work in Chrome:
+
+#+BEGIN_SRC js
+javascript:location.href = 'org-protocol:///capture-html:///w/' + encodeURIComponent(location.href) + '/' + encodeURIComponent(document.title || "[untitled page]") + '/' + encodeURIComponent(function () {var html = ""; if (typeof window.getSelection != "undefined") {var sel = window.getSelection(); if (sel.rangeCount) {var container = document.createElement("div"); for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());} html = container.innerHTML;}} else if (typeof document.selection != "undefined") {if (document.selection.type == "Text") {html = document.selection.createRange().htmlText;}} var relToAbs = function (href) {var a = document.createElement("a"); a.href = href; var abs = a.protocol + "//" + a.host + a.pathname + a.search + a.hash; a.remove(); return abs;}; var elementTypes = [['a', 'href'], ['img', 'src']]; var div = document.createElement('div'); div.innerHTML = html; elementTypes.map(function(elementType) {var elements = div.getElementsByTagName(elementType[0]); for (var i = 0; i < elements.length; i++) {elements[i].setAttribute(elementType[1], relToAbs(elements[i].getAttribute(elementType[1])));}}); return div.innerHTML;}());
+javascript:location.href = 'org-protocol:///capture-readability:///w/' + encodeURIComponent(location.href) + '/' + encodeURIComponent(document.title || "[untitled page]") + '/';
+#+END_SRC
+
+*Note:* The first sets of slashes are tripled compared to the Firefox bookmarklets.  When testing with Chrome, I found that =xdg-open= was collapsing the double-slashes into single-slashes, which breaks =org-protocol=.  I'm not sure why that doesn't seem to be necessary for Firefox.  If you have any trouble with this, you might try removing the extra slashes.
+
+* Shell script
+
+The [[org-protocol-capture-html.sh][shell script]] is handy for piping any HTML (or plain-text) content to Org through the shell, or downloading and capturing any URL directly (without a browser), but it's not required.  You can use it like this:
+
+#+BEGIN_EXAMPLE
+org-protocol-capture-html.sh [OPTIONS] [HTML]
+cat html | org-protocol-capture-html.sh [OPTIONS]
+
+Send HTML to Emacs through org-protocol, passing it through Pandoc to
+convert HTML to Org-mode.  HTML may be passed as an argument or
+through STDIN.  If only URL is given, it will be downloaded and its
+contents used.
+
+Options:
+    -h, --heading HEADING     Heading
+    -r, --readability         Capture web page article with python-readability
+    -t, --template TEMPLATE   org-capture template key (default: w)
+    -u, --url URL             URL
+
+    --debug  Print debug info
+    --help   I need somebody!
+#+END_EXAMPLE
+
+* Usage
+
+After installing the bookmarklets, you can select some text on a web page with your mouse, open the bookmarklet with the browser, and Emacs should pop up an Org capture buffer.  You can also do it without selecting text first, if you just want to capture a link to the page.
+
+You can also pass data through the shell script, for example:
+
+#+BEGIN_SRC sh
+dmesg | grep -i sata | org-protocol-capture-html.sh --heading "dmesg SATA messages" --template i
+
+org-protocol-capture-html.sh --readability --url "https://lwn.net/Articles/615220/"
+
+org-protocol-capture-html.sh -h "TODO Feed the cat!" -t i "He gets grouchy if I forget!"
+#+END_SRC
+
+* Changelog
+
+** <2016-10-23 Sun>
+
++ Add =org-protocol-capture-html-demote-times= variable, which controls how many times headings in captured pages are demoted.  This is handy if you use a sub-heading in your capture template, so you can make all the headings in captured pages lower than the lowest-level heading in your capture template.
+
+** <2016-10-05 Wed>
+
++  Check Pandoc's no-wrap option lazily (upon first capture), and if Pandoc takes too long for some reason, try again next time a capture is run.
++  If Pandoc does take too long, kill the buffer and process without prompting.
++  Use ~sleep-for~ instead of ~sit-for~ to work around any potential issues with whatever "input" may interrupt ~sit-for~.
+
+Hopefully this puts issue #12 to rest for good.  Thanks to [[https://github.com/jguenther][@jguenther]] for his help fixing and reporting bugs.
+
+** <2016-10-03 Mon>
+
++ Handle pages without titles in bookmarklet examples.  If a page lacks an HTML title, the string passed to =org-protocol= would have nothing where the title should go, and this would cause the capture to fail.  Now the bookmarklets will use =[untitled page]= instead of an empty string.  (No Elisp code changed, only the examples in the readme.)
+
+** <2016-10-01 Sat>
+
++ Use a temp buffer for the Pandoc test, thanks to [[https://github.com/jguenther][@jguenther]].
+
+** <2016-09-29 Thu>
+
++  Fix issue #12 (i.e. /really/ fix the =--no-wrap= deprecation), thanks to [[https://github.com/jguenther][@jguenther]].
++  Require =cl= and use =cl-incf= instead of =incf=.
+
+** <2016-09-23 Fri>
+
++ Fix for Pandoc versions =>== 1.16, which deprecates =--no-wrap= in favor of =--wrap=none=.
+
+** <2016-04-03 Sun>
+
++ Add support for [[https://github.com/buriy/python-readability][python-readability]].
++ Improve instructions.
+
+** <2016-03-23 Wed>
+
++ Add URL downloading to the shell script.  Now you can run =org-protocol-capture-html.sh -u http://example.com= and it will download and capture the page.
++ Add =org-capture= template to the readme.  This will make it much easier for new users.
+
+* Credits
+
++ Thanks to [[https://github.com/jguenther][@jguenther]] for helping to fix issue #12.
+
+* Appendix
+
+** org-protocol Instructions
+
+*** 1. Add protocol handler
+
+Create the file =~/.local/share/applications/org-protocol.desktop= containing:
+
+#+BEGIN_SRC conf
+  [Desktop Entry]
+  Name=org-protocol
+  Exec=emacsclient %u
+  Type=Application
+  Terminal=false
+  Categories=System;
+  MimeType=x-scheme-handler/org-protocol;
+#+END_SRC
+
+*Note:* Each line's key must be capitalized exactly as displayed, or it will be an invalid =.desktop= file.
+
+Then update =~/.local/share/applications/mimeinfo.cache= by running:
+
+-  On KDE: =kbuildsycoca4=
+-  On GNOME: =update-desktop-database ~/.local/share/applications/=
+
+*** 2. Configure Emacs
+
+**** Init file
+
+Add to your Emacs init file:
+
+#+BEGIN_SRC elisp
+    (server-start)
+    (require 'org-protocol)
+#+END_SRC
+
+**** Capture template
+
+You'll probably want to add a capture template something like this:
+
+#+BEGIN_SRC elisp
+  ("w" "Web site"
+   entry (file+olp "~/org/inbox.org" "Web")
+   "* %c :website:\n%U %?%:initial")
+#+END_SRC
+
+*Note:* Using =%:initial= instead of =%i= seems to handle multi-line content better.
+
+This will result in a capture like this:
+
+#+BEGIN_SRC org
+   * [[http://orgmode.org/worg/org-contrib/org-protocol.html][org-protocol.el – Intercept calls from emacsclient to trigger custom actions]] :website:
+   [2015-09-29 Tue 11:09] About org-protocol.el org-protocol.el is based on code and ideas from org-annotation-helper.el and org-browser-url.el.
+#+END_SRC
+
+*** 3. Configure Firefox
+
+On some versions of Firefox, it may be necessary to add this setting. You may skip this step and come back to it if you get an error saying that Firefox doesn't know how to handle =org-protocol= links.
+
+Open =about:config= and create a new =boolean= value named =network.protocol-handler.expose.org-protocol= and set it to =true=.
+
+*Note:* If you do skip this step, and you do encounter the error, Firefox may replace all open tabs in the window with the error message, making it difficult or impossible to recover those tabs. It's best to use a new window with a throwaway tab to test this setup until you know it's working.
+
+** Selection-grabbing function
+
+This function gets the HTML from the browser's selection.  It's from [[http://stackoverflow.com/a/6668159/712624][this answer]] on StackOverflow.
+
+#+BEGIN_SRC js
+  function () {
+      var html = "";
+
+      if (typeof content.document.getSelection != "undefined") {
+          var sel = content.document.getSelection();
+          if (sel.rangeCount) {
+              var container = document.createElement("div");
+              for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                  container.appendChild(sel.getRangeAt(i).cloneContents());
+              }
+              html = container.innerHTML;
+          }
+      } else if (typeof document.selection != "undefined") {
+          if (document.selection.type == "Text") {
+              html = document.selection.createRange().htmlText;
+          }
+      }
+
+      var relToAbs = function (href) {
+          var a = content.document.createElement("a");
+          a.href = href;
+          var abs = a.protocol + "//" + a.host + a.pathname + a.search + a.hash;
+          a.remove();
+          return abs;
+      };
+      var elementTypes = [
+          ['a', 'href'],
+          ['img', 'src']
+      ];
+
+      var div = content.document.createElement('div');
+      div.innerHTML = html;
+
+      elementTypes.map(function(elementType) {
+          var elements = div.getElementsByTagName(elementType[0]);
+          for (var i = 0; i < elements.length; i++) {
+              elements[i].setAttribute(elementType[1], relToAbs(elements[i].getAttribute(elementType[1])));
+          }
+      });
+      return div.innerHTML;
+  }
+#+END_SRC
+
+Here's a one-line version of it, better for pasting into bookmarklets and such:
+
+#+BEGIN_SRC js
+  function () {var html = ""; if (typeof content.document.getSelection != "undefined") {var sel = content.document.getSelection(); if (sel.rangeCount) {var container = document.createElement("div"); for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());} html = container.innerHTML;}} else if (typeof document.selection != "undefined") {if (document.selection.type == "Text") {html = document.selection.createRange().htmlText;}} var relToAbs = function (href) {var a = content.document.createElement("a"); a.href = href; var abs = a.protocol + "//" + a.host + a.pathname + a.search + a.hash; a.remove(); return abs;}; var elementTypes = [['a', 'href'], ['img', 'src']]; var div = content.document.createElement('div'); div.innerHTML = html; elementTypes.map(function(elementType) {var elements = div.getElementsByTagName(elementType[0]); for (var i = 0; i < elements.length; i++) {elements[i].setAttribute(elementType[1], relToAbs(elements[i].getAttribute(elementType[1])));}}); return div.innerHTML;}
+#+END_SRC
+
+* To-Do
+
+** TODO Use eww-readable
+
+Emacs 25.1 has ~eww-readable~, which is said to work very well.  Using it would mean that there'd be no need for =python-readability=.
+
+** TODO File-based capturing
+
+Pentadactyl has the =:write= command, which can write a page's HTML to a file, or to a command, like =:write !org-protocol-capture-html.sh=.  This should make it easy to implement file-based capturing, which would pass HTML through a temp file rather than as an argument, and this would work around the argument-length limit that we occasionally run into.
+
+All that should be necessary is to:
+
+1. Add a new sub-protocol =capture-file= that receives a path to a file instead of a URL to a page.
+     - It should probably delete the file after finishing the capture, to avoid leaving temp files laying around, so it should protect against deleting random files.  Probably the best way to do this would be to define a directory and a prefix, and any files not in that directory and not having that prefix should not be deleted.
+2. Add a options to =org-protocol-capture-html.sh= to capture with files.
+     - This should have two methods:
+         + Pass the path to an existing file, which will then be passed to Emacs.
+         + Pass content via =STDIN=, write it to a tempfile, and pass the tempfile's path to Emacs.  The tempfile should go in the directory and have the prefix so that Emacs knows it's safe to delete that file.
+3. Document how to integrate this with Pentadactyl.  It should be very simple, like =:write !org-protocol-capture-html --tempfile=.
+     - This would, by default, pass the entire content of the page.  It would be good to also be able to capture only the selection, and to be able to use Readability on the result.  Here's an example from the Pentadactyl manual that seems to show using JavaScript to fill arguments to the command:
+
+#+BEGIN_EXAMPLE txt
+  :com! search-selection,ss -bang -nargs=? -complete search
+  \ -js commands.execute((bang ? open : tabopen )
+  \ + args + + buffer.currentWord)
+#+END_EXAMPLE
+
+        However, I don't see how this would allow writing different content to =STDIN=, only arguments.  So this might not be possible without modifying Pentadactyl and/or using a separate Firefox extension.  [[file:~/src/dactyl/common/modules/buffer.jsm::commands.add(%5B"sav%5Beas%5D",%20"w%5Brite%5D"%5D,][Here]] is the source for the =:write= command, and [[file:~/Temp/src/dactyl/common/modules/storage.jsm::write:%20function%20write(buf,%20mode,%20perms,%20encoding)%20{][here]] for the underlying JS function.  And you can see [[file:~/src/dactyl/common/modules/io.jsm::%5B"exec",%20">"%20%2B%20shellEscape(stdout.path),%20"2>&1",%20"<"%20%2B%20shellEscape(stdin.path),][here]] how it uses temp files to pass =STDIN= to commands.
+
+
+** Handle long chunks of HTML
+
+If you try to capture too long a chunk of HTML, it will fail with "argument list too long errors" from =emacsclient=.  To work around this will require capturing via STDIN instead of arguments.  Since org-protocol is based on using URLs, this will probably require using a shell script and a new Emacs function, and perhaps another MIME protocol-handler.  Even then, it might still run into problems, because the data is passed to the shell script as an argument in the protocol-handler.  Working around that would probably require a non-protocol-handler-based method using a browser extension to send the HTML directly via STDIN.  Might be possible with Pentadactyl instead of making an entirely new browser extension.  Also, maybe the [[https://addons.mozilla.org/en-US/firefox/addon/org-mode-capture/][Org-mode Capture]] Firefox extension could be extended (...) to do this.
+
+However, most of the time, this is not a problem.
+
+** Package for MELPA
+
+This would be nice.

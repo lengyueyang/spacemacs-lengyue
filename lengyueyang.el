@@ -143,12 +143,20 @@
         (insert output-string))
       output-string))
 
+(add-to-load-path "~/.spacemacs.d/package/org-protocol-capture-html")
+(server-start)
+(require 'org-protocol)
+(require 'org-protocol-capture-html)
+
 (define-key global-map (kbd "<f9>") 'org-capture)
 
 (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
-           "* TODO %?\n%i%U" 
+           "* TODO %?\n%i%U"
            :empty-lines 1)
+          ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+           "* %c :website:\n%?\n%U %:initial"
+          :empty-lines 1)
           ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
            "* INBOX %?\n%i%U"
            :empty-lines 1)

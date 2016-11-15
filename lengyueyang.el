@@ -14,6 +14,12 @@
 
 (global-set-key (kbd "<f2>") 'open-my-init-file)
 
+(spacemacs/declare-prefix "om" "Bookmark")
+(spacemacs/set-leader-keys "oms" 'bookmark-set)
+(spacemacs/set-leader-keys "omr" 'bookmark-rename)
+(spacemacs/set-leader-keys "omd" 'bookmark-delete)
+(spacemacs/set-leader-keys "omj" 'counsel-bookmark)
+
 (when (configuration-layer/layer-usedp 'markdown)
   (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.md$" . gfm-mode) auto-mode-alist))
@@ -31,6 +37,7 @@
   (interactive)
   (persp-save-state-to-file (concat lengyueyang-configuration-path "lengyueyang")))
 
+(spacemacs/declare-prefix "ol" "Layout-lengyueyang")
 (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
 
 ;;(defun zilongshanren-misc/post-init-persp-mode ()
@@ -43,6 +50,10 @@
 ;;      (find-file "~/cocos2d-x/cocos/ui/UIWidget.cpp")
 ;;      (split-window-right)
 ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
+
+(global-set-key (kbd "<f5>") 'deft)
+(setq deft-extensions '("txt" "tex" "org"))
+(setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
 (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
 

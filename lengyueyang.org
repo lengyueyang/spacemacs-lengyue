@@ -109,7 +109,6 @@ org related keybindings in Org-mode configuration part.
 (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
 
 #+END_SRC
-
 ** F2 to open my init file
 
 #+BEGIN_SRC emacs-lisp
@@ -119,6 +118,18 @@ org related keybindings in Org-mode configuration part.
   (find-file "~/.spacemacs.d/lengyueyang.org"))
 
 (global-set-key (kbd "<f2>") 'open-my-init-file)
+
+#+END_SRC
+
+** Bookmark keybindings reconfiguration
+
+#+BEGIN_SRC emacs-lisp
+
+(spacemacs/declare-prefix "om" "Bookmark")
+(spacemacs/set-leader-keys "oms" 'bookmark-set)
+(spacemacs/set-leader-keys "omr" 'bookmark-rename)
+(spacemacs/set-leader-keys "omd" 'bookmark-delete)
+(spacemacs/set-leader-keys "omj" 'counsel-bookmark)
 
 #+END_SRC
 
@@ -142,7 +153,6 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
 #+BEGIN_SRC emacs-lisp
 
-
 (setq lengyueyang-configuration-path "~/.spacemacs.d/")
 (defun lengyueyang/load-my-layout ()
   (interactive)
@@ -153,6 +163,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (interactive)
   (persp-save-state-to-file (concat lengyueyang-configuration-path "lengyueyang")))
 
+(spacemacs/declare-prefix "ol" "Layout-lengyueyang")
 (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
 
 ;;(defun zilongshanren-misc/post-init-persp-mode ()
@@ -165,6 +176,15 @@ Include the configuration of spacemacs itself layers and better use of its defau
 ;;      (find-file "~/cocos2d-x/cocos/ui/UIWidget.cpp")
 ;;      (split-window-right)
 ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
+
+#+END_SRC
+** Deft
+
+#+BEGIN_SRC emacs-lisp
+
+(global-set-key (kbd "<f5>") 'deft)
+(setq deft-extensions '("txt" "tex" "org"))
+(setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
 #+END_SRC
 

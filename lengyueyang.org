@@ -101,14 +101,6 @@ of emacs config.
 Global keybindings of emacs but for specific customization with keybinding, like some
 org related keybindings in Org-mode configuration part.
 
-** F3 to open stardict
-
-#+BEGIN_SRC emacs-lisp
-
-(require 'chinese-yasdcv)
-(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
-
-#+END_SRC
 ** F2 to open my init file
 
 #+BEGIN_SRC emacs-lisp
@@ -118,6 +110,22 @@ org related keybindings in Org-mode configuration part.
   (find-file "~/.spacemacs.d/lengyueyang.org"))
 
 (global-set-key (kbd "<f2>") 'open-my-init-file)
+
+#+END_SRC
+** F3 to open stardict
+
+#+BEGIN_SRC emacs-lisp
+
+(require 'chinese-yasdcv)
+(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+
+#+END_SRC
+
+** F8 to checkout the spelling of words
+
+#+BEGIN_SRC emacs-lisp
+
+(define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
 
 #+END_SRC
 
@@ -1001,3 +1009,4 @@ to execute following line to send =req-package= on its merry way.
 
 * Reference
 
+ 

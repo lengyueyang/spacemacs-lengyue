@@ -5,14 +5,16 @@
 
 (require 'req-package)
 
-(require 'chinese-yasdcv)
-(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
-
 (defun open-my-init-file()
   (interactive)
   (find-file "~/.spacemacs.d/lengyueyang.org"))
 
 (global-set-key (kbd "<f2>") 'open-my-init-file)
+
+(require 'chinese-yasdcv)
+(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+
+(define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
 
 (spacemacs/declare-prefix "om" "Bookmark")
 (spacemacs/set-leader-keys "oms" 'bookmark-set)

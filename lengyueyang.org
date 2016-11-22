@@ -202,25 +202,17 @@ This part is the customization to org-mode.
 
 ** Better defaults to org
 
-#+BEGIN_SRC emacs-lip
-;;(defun lengyueyang/post-init-org ()
-;;  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)) t)
-;;  (with-eval-after-load 'org
-;;    (progn 
-;;      (setq org-startup-indented t))))
+#+BEGIN_SRC emacs-lisp
 
- ;; (add-hook 'org-mode-hook 'smartparens-mode)
- ;; (add-hook 'org-mode-hook (lambda () (org-indent-mode t)) t)
- ;; (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+    (setq org-startup-indented t)
 
-  (defun org-mode-my-init ()
-    (define-key org-mode-map (kbd "×") (kbd "*"))
-    (define-key org-mode-map (kbd "－") (kbd "-"))
-    (define-key org-mode-map (kbd "（") (kbd "("))
-    (define-key org-mode-map (kbd "）") (kbd ")"))
-    )
-
-  (add-hook 'org-mode-hook 'org-mode-my-init)
+    (defun org-mode-my-init ()
+      (define-key org-mode-map (kbd "×") (kbd "*"))
+      ;;(define-key org-mode-map (kbd "－") (kbd "-"))
+      (define-key org-mode-map (kbd "（") (kbd "("))
+      (define-key org-mode-map (kbd "）") (kbd ")"))
+      )
+    (add-hook 'org-mode-hook 'org-mode-my-init)
 
 #+END_SRC
 ** Org columns and properties

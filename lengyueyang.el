@@ -57,6 +57,16 @@
 (setq deft-extensions '("txt" "tex" "org"))
 (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
+(setq org-startup-indented t)
+
+(defun org-mode-my-init ()
+  (define-key org-mode-map (kbd "×") (kbd "*"))
+  ;;(define-key org-mode-map (kbd "－") (kbd "-"))
+  (define-key org-mode-map (kbd "（") (kbd "("))
+  (define-key org-mode-map (kbd "）") (kbd ")"))
+  )
+(add-hook 'org-mode-hook 'org-mode-my-init)
+
 (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
 
 (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")

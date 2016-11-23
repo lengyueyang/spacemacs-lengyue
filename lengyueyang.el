@@ -206,6 +206,8 @@
   )
 (add-hook 'org-mode-hook 'org-mode-my-init)
 
+(add-hook 'org-mode-hook 'smartparens-strict-mode)
+
 (eval-after-load 'org
   '(progn
      (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")

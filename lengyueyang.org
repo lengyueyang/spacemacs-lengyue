@@ -514,6 +514,8 @@ This part is the customization to org-mode.
     )
   (add-hook 'org-mode-hook 'org-mode-my-init)
 
+  (add-hook 'org-mode-hook 'smartparens-strict-mode)
+
 #+END_SRC
 ** Org columns and properties
 

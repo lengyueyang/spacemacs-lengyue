@@ -89,12 +89,19 @@
              rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
 
      )
-   dotspacemacs-additional-packages '(nodejs-repl
+   dotspacemacs-additional-packages '(
+                                      nodejs-repl
                                       youdao-dictionary
                                       chinese-yasdcv
                                       req-package
                                       blog-admin
-                                      ob-ipython)
+                                      ob-ipython
+                                      pangu-spacing
+                                      linum-off
+                                      ;;editorconfig
+                                      emmet-mode
+                                      yasnippet
+                                      )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only))

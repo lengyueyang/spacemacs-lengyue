@@ -51,6 +51,7 @@ same location code to =custom.el= at the same time.
 (load custom-file 'no-error 'no-message)
 
 #+END_EXAMPLE
+
 ** Org-mode to customize emacs configuration
 
 Add the follow code to =.inti.el= part =defun dotspacemacs/user-config ()=
@@ -105,19 +106,20 @@ org related keybindings in Org-mode configuration part.
 
 #+BEGIN_SRC emacs-lisp
 
-(defun open-my-init-file()
-  (interactive)
-  (find-file "~/.spacemacs.d/lengyueyang.org"))
+  (defun open-my-init-file()
+    (interactive)
+    (find-file "~/.spacemacs.d/lengyueyang.org"))
 
-(global-set-key (kbd "<f2>") 'open-my-init-file)
+  (global-set-key (kbd "<f2>") 'open-my-init-file)
 
 #+END_SRC
+
 ** F3 to open stardict
 
 #+BEGIN_SRC emacs-lisp
 
-(require 'chinese-yasdcv)
-(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+  (require 'chinese-yasdcv)
+  (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
 
 #+END_SRC
 
@@ -125,7 +127,7 @@ org related keybindings in Org-mode configuration part.
 
 #+BEGIN_SRC emacs-lisp
 
-(define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
+  (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
 
 #+END_SRC
 
@@ -133,11 +135,11 @@ org related keybindings in Org-mode configuration part.
 
 #+BEGIN_SRC emacs-lisp
 
-(spacemacs/declare-prefix "om" "Bookmark")
-(spacemacs/set-leader-keys "oms" 'bookmark-set)
-(spacemacs/set-leader-keys "omr" 'bookmark-rename)
-(spacemacs/set-leader-keys "omd" 'bookmark-delete)
-(spacemacs/set-leader-keys "omj" 'counsel-bookmark)
+  (spacemacs/declare-prefix "om" "Bookmark")
+  (spacemacs/set-leader-keys "oms" 'bookmark-set)
+  (spacemacs/set-leader-keys "omr" 'bookmark-rename)
+  (spacemacs/set-leader-keys "omd" 'bookmark-delete)
+  (spacemacs/set-leader-keys "omj" 'counsel-bookmark)
 
 #+END_SRC
 
@@ -149,51 +151,349 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
 #+BEGIN_SRC emacs-lisp
 
-(when (configuration-layer/layer-usedp 'markdown)
-  (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.md$" . gfm-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.mdown$" . gfm-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.mdt$" . gfm-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
+  (when (configuration-layer/layer-usedp 'markdown)
+    (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
+    (setq auto-mode-alist (cons '("\\.md$" . gfm-mode) auto-mode-alist))
+    (setq auto-mode-alist (cons '("\\.mdown$" . gfm-mode) auto-mode-alist))
+    (setq auto-mode-alist (cons '("\\.mdt$" . gfm-mode) auto-mode-alist))
+    (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
 
 #+END_SRC
+
 ** Spacemacs-layout
 
 #+BEGIN_SRC emacs-lisp
 
-(setq lengyueyang-configuration-path "~/.spacemacs.d/")
-(defun lengyueyang/load-my-layout ()
-  (interactive)
-  (persp-load-state-from-file (concat lengyueyang-configuration-path "lengyueyang")))
-(spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
+  (setq lengyueyang-configuration-path "~/.spacemacs.d/")
 
-(defun lengyueyang/save-my-layout ()
-  (interactive)
-  (persp-save-state-to-file (concat lengyueyang-configuration-path "lengyueyang")))
+  (defun lengyueyang/load-my-layout ()
+    (interactive)
+    (persp-load-state-from-file (concat lengyueyang-configuration-path "lengyueyang")))
 
-(spacemacs/declare-prefix "ol" "Layout-lengyueyang")
-(spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
+  (defun lengyueyang/save-my-layout ()
+    (interactive)
+    (persp-save-state-to-file (concat lengyueyang-configuration-path "lengyueyang")))
 
-;;(defun zilongshanren-misc/post-init-persp-mode ()
-;;  (setq persp-kill-foreign-buffer-action 'kill)
-;;  (setq persp-lighter nil)
-;;  (when (fboundp 'spacemacs|define-custom-layout)
-;;    (spacemacs|define-custom-layout "@Cocos2D-X"
-;;      :binding "c"
-;;      :body
-;;      (find-file "~/cocos2d-x/cocos/ui/UIWidget.cpp")
-;;      (split-window-right)
-;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
+  (spacemacs/declare-prefix "ol" "Layout-lengyueyang")
+  (spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
+  (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
+
+  ;;(defun zilongshanren-misc/post-init-persp-mode ()
+  ;;  (setq persp-kill-foreign-buffer-action 'kill)
+  ;;  (setq persp-lighter nil)
+  ;;  (when (fboundp 'spacemacs|define-custom-layout)
+  ;;    (spacemacs|define-custom-layout "@Cocos2D-X"
+  ;;      :binding "c"
+  ;;      :body
+  ;;      (find-file "~/cocos2d-x/cocos/ui/UIWidget.cpp")
+  ;;      (split-window-right)
+  ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
 
 #+END_SRC
+
 ** Deft
 
 #+BEGIN_SRC emacs-lisp
 
-(global-set-key (kbd "<f5>") 'deft)
-(setq deft-extensions '("txt" "tex" "org"))
-(setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
+  (global-set-key (kbd "<f5>") 'deft)
+  (setq deft-extensions '("txt" "tex" "org"))
+  (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
+#+END_SRC
+
+** Use emmet-mode to add Zen Coding support
+
+[[https://github.com/smihica/emmet-mode][emmet-mode]] is a fork of [[https://github.com/rooney/zencoding][zencoding-mode]] which add minor mode providing support
+for Zen Coding by producing HTML from CSS-like selectors.
+
+GitHub: https://github.com/smihica/emmet-mode
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (req-package emmet-mode
+    :config
+    (progn
+      ;; Following mode support emmet-mode
+      (add-hook 'html-mode-hook 'emmet-mode)
+      (add-hook 'sgml-mode-hook 'emmet-mode)
+      (add-hook 'nxml-mode-hook 'emmet-mode)
+      (add-hook 'css-mode-hook  'emmet-mode)
+
+      ;; Move cursor between quotes after expand
+      (add-hook 'emmt-mode-hook
+                '(lambda()
+                   (setq emmet-move-cursor-between-quotes t)))
+
+      ;; Make tab can also expand emmt instead of use yasnippet directly
+      (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
+      (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
+#+END_SRC
+
+* Basic setup
+
+Some basic customizaton
+
+In emacs, we can use =M-x= to execute interactive commands, I
+implement some of them to make my emacs more easy to use.
+
+** Personal information setup
+
+#+BEGIN_SRC emacs-lisp
+
+(setq user-full-name "lengyuyang"
+      user-mail-address "maoxiaoweihl@gmail.com")
+
+#+END_SRC
+** Don't ask me when kill process buffer
+
+#+BEGIN_SRC emacs-lisp
+
+  (setq kill-buffer-query-functions
+        (remq 'process-kill-buffer-query-function
+              kill-buffer-query-functions))
+
+#+END_SRC
+
+** Hungry-delete
+
+[[https://github.com/nflath/hungry-delete][hungry-delete]] borrows hungry deletion from =cc-mode=, which will causes deletion
+to delete all whitespace in the direction you are deleting.
+
+#+BEGIN_SRC emacs-lisp
+
+  (req-package hungry-delete
+    :init (global-hungry-delete-mode))
+
+#+END_SRC
+
+** Set the chinese font alignment
+
+#+BEGIN_SRC emacs-lisp
+
+  (spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
+
+#+END_SRC
+
+** Buffers                                                          :buffer:
+
+*** Indent whole buffer
+
+#+BEGIN_SRC emacs-lisp
+  (defun indent-whole-buffer ()
+    "Indent whole buffer."
+    (interactive)
+    (save-excursion
+      (indent-region (point-min) (point-max))))
+#+END_SRC
+
+*** Quick folding source block
+
+#+BEGIN_SRC emacs-lisp
+  (defun quick-folding-source ()
+    "Use emacs buildin easy to folding code."
+    (interactive)
+    (set-selective-display
+     (if selective-display nil 1)))
+#+END_SRC
+
+** Edit (Insert/Remove)
+
+*** Insert U200B char
+
+=<U200B>= character is a =zero width space character= which is nice to
+use under org-mode.
+
+For more info, please see: [[https://lists.gnu.org/archive/html/emacs-orgmode/2012-09/msg00155.html][suggestion for org-emphasis-regexp-components: *U*nited *N*ations]]
+
+#+BEGIN_SRC emacs-lisp
+  (defun insert-U200B-char ()
+    "Insert <U200B> char, this character is nice use in org-mode."
+    (interactive)
+    (insert "\ufeff"))
+#+END_SRC
+
+*** Insert empty line after current line
+
+#+BEGIN_SRC emacs-lisp
+  (defun insert-empty-line ()
+    "Insert an empty line after current line and position cursor on newline."
+    (interactive)
+    (move-end-of-line nil)
+    (open-line 1)
+    (next-line 1))
+#+END_SRC
+
+** File Handle
+
+*** Reopen file as root
+
+#+BEGIN_SRC emacs-lisp
+  (defun file-reopen-as-root ()
+    (interactive)
+    (when buffer-file-name
+      (find-alternate-file
+       (concat "/sudo:root@localhost:"
+               buffer-file-name))))
+#+END_SRC
+
+*** Delete current buffer file
+
+#+BEGIN_SRC emacs-lisp
+  (defun delete-current-buffer-file ()
+    "Removes file connected to current buffer and kills buffer."
+    (interactive)
+    (let ((filename (buffer-file-name))
+          (buffer (current-buffer))
+          (name (buffer-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (ido-kill-buffer)
+        (when (yes-or-no-p "Are you sure you want to remove this file? ")
+          (delete-file filename)
+          (kill-buffer buffer)
+          (message "File '%s' successfully removed" filename)))))
+#+END_SRC
+
+*** Rename current Buffer and file
+
+#+BEGIN_SRC emacs-lisp
+  (defun rename-current-buffer-file ()
+    "Renames current buffer and file it is visiting."
+    (interactive)
+    (let ((name (buffer-name))
+          (filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (error "Buffer '%s' is not visiting a file!" name)
+        (let ((new-name (read-file-name "New name: " filename)))
+          (if (get-buffer new-name)
+              (error "A buffer named '%s' already exists!" new-name)
+            (rename-file filename new-name 1)
+            (rename-buffer new-name)
+            (set-visited-file-name new-name)
+            (set-buffer-modified-p nil)
+            (message "File '%s' successfully renamed to '%s'"
+                     name (file-name-nondirectory new-name)))))))
+#+END_SRC
+
+*** Add executable attribute to file
+
+Actually this command is the same as =chmod +x= but it doesn't use any shell
+command, it use emacs's logior function to change file attribute.
+
+I only make =owener= can has executable permission, not change it for gourp or
+others user.
+
+#+BEGIN_SRC emacs-lisp
+  (defun set-file-executable()
+    "Add executable permissions on current file."
+    (interactive)
+    (when (buffer-file-name)
+      (set-file-modes buffer-file-name
+                      (logior (file-modes buffer-file-name) #o100))
+      (message (concat "Made " buffer-file-name " executable"))))
+#+END_SRC
+
+*** Clone current file to new one
+
+#+BEGIN_SRC emacs-lisp
+  (defun clone-file-and-open (filename)
+    "Clone the current buffer writing it into FILENAME and open it"
+    (interactive "FClone to file: ")
+    (save-restriction
+      (widen)
+      (write-region (point-min) (point-max) filename nil nil nil 'confirm))
+    (find-file filename))
+#+END_SRC
+
+** Keeping files in sync
+
+By default, Emacs will not update the contents of open buffers when a file
+changes on disk. This is inconvenient when switching branches in Git - as you’d
+risk editing stale buffers.
+
+This problem can be solved by:
+
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode 1)
+  (setq global-auto-revert-non-file-buffers t)
+  (setq auto-revert-verbose nil)
+  (setq revert-without-query '(".*")) ;; disable revert query
+#+END_SRC
+
+** Snippet handle by yasnippet                                   :yasnippet:
+
+#+BEGIN_SRC emacs-lisp
+  (req-package yasnippet
+    :init (yas-global-mode 1)
+    :mode ("emacs.+/snippets/" . snippet-mode)
+    :config
+    (progn
+      (setq yas/prompt-functions '(yas-dropdown-prompt
+                                   yas-completing-prompt
+                                   yas-ido-prompt))
+
+      (setq yas/snippet-dirs (concat user-emacs-directory "snippets"))))
+#+END_SRC
+
+*** Implement org-mode's easy-template like function
+
+I really like org-mode's =easy-template= function, so I implement one called
+=major-mode-expand= which will let you use easy-template like function in any
+major-mode.
+
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load 'yasnippet
+    '(progn
+       (defadvice yas-expand (around major-mode-expand activate)
+         "Try to complete a structure template before point like org-mode does.
+    This looks for strings like \"<e\" on an otherwise empty line and
+    expands them.
+    Before use this function, you must setup `major-mode-name'-expand-alist variable.
+
+    Take emacs-lisp-mode as example, if you wand to use <r to expand your snippet `require'
+    in yasnippet, you muse setup the emacs-lisp-mode-expand-alist variable.
+
+     (setq emacs-lisp-expand-alist '((\"r\" . \"require\")))"
+         (let* ((l (buffer-substring (point-at-bol) (point)))
+                (expand-symbol (intern (concat (symbol-name major-mode) "-expand-alist")))
+                (expand-alist (if (boundp expand-symbol) (symbol-value expand-symbol) nil))
+                a)
+           (when (and (looking-at "[ \t]*$")
+                      (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
+                      (setq a (assoc (match-string 1 l) expand-alist)))
+             (backward-delete-char (1+ (length (car-safe a))))
+             (if (symbolp (cdr-safe a))
+                 (funcall (cdr-safe a))
+               (insert (cdr-safe a)))
+             t)
+           ad-do-it))
+       ))
+#+END_SRC
+
+Take emacs-lisp-mode as example, if I want to use =<r= and press =TAB=
+then yasnippet will expand the command, just add following code:
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq emacs-lisp-mode-expand-alist '(("r" . "require")))
+#+END_SRC
+
+For c-mode, just do the same but change the relative
+*major-mode-expand-alist* like following
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq c-mode-expand-alist '(("i" . "include")))
+#+END_SRC
+
+** Debug
+
+*** Eval emacs buffer until error
+
+A really nice command help me to find error on elisp buffer.
+
+#+BEGIN_SRC emacs-lisp
+  (defun eval-buffer-until-error ()
+    "Evaluate emacs buffer until error occured."
+    (interactive)
+    (goto-char (point-min))
+    (while t (eval (read (current-buffer)))))
 #+END_SRC
 
 * Org-mode configuration
@@ -204,25 +504,27 @@ This part is the customization to org-mode.
 
 #+BEGIN_SRC emacs-lisp
 
-    (setq org-startup-indented t)
+  (setq org-startup-indented t)
 
-    (defun org-mode-my-init ()
-      (define-key org-mode-map (kbd "×") (kbd "*"))
-      ;;(define-key org-mode-map (kbd "－") (kbd "-"))
-      (define-key org-mode-map (kbd "（") (kbd "("))
-      (define-key org-mode-map (kbd "）") (kbd ")"))
-      )
-    (add-hook 'org-mode-hook 'org-mode-my-init)
+  (defun org-mode-my-init ()
+    (define-key org-mode-map (kbd "×") (kbd "*"))
+    ;;(define-key org-mode-map (kbd "－") (kbd "-"))
+    (define-key org-mode-map (kbd "（") (kbd "("))
+    (define-key org-mode-map (kbd "）") (kbd ")"))
+    )
+  (add-hook 'org-mode-hook 'org-mode-my-init)
 
 #+END_SRC
 ** Org columns and properties
 
 #+BEGIN_SRC emacs-lisp
-
-  (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
-
-  (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
-                                      ("STYLE_ALL" . "habit"))))
+  (eval-after-load 'org
+    '(progn
+       (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
+       (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
+                                           ("STYLE_ALL" . "habit"))))
+       )
+    )
 
 #+END_SRC
 
@@ -251,7 +553,7 @@ This part is the customization to org-mode.
 #+END_SRC
 ** Org-notify
 
-#+BEGIN_SRC emacs-liso
+#+BEGIN_SRC emacs-lisp
 
   (require 'org-notify)
   (org-notify-start)
@@ -268,7 +570,7 @@ This part is the customization to org-mode.
 #+END_SRC
 ** Org-pomodoro
 
-#+BEGIN_SRC eamcs-lisp
+#+BEGIN_SRC emacs-lisp
 
   (defun notify-osx (title message)
     (call-process "gol"
@@ -305,90 +607,90 @@ This part is the customization to org-mode.
 
 #+END_SRC
 
-** Org-agenda
+** Org-agenda and capture
 
 #+BEGIN_SRC emacs-lisp
+  (eval-after-load 'org
+    '(progn
+       (setq org-agenda-dir "~/Emacs-lengyue/GTD-lengyue")
+       (setq org-agenda-file-gtd (expand-file-name "GTD-lengyue.org" org-agenda-dir))
+       (setq org-agenda-files `(,org-agenda-file-gtd))
 
-    (setq org-agenda-dir "~/Emacs-lengyue/GTD-lengyue")
-    (setq org-agenda-file-gtd (expand-file-name "GTD-lengyue.org" org-agenda-dir))
-    (setq org-agenda-files `(,org-agenda-file-gtd))
+       (setq org-default-notes-file org-agenda-file-gtd)
+       (setq org-todo-keywords
+            '((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d)")
+              (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "HOLD(h@/!)" "CANCELLED(c@/!)")
+              (sequence "INBOX(i)" "|" "NOTE(e)" "PHONE(p)" "MEETING(m)")
+              (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
+       (setq org-refile-targets
+             '(("GTD-lengyue.org" :maxlevel . 1)))
+       (setq org-log-into-drawer t)
+       (setq org-agenda-custom-commands
+          '(
+            ("i" "Inbox" todo "INBOX")
+            ("h" "Holdtodo" todo "HOLD")
+            ("e" "Note" todo "NOTE")
+            ("s" "Someday/Maybe" todo "SOMEDAY")
+            ("b" "Blog" tags-todo "BLOG")
+            ("w" . " 任务安排 ")
+            ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
+            ("wb" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
+            ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
+            ("p" . " 项目安排 ")
+            ("W" "Weekly Review"
+             ((stuck "");; review stuck projects as designated by org-stuck-projects
+              (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
+              )))))
+    )
 
-    (setq org-default-notes-file org-agenda-file-gtd)
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d)")
-            (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "HOLD(h@/!)" "CANCELLED(c@/!)")
-            (sequence "INBOX(i)" "|" "NOTE(e)" "PHONE(p)" "MEETING(m)")
-            (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
-(setq org-refile-targets
-        '(("GTD-lengyue.org" :maxlevel . 1)))
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)  ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
-(setq org-log-into-drawer t)
+  (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
 
-(setq org-agenda-custom-commands
-        '(
-          ("i" "Inbox" todo "INBOX")
-          ("h" "Holdtodo" todo "HOLD")
-          ("e" "Note" todo "NOTE")
-          ("s" "Someday/Maybe" todo "SOMEDAY")
-          ("b" "Blog" tags-todo "BLOG")
-          ("w" . " 任务安排 ")
-          ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
-          ("wb" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
-          ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
-          ("p" . " 项目安排 ")
-          ("W" "Weekly Review"
-           ((stuck "")            ;; review stuck projects as designated by org-stuck-projects
-            (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
-            ))))
-
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)  ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-(add-hook'org-after-todo-statistics-hook 'org-summary-todo)
-  
-  ;;used by org-clock-sum-today-by-tags
-(defun filter-by-tags ()
-    (let ((head-tags (org-get-tags-at)))
-      (member current-tag head-tags)))
+    ;;used by org-clock-sum-today-by-tags
+  (defun filter-by-tags ()
+      (let ((head-tags (org-get-tags-at)))
+        (member current-tag head-tags)))
 
 
   (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-    (interactive "P")
-    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-           (files (org-add-archive-files (org-agenda-files)))
-           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
-           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-           (output-string "")
-           (tstart (or tstart
-                       (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
-                       (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
-                       (org-time-today)))
-           (tend (or tend
-                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
-                     (+ tstart 86400)))
-           h m file item prompt donesomething)
-      (while (setq file (pop files))
-        (setq org-agenda-buffer (if (file-exists-p file)
-                                    (org-get-agenda-file-buffer file)
-                                  (error "No such file %s" file)))
-        (with-current-buffer org-agenda-buffer
-          (dolist (current-tag include-tags)
-            (org-clock-sum tstart tend'filter-by-tags)
-            (setcdr (assoc current-tag tags-time-alist)
-                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-      (while (setq item (pop tags-time-alist))
-        (unless (equal (cdr item) 0)
-          (setq donesomething t)
-          (setq h (/ (cdr item) 60)
-                m (- (cdr item) (* 60 h)))
-          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-      (unless donesomething
-        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-      (unless noinsert
-        (insert output-string))
-      output-string))
+      (interactive "P")
+      (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+             (files (org-add-archive-files (org-agenda-files)))
+             (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
+             (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+             (output-string "")
+             (tstart (or tstart
+                         (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
+                         (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+                         (org-time-today)))
+             (tend (or tend
+                       (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+                       (+ tstart 86400)))
+             h m file item prompt donesomething)
+        (while (setq file (pop files))
+          (setq org-agenda-buffer (if (file-exists-p file)
+                                      (org-get-agenda-file-buffer file)
+                                    (error "No such file %s" file)))
+          (with-current-buffer org-agenda-buffer
+            (dolist (current-tag include-tags)
+              (org-clock-sum tstart tend'filter-by-tags)
+              (setcdr (assoc current-tag tags-time-alist)
+                      (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+        (while (setq item (pop tags-time-alist))
+          (unless (equal (cdr item) 0)
+            (setq donesomething t)
+            (setq h (/ (cdr item) 60)
+                  m (- (cdr item) (* 60 h)))
+            (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+        (unless donesomething
+          (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+        (unless noinsert
+          (insert output-string))
+        output-string))
 
 #+END_SRC
 
@@ -521,8 +823,10 @@ This part is the customization to org-mode.
   (setq org-export-latex-listings t)
 
   ;;org-mode source code setup in exporting to latex
-  (add-to-list 'org-latex-listings '("" "listings"))
-  (add-to-list 'org-latex-listings '("" "color"))
+  (add-to-list 'org-latex-listings
+               '("" "listings"))
+  (add-to-list 'org-latex-listings
+               '("" "color"))
 
   (add-to-list 'org-latex-packages-alist
                '("" "xcolor" t))
@@ -570,153 +874,168 @@ This part is the customization to org-mode.
   (add-to-list 'org-latex-classes
                '("lengyue-org-book"
                  "\\documentclass{book}
-\\usepackage[slantfont, boldfont]{xeCJK}
-% chapter set
-\\usepackage{titlesec}
-\\usepackage{hyperref}
+  \\usepackage[slantfont, boldfont]{xeCJK}
+  % chapter set
+  \\usepackage{titlesec}
+  \\usepackage{hyperref}
 
-[NO-DEFAULT-PACKAGES]
-[PACKAGES]
+  [NO-DEFAULT-PACKAGES]
+  [PACKAGES]
 
 
-\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
-\\setCJKsansfont{WenQuanYi Micro Hei}
-\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+  \\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setCJKsansfont{WenQuanYi Micro Hei}
+  \\setCJKmonofont{WenQuanYi Micro Hei Mono}
 
-\\setmainfont{DejaVu Sans} % 英文衬线字体
-\\setsansfont{DejaVu Serif} % 英文无衬线字体
-\\setmonofont{DejaVu Sans Mono}
-%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
-%\\setsansfont{WenQuanYi Micro Hei}
-%\\setmonofont{WenQuanYi Micro Hei Mono}
+  \\setmainfont{DejaVu Sans} % 英文衬线字体
+  \\setsansfont{DejaVu Serif} % 英文无衬线字体
+  \\setmonofont{DejaVu Sans Mono}
+  %\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  %\\setsansfont{WenQuanYi Micro Hei}
+  %\\setmonofont{WenQuanYi Micro Hei Mono}
 
-%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
-\\defaultfontfeatures{Mapping=tex-text}
+  %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+  \\defaultfontfeatures{Mapping=tex-text}
 
-% 中文断行
-\\XeTeXlinebreaklocale \"zh\"
-\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+  % 中文断行
+  \\XeTeXlinebreaklocale \"zh\"
+  \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
 
-% 代码设置
-\\lstset{numbers=left,
-numberstyle= \\tiny,
-keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
-frame=shadowbox,
-breaklines=true,
-rulesepcolor= \\color{ red!20!green!20!blue!20}
-}
+  % 代码设置
+  \\lstset{numbers=left,
+  numberstyle= \\tiny,
+  keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+  frame=shadowbox,
+  breaklines=true,
+  rulesepcolor= \\color{ red!20!green!20!blue!20}
+  }
 
-[EXTRA]
-"
-                 ("\\chapter{%s}" . "\\chapter*{%s}")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  [EXTRA]
+  "
+                   ("\\chapter{%s}" . "\\chapter*{%s}")
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   (add-to-list 'org-latex-classes
                '("lengyue-org-article"
                  "\\documentclass{article}
-\\usepackage[slantfont, boldfont]{xeCJK}
-\\usepackage{titlesec}
-\\usepackage{hyperref}
+  \\usepackage[slantfont, boldfont]{xeCJK}
+  \\usepackage{titlesec}
+  \\usepackage{hyperref}
 
-[NO-DEFAULT-PACKAGES]
-[PACKAGES]
+  [NO-DEFAULT-PACKAGES]
+  [PACKAGES]
 
-\\parindent 2em
+  \\parindent 2em
 
-\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
-\\setCJKsansfont{WenQuanYi Micro Hei}
-\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+  \\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setCJKsansfont{WenQuanYi Micro Hei}
+  \\setCJKmonofont{WenQuanYi Micro Hei Mono}
 
-\\setmainfont{DejaVu Sans} % 英文衬线字体
-\\setsansfont{DejaVu Serif} % 英文无衬线字体
-\\setmonofont{DejaVu Sans Mono}
-%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
-%\\setsansfont{WenQuanYi Micro Hei}
-%\\setmonofont{WenQuanYi Micro Hei Mono}
+  \\setmainfont{DejaVu Sans} % 英文衬线字体
+  \\setsansfont{DejaVu Serif} % 英文无衬线字体
+  \\setmonofont{DejaVu Sans Mono}
+  %\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  %\\setsansfont{WenQuanYi Micro Hei}
+  %\\setmonofont{WenQuanYi Micro Hei Mono}
 
-%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
-\\defaultfontfeatures{Mapping=tex-text}
+  %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+  \\defaultfontfeatures{Mapping=tex-text}
 
-% 中文断行
-\\XeTeXlinebreaklocale \"zh\"
-\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+  % 中文断行
+  \\XeTeXlinebreaklocale \"zh\"
+  \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
 
-% 代码设置
-\\lstset{numbers=left,
-numberstyle= \\tiny,
-keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
-frame=shadowbox,
-breaklines=true,
-rulesepcolor= \\color{ red!20!green!20!blue!20}
-}
+  % 代码设置
+  \\lstset{numbers=left,
+  numberstyle= \\tiny,
+  keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+  frame=shadowbox,
+  breaklines=true,
+  rulesepcolor= \\color{ red!20!green!20!blue!20}
+  }
 
-[EXTRA]
-"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  [EXTRA]
+  "
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   (add-to-list 'org-latex-classes
                '("lengyue-org-beamer"
                  "\\documentclass{beamer}
-\\usepackage[slantfont, boldfont]{xeCJK}
-% beamer set
-\\usepackage[none]{hyphenat}
-\\usepackage[abs]{overpic}
+  \\usepackage[slantfont, boldfont]{xeCJK}
+  % beamer set
+  \\usepackage[none]{hyphenat}
+  \\usepackage[abs]{overpic}
 
-[NO-DEFAULT-PACKAGES]
-[PACKAGES]
+  [NO-DEFAULT-PACKAGES]
+  [PACKAGES]
 
-\\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
-\\setCJKsansfont{WenQuanYi Micro Hei}
-\\setCJKmonofont{WenQuanYi Micro Hei Mono}
+  \\setCJKmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  \\setCJKsansfont{WenQuanYi Micro Hei}
+  \\setCJKmonofont{WenQuanYi Micro Hei Mono}
 
-\\setmainfont{DejaVu Sans} % 英文衬线字体
-\\setsansfont{DejaVu Serif} % 英文无衬线字体
-\\setmonofont{DejaVu Sans Mono}
-%\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
-%\\setsansfont{WenQuanYi Micro Hei}
-%\\setmonofont{WenQuanYi Micro Hei Mono}
+  \\setmainfont{DejaVu Sans} % 英文衬线字体
+  \\setsansfont{DejaVu Serif} % 英文无衬线字体
+  \\setmonofont{DejaVu Sans Mono}
+  %\\setmainfont{WenQuanYi Micro Hei} % 设置缺省中文字体
+  %\\setsansfont{WenQuanYi Micro Hei}
+  %\\setmonofont{WenQuanYi Micro Hei Mono}
 
-%如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
-\\defaultfontfeatures{Mapping=tex-text}
+  %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+  \\defaultfontfeatures{Mapping=tex-text}
 
-% 中文断行
-\\XeTeXlinebreaklocale \"zh\"
-\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+  % 中文断行
+  \\XeTeXlinebreaklocale \"zh\"
+  \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
 
-% 代码设置
-\\lstset{numbers=left,
-numberstyle= \\tiny,
-keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
-frame=shadowbox,
-breaklines=true,
-rulesepcolor= \\color{ red!20!green!20!blue!20}
-}
+  % 代码设置
+  \\lstset{numbers=left,
+  numberstyle= \\tiny,
+  keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50},
+  frame=shadowbox,
+  breaklines=true,
+  rulesepcolor= \\color{ red!20!green!20!blue!20}
+  }
 
-[EXTRA]
-"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  [EXTRA]
+  "
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   (setq org-latex-pdf-process
-        '("xelatex -interaction nonstopmode -output-directory %o %f"
-          ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
-          "bibtex %b"
-          "xelatex -interaction nonstopmode -output-directory %o %f"
-          "xelatex -interaction nonstopmode -output-directory %o %f"))
+          '("xelatex -interaction nonstopmode -output-directory %o %f"
+            ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+            "bibtex %b"
+            "xelatex -interaction nonstopmode -output-directory %o %f"
+            "xelatex -interaction nonstopmode -output-directory %o %f"))
 
 
 #+END_SRC
+** Setup link abbreviations
+
+[[https://www.gnu.org/software/emacs/manual/html_node/org/Link-abbreviations.html][Link abbreviations]]
+
+An abbreviated link looks like
+
+: [[linkword:tag][description]]
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-link-abbrev-alist
+        '(("google" . "http://www.google.com/search?q=")
+          ("google-map" . "http://maps.google.com/maps?q=%s")
+          ))
+#+END_SRC
+
 ** Org-subtask and org-checklist
 
 #+BEGIN_SRC emacs-lisp
@@ -740,10 +1059,26 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
         org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
 
 #+END_SRC
-
 * Programming Languages
 
 This part is the customization to programming languages.
+
+** Add support for editorconfig                               :editorconfig:
+
+[[http://editorconfig.org/][EditorConfig]] helps developers define and maintain consistent coding
+styles between different editors and IDEs. The EditorConfig project
+consists of a file format for defining coding styles and a collection
+of text editor plugins that enable editors to read the file format and
+adhere to defined styles. EditorConfig files are easily readable and
+they work nicely with version control systems.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package editorconfig
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook (editorconfig-mode 1))
+    (add-hook 'text-mode-hook (editorconfig-mode 1)))
+#+END_SRC
 
 ** Ess and R
 
@@ -771,29 +1106,116 @@ This part is the customization to programming languages.
 
 #+END_SRC
 
+* External package besides spacemacs
+
+** Pangu-spacing
+
+=pangu-spcing= is an minor-mode to auto add space between Chinese and English characters. Note that these white-space characters are not really added to the contents, it just like to do so.
+
+#+BEGIN_SRC emacs-lisp
+
+  (req-package pangu-spacing
+    :init
+    (progn
+      ;; start pangu-spacing globally
+      (global-pangu-spacing-mode 1)
+      ;; Always insert `real' space in org-mode.
+      (add-hook 'org-mode-hook
+                '(lambda ()
+                   (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))))
+
+#+END_SRC
+
+** Bold-admin
+
+#+BEGIN_SRC emacs-lisp
+
+  ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
+  
+  (require 'blog-admin)
+
+  ;;  (setq blog-admin-backend-type 'org-page)
+  ;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
+  ;;  (setq blog-admin-backend-new-post-in-drafts t)
+  ;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
+  ;;  (setq blog-admin-backend-org-page-drafts "_drafts")
+
+  ;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
+  ;;  (setq op/site-domain "http://lengyueyang.github.io") 
+  ;;  (setq op/personal-disqus-shortname "lengyueyang")
+
+  (setq blog-admin-backend-type 'hexo)
+  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
+  (setq blog-admin-backend-new-post-in-drafts t)
+  (setq blog-admin-backend-new-post-with-same-name-dir t)
+
+#+END_SRC
+
+** Hexo configuration
+
+#+BEGIN_SRC emacs-lisp
+
+  (require'cl)
+
+  (setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
+
+  (defun lengyueyang/hexo-publish (commit-msg)
+    "git add . & git commit & git push & hexo d"
+    (interactive "sInput commit message:")
+    (async-shell-command (format "cd %s ;git add . ;git commit -m \"%s\" ;git push ;hexo clean; hexo g; hexo d -g"
+                                 hexo-dir
+                                 commit-msg)))
+
+  (defun lengyueyang/hexo-org-add-read-more ()
+    "add <!--more-->"
+    (interactive)
+    (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
+
+  (defun lengyueyang/hexo-org-new-open-post (post-name)
+    "create a hexo org post"
+    (interactive "sInput post name:")
+    (find-file (format "%s/source/_posts/%s.org" hexo-dir post-name))
+    (insert (format "#+TITLE: %s
+  ,#+DATE: %s
+  ,#+LAYOUT: post
+  ,#+TAGS:
+  ,#+CATEGORIES:
+  "  post-name (format-time-string "<%Y-%m-%d %a %H:%M>"))))
+
+  (defun lengyueyang/hexo-org-source ()
+    "use dired open hexo source dir"
+    (interactive)
+    (ido-find-file-in-dir (format "%s/source/" hexo-dir))
+    )
+
+  (defun lengyueyang/hexo-move-article ()
+    "Move current file between _post and _draft;
+  You can run this function in dired or a hexo article."
+    (interactive)
+    (if (string-match "/\\(_posts/\\|_drafts/\\)$" default-directory)
+        (let* ((parent-dir (file-truename (concat default-directory "../")))
+               (dest-dir (if (string-match "_drafts/$" default-directory) "_posts/" "_drafts/"))))
+          (cond (or (eq major-mode 'markdown-mode) (eq major-mode 'org-mode))
+                 (let* ((cur-file (buffer-file-name))
+                        (new-file (concat parent-dir dest-dir (buffer-name))))
+                   (save-buffer)
+                   (kill-buffer)
+                   (rename-file cur-file new-file)
+                   (find-file new-file)
+                   (message (format "Now in %s" dest-dir))))
+                ((eq major-mode 'dired-mode)
+                 (dired-rename-file (dired-get-filename nil)
+                                    (concat parent-dir dest-dir (dired-get-filename t))
+                                    nil)
+                 (message (format "The article has been moved to %s" dest-dir))))
+      (message "You have to run this in a hexo article buffer or dired"))
+
+#+END_SRC
+
 * Other customization
 
 This part is some customization not belong to the anterior part.
 
-** Personal information setup
-
-#+BEGIN_SRC emacs-lisp
-
-(setq user-full-name "lengyuyang"
-      user-mail-address "maoxiaoweihl@gmail.com")
-
-#+END_SRC
-** Hungry-delete
-
-[[https://github.com/nflath/hungry-delete][hungry-delete]] borrows hungry deletion from =cc-mode=, which will causes deletion
-to delete all whitespace in the direction you are deleting.
-
-#+BEGIN_SRC emacs-lisp
-
-  (req-package hungry-delete
-    :init (global-hungry-delete-mode))
-
-#+END_SRC
 ** Disable auto paste from clipboard
 
 #+BEGIN_SRC emacs-lisp
@@ -802,7 +1224,8 @@ to delete all whitespace in the direction you are deleting.
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 
 #+END_SRC
-** truncate lines automatically
+
+** Truncate lines automatically
 
 #+BEGIN_SRC emacs-lisp
 
@@ -812,40 +1235,32 @@ to delete all whitespace in the direction you are deleting.
 
 #+END_SRC
 
-** Set the  chinese font alignment
-
-#+BEGIN_SRC emacs-lisp
-
-  (spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
-
-#+END_SRC
-
 ** Hotspots
 
 #+BEGIN_SRC emacs-lisp
 
-(defun lengyueyang/hotspots ()
-  "helm interface to my hotspots, which includes my locations,
-org-files and bookmarks"
-  (interactive)
-  (helm :buffer "*helm: utities*"
-        :sources `(,(lengyueyang//hotspots-sources))))
+  (defun lengyueyang/hotspots ()
+    "helm interface to my hotspots, which includes my locations,
+  org-files and bookmarks"
+    (interactive)
+    (helm :buffer "*helm: utities*"
+          :sources `(,(lengyueyang//hotspots-sources))))
 
-(defun lengyueyang//hotspots-sources ()
-  "Construct the helm sources for my hotspots"
-  `((name . "lengyueyang's center")
-    (candidates . (
-                   ("Agenda" . (lambda () (org-agenda "" "a")))
-                   ("Blog" . (lambda() (blog-admin-start)))
-                   ("Elfeed" . (lambda () (elfeed)))
-                   ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
-                   ("Agenda Menu" . (lambda () (org-agenda)))
-                   ("Open Github" . (lambda() (browse-url "https://github.com/lengyueyang")))
-                   ("Open Blog" . (lambda() (browse-url "http://lengyueyang.github.io")))))
-    (candidate-number-limit)
-    (action . (("Open" . (lambda (x) (funcall x)))))))
+  (defun lengyueyang//hotspots-sources ()
+    "Construct the helm sources for my hotspots"
+    `((name . "lengyueyang's center")
+      (candidates . (
+                     ("Agenda" . (lambda () (org-agenda "" "a")))
+                     ("Blog" . (lambda() (blog-admin-start)))
+                     ("Elfeed" . (lambda () (elfeed)))
+                     ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
+                     ("Agenda Menu" . (lambda () (org-agenda)))
+                     ("Open Github" . (lambda() (browse-url "https://github.com/lengyueyang")))
+                     ("Open Blog" . (lambda() (browse-url "http://lengyueyang.github.io")))))
+      (candidate-number-limit)
+      (action . (("Open" . (lambda (x) (funcall x)))))))
 
-(define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
+  (define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
 
 #+END_SRC
 ** Count chinese word
@@ -900,92 +1315,6 @@ org-files and bookmarks"
              (+ chinese-char english-word)))))
 
 #+END_SRC
-** Bold-admin
-
-#+BEGIN_SRC emacs-lisp
-
-  ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
-  
-  (require 'blog-admin)
-
-  ;;  (setq blog-admin-backend-type 'org-page)
-  ;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
-  ;;  (setq blog-admin-backend-new-post-in-drafts t)
-  ;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
-  ;;  (setq blog-admin-backend-org-page-drafts "_drafts")
-
-  ;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
-  ;;  (setq op/site-domain "http://lengyueyang.github.io") 
-  ;;  (setq op/personal-disqus-shortname "lengyueyang")
-
-  (setq blog-admin-backend-type 'hexo)
-  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
-  (setq blog-admin-backend-new-post-in-drafts t)
-  (setq blog-admin-backend-new-post-with-same-name-dir t)
-
-#+END_SRC
-
-** Hexo configuration
-
-#+BEGIN_SRC emacs-lisp
-
-(require'cl)
-
-(setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
-
-(defun lengyueyang/hexo-publish (commit-msg)
-  "git add . & git commit & git push & hexo d"
-  (interactive "sInput commit message:")
-  (async-shell-command (format "cd %s ;git add . ;git commit -m \"%s\" ;git push ;hexo clean; hexo g; hexo d -g"
-                               hexo-dir
-                               commit-msg)))
-
-(defun lengyueyang/hexo-org-add-read-more ()
-  "add <!--more-->"
-  (interactive)
-  (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
-
-(defun lengyueyang/hexo-org-new-open-post (post-name)
-  "create a hexo org post"
-  (interactive "sInput post name:")
-  (find-file (format "%s/source/_posts/%s.org" hexo-dir post-name))
-  (insert (format "#+TITLE: %s
-#+DATE: %s
-#+LAYOUT: post
-#+TAGS:
-#+CATEGORIES:
-"  post-name (format-time-string "<%Y-%m-%d %a %H:%M>"))))
-
-(defun lengyueyang/hexo-org-source ()
-  "use dired open hexo source dir"
-  (interactive)
-  (ido-find-file-in-dir (format "%s/source/" hexo-dir))
-  )
-
-(defun lengyueyang/hexo-move-article ()
-  "Move current file between _post and _draft;
-You can run this function in dired or a hexo article."
-  (interactive)
-  (if (string-match "/\\(_posts/\\|_drafts/\\)$" default-directory)
-      (let* ((parent-dir (file-truename (concat default-directory "../")))
-             (dest-dir (if (string-match "_drafts/$" default-directory) "_posts/" "_drafts/"))))
-        (cond (or (eq major-mode 'markdown-mode) (eq major-mode 'org-mode))
-               (let* ((cur-file (buffer-file-name))
-                      (new-file (concat parent-dir dest-dir (buffer-name))))
-                 (save-buffer)
-                 (kill-buffer)
-                 (rename-file cur-file new-file)
-                 (find-file new-file)
-                 (message (format "Now in %s" dest-dir))))
-              ((eq major-mode 'dired-mode)
-               (dired-rename-file (dired-get-filename nil)
-                                  (concat parent-dir dest-dir (dired-get-filename t))
-                                  nil)
-               (message (format "The article has been moved to %s" dest-dir))))
-    (message "You have to run this in a hexo article buffer or dired"))
-
-#+END_SRC
-
 ** End of configuration
 
 Oh YA!! We finish loading emacs configuration :)
@@ -1000,5 +1329,23 @@ to execute following line to send =req-package= on its merry way.
 #+END_SRC
 
 * Reference
-
  
+Following link is refrence for my emac config.
+
+~[1]~ https://github.com/r0man/.emacs.d/blob/master/init.el.org
+
+~[2]~ https://github.com/bodil/emacs.d
+
+~[3]~ https://github.com/mgalgs/.emacs.d
+
+~[4]~ https://raw.githubusercontent.com/sbisaacson/literate-emacs/master/README.org
+
+~[5]~ https://github.com/jhenahan/emacs.d/blob/master/emacs-init.org
+
+~[6]~ https://ryuslash.org/dotfiles/emacs/init.html
+
+~[7]~ http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.org_.txt
+
+~[8]~ https://github.com/howardabrams/dot-files
+
+~[9]~ [[https://github.com/coldnew/coldnew-spacemacs]]

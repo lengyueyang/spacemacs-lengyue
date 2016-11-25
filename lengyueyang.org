@@ -111,7 +111,7 @@ org related keybindings in Org-mode configuration part.
     (find-file "~/.spacemacs.d/lengyueyang.org"))
 
   (global-set-key (kbd "<f2>") 'open-my-init-file)
-
+  (spacemacs/set-leader-keys "oo" 'open-my-init-file)
 #+END_SRC
 
 ** F3 to open stardict
@@ -120,7 +120,7 @@ org related keybindings in Org-mode configuration part.
 
   (require 'chinese-yasdcv)
   (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
-
+  (spacemacs/set-leader-keys "oy" 'yasdcv-translate-at-point)
 #+END_SRC
 
 ** F8 to checkout the spelling of words
@@ -128,6 +128,16 @@ org related keybindings in Org-mode configuration part.
 #+BEGIN_SRC emacs-lisp
 
   (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
+  (spacemacs/set-leader-keys "os" 'flyspell-correct-previous-word-generic)
+
+#+END_SRC
+
+** Org-iswitch
+
+#+BEGIN_SRC emacs-lisp
+
+  (global-set-key (kbd "C-c b") 'org-iswitchb)
+  ;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
 
 #+END_SRC
 
@@ -178,7 +188,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
   (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
 
-  ;;(defun zilongshanren-misc/post-init-persp-mode ()
+  ;;(defun lengyueyang-misc/post-init-persp-mode ()
   ;;  (setq persp-kill-foreign-buffer-action 'kill)
   ;;  (setq persp-lighter nil)
   ;;  (when (fboundp 'spacemacs|define-custom-layout)
@@ -196,7 +206,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
 #+BEGIN_SRC emacs-lisp
 
   (global-set-key (kbd "<f5>") 'deft)
-  (setq deft-extensions '("txt" "tex" "org"))
+  (setq deft-extensions '("txt" "tex" "org" "mk" "makedown"))
   (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
 #+END_SRC
@@ -208,7 +218,8 @@ for Zen Coding by producing HTML from CSS-like selectors.
 
 GitHub: https://github.com/smihica/emmet-mode
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
+
   (req-package emmet-mode
     :config
     (progn
@@ -226,6 +237,7 @@ GitHub: https://github.com/smihica/emmet-mode
       ;; Make tab can also expand emmt instead of use yasnippet directly
       (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
       (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
+
 #+END_SRC
 
 * Basic setup
@@ -239,8 +251,8 @@ implement some of them to make my emacs more easy to use.
 
 #+BEGIN_SRC emacs-lisp
 
-(setq user-full-name "lengyuyang"
-      user-mail-address "maoxiaoweihl@gmail.com")
+  (setq user-full-name "lengyuyang"
+        user-mail-address "maoxiaoweihl@gmail.com")
 
 #+END_SRC
 ** Don't ask me when kill process buffer
@@ -252,24 +264,73 @@ implement some of them to make my emacs more easy to use.
               kill-buffer-query-functions))
 
 #+END_SRC
-
-** Hungry-delete
-
-[[https://github.com/nflath/hungry-delete][hungry-delete]] borrows hungry deletion from =cc-mode=, which will causes deletion
-to delete all whitespace in the direction you are deleting.
-
-#+BEGIN_SRC emacs-lisp
-
-  (req-package hungry-delete
-    :init (global-hungry-delete-mode))
-
-#+END_SRC
-
 ** Set the chinese font alignment
 
 #+BEGIN_SRC emacs-lisp
 
   (spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
+
+#+END_SRC
+** Add auto format paste code
+
+#+BEGIN_SRC emacs-lisp
+
+  (dolist (command '(yank yank-pop))
+    (eval
+     `(defadvice ,command (after indent-region activate)
+        (and (not current-prefix-arg)
+             (member major-mode
+                     '(emacs-lisp-mode
+                       lisp-mode
+                       clojure-mode
+                       scheme-mode
+                       haskell-mode
+                       ruby-mode
+                       rspec-mode
+                       python-mode
+                       c-mode
+                       c++-mode
+                       objc-mode
+                       latex-mode
+                       js-mode
+                       plain-tex-mode))
+             (let ((mark-even-if-inactive transient-mark-mode))
+               (indent-region (region-beginning) (region-end) nil))))))
+
+#+END_SRC
+
+** Simple better defaults
+
+#+BEGIN_SRC emacs-lisp
+
+  (global-prettify-symbols-mode 1)
+  (setq-default fill-column 80)
+  (defadvice find-file (before make-directory-maybe
+                               (filename &optional wildcards) activate)
+    "Create parent directory if not exists while visiting file."
+    (unless (file-exists-p filename)
+      (let ((dir (file-name-directory filename)))
+        (when dir
+          (unless (file-exists-p dir)
+            (make-directory dir t))))))
+
+#+END_SRC
+
+** Large file handle
+
+#+BEGIN_SRC emacs-lisp
+
+  (setq large-file-warning-threshold 300000000)
+  (defun spacemacs/check-large-file ()
+    (when (> (buffer-size) 500000)
+      (progn (fundamental-mode)
+             (hl-line-mode -1)))
+    (if (and (executable-find "wc")
+             (> (string-to-number (shell-command-to-string (format "wc -l %s" (buffer-file-name))))
+                5000))
+        (linum-mode -1)))
+
+  (add-hook 'find-file-hook 'spacemacs/check-large-file)
 
 #+END_SRC
 
@@ -278,21 +339,25 @@ to delete all whitespace in the direction you are deleting.
 *** Indent whole buffer
 
 #+BEGIN_SRC emacs-lisp
+
   (defun indent-whole-buffer ()
     "Indent whole buffer."
     (interactive)
     (save-excursion
       (indent-region (point-min) (point-max))))
+
 #+END_SRC
 
 *** Quick folding source block
 
 #+BEGIN_SRC emacs-lisp
+
   (defun quick-folding-source ()
     "Use emacs buildin easy to folding code."
     (interactive)
     (set-selective-display
      (if selective-display nil 1)))
+
 #+END_SRC
 
 ** Edit (Insert/Remove)
@@ -305,21 +370,25 @@ use under org-mode.
 For more info, please see: [[https://lists.gnu.org/archive/html/emacs-orgmode/2012-09/msg00155.html][suggestion for org-emphasis-regexp-components: *U*nited *N*ations]]
 
 #+BEGIN_SRC emacs-lisp
+
   (defun insert-U200B-char ()
     "Insert <U200B> char, this character is nice use in org-mode."
     (interactive)
     (insert "\ufeff"))
+
 #+END_SRC
 
 *** Insert empty line after current line
 
 #+BEGIN_SRC emacs-lisp
+
   (defun insert-empty-line ()
     "Insert an empty line after current line and position cursor on newline."
     (interactive)
     (move-end-of-line nil)
     (open-line 1)
     (next-line 1))
+
 #+END_SRC
 
 ** File Handle
@@ -327,17 +396,20 @@ For more info, please see: [[https://lists.gnu.org/archive/html/emacs-orgmode/20
 *** Reopen file as root
 
 #+BEGIN_SRC emacs-lisp
+
   (defun file-reopen-as-root ()
     (interactive)
     (when buffer-file-name
       (find-alternate-file
        (concat "/sudo:root@localhost:"
                buffer-file-name))))
+
 #+END_SRC
 
 *** Delete current buffer file
 
 #+BEGIN_SRC emacs-lisp
+
   (defun delete-current-buffer-file ()
     "Removes file connected to current buffer and kills buffer."
     (interactive)
@@ -350,11 +422,13 @@ For more info, please see: [[https://lists.gnu.org/archive/html/emacs-orgmode/20
           (delete-file filename)
           (kill-buffer buffer)
           (message "File '%s' successfully removed" filename)))))
+
 #+END_SRC
 
 *** Rename current Buffer and file
 
 #+BEGIN_SRC emacs-lisp
+
   (defun rename-current-buffer-file ()
     "Renames current buffer and file it is visiting."
     (interactive)
@@ -371,6 +445,7 @@ For more info, please see: [[https://lists.gnu.org/archive/html/emacs-orgmode/20
             (set-buffer-modified-p nil)
             (message "File '%s' successfully renamed to '%s'"
                      name (file-name-nondirectory new-name)))))))
+
 #+END_SRC
 
 *** Add executable attribute to file
@@ -382,6 +457,7 @@ I only make =owener= can has executable permission, not change it for gourp or
 others user.
 
 #+BEGIN_SRC emacs-lisp
+
   (defun set-file-executable()
     "Add executable permissions on current file."
     (interactive)
@@ -389,11 +465,13 @@ others user.
       (set-file-modes buffer-file-name
                       (logior (file-modes buffer-file-name) #o100))
       (message (concat "Made " buffer-file-name " executable"))))
+
 #+END_SRC
 
 *** Clone current file to new one
 
 #+BEGIN_SRC emacs-lisp
+
   (defun clone-file-and-open (filename)
     "Clone the current buffer writing it into FILENAME and open it"
     (interactive "FClone to file: ")
@@ -401,6 +479,7 @@ others user.
       (widen)
       (write-region (point-min) (point-max) filename nil nil nil 'confirm))
     (find-file filename))
+
 #+END_SRC
 
 ** Keeping files in sync
@@ -412,15 +491,18 @@ risk editing stale buffers.
 This problem can be solved by:
 
 #+BEGIN_SRC emacs-lisp
+
   (global-auto-revert-mode 1)
   (setq global-auto-revert-non-file-buffers t)
   (setq auto-revert-verbose nil)
   (setq revert-without-query '(".*")) ;; disable revert query
+
 #+END_SRC
 
 ** Snippet handle by yasnippet                                   :yasnippet:
 
 #+BEGIN_SRC emacs-lisp
+
   (req-package yasnippet
     :init (yas-global-mode 1)
     :mode ("emacs.+/snippets/" . snippet-mode)
@@ -431,6 +513,7 @@ This problem can be solved by:
                                    yas-ido-prompt))
 
       (setq yas/snippet-dirs (concat user-emacs-directory "snippets"))))
+
 #+END_SRC
 
 *** Implement org-mode's easy-template like function
@@ -440,6 +523,7 @@ I really like org-mode's =easy-template= function, so I implement one called
 major-mode.
 
 #+BEGIN_SRC emacs-lisp
+
   (eval-after-load 'yasnippet
     '(progn
        (defadvice yas-expand (around major-mode-expand activate)
@@ -466,20 +550,25 @@ major-mode.
              t)
            ad-do-it))
        ))
+
 #+END_SRC
 
 Take emacs-lisp-mode as example, if I want to use =<r= and press =TAB=
 then yasnippet will expand the command, just add following code:
 
 #+BEGIN_SRC emacs-lisp :tangle no
+
   (setq emacs-lisp-mode-expand-alist '(("r" . "require")))
+
 #+END_SRC
 
 For c-mode, just do the same but change the relative
 *major-mode-expand-alist* like following
 
 #+BEGIN_SRC emacs-lisp :tangle no
+
   (setq c-mode-expand-alist '(("i" . "include")))
+
 #+END_SRC
 
 ** Debug
@@ -489,11 +578,13 @@ For c-mode, just do the same but change the relative
 A really nice command help me to find error on elisp buffer.
 
 #+BEGIN_SRC emacs-lisp
+
   (defun eval-buffer-until-error ()
     "Evaluate emacs buffer until error occured."
     (interactive)
     (goto-char (point-min))
     (while t (eval (read (current-buffer)))))
+
 #+END_SRC
 
 * Org-mode configuration
@@ -516,10 +607,14 @@ This part is the customization to org-mode.
 
   (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
+  (add-hook 'org-mode-hook 'company-mode)
+
 #+END_SRC
+
 ** Org columns and properties
 
 #+BEGIN_SRC emacs-lisp
+
   (eval-after-load 'org
     '(progn
        (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
@@ -544,13 +639,14 @@ This part is the customization to org-mode.
 (add-hook 'org-mode-hook #'lengyueyang/org-ispell)
 
 #+END_SRC
+
 ** Org bullets customization
 
 #+BEGIN_SRC emacs-lisp
 
-(defun lengyueyang/post-init-org-bullets ()
-  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
-(add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
+  (defun lengyueyang/post-init-org-bullets ()
+    (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+  (add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
 
 #+END_SRC
 ** Org-notify
@@ -570,6 +666,7 @@ This part is the customization to org-mode.
                   '(:time "30d" :actions -email))
 
 #+END_SRC
+
 ** Org-pomodoro
 
 #+BEGIN_SRC emacs-lisp
@@ -700,10 +797,10 @@ This part is the customization to org-mode.
 
 #+BEGIN_SRC emacs-lisp
 
-(add-to-load-path "~/.spacemacs.d/package/org-protocol-capture-html")
-(server-start)
-(require 'org-protocol)
-(require 'org-protocol-capture-html)
+  (add-to-load-path "~/.spacemacs.d/package/org-protocol-capture-html")
+  (server-start)
+  (require 'org-protocol)
+  (require 'org-protocol-capture-html)
 
 
 #+END_SRC
@@ -735,10 +832,10 @@ This part is the customization to org-mode.
              :empty-lines 1)))
 
 #+END_SRC
+
 ** Org-babel customizaton
 
 #+BEGIN_SRC emacs-lisp
-
 
   (setq org-confirm-babel-evaluate nil)
 
@@ -802,17 +899,17 @@ This part is the customization to org-mode.
   ;; Do not prompt to resume an active clock
   (setq org-clock-persist-query-resume nil)
 
-
 #+END_SRC
+
 ** Ob-ipython and Jupter notebook
 
 #+BEGIN_SRC emacs-lisp
 
-(require 'ob-ipython)
-;; (setq org-babel-python-command "/usr/bin/ipython --pylab --pdb --nosep")
-(setq python-shell-prompt-detect-failure-warning nil)
+  (require 'ob-ipython)
+  ;; (setq org-babel-python-command "/usr/bin/ipython --pylab --pdb --nosep")
+  (setq python-shell-prompt-detect-failure-warning nil)
 
-(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
 #+END_SRC
 
@@ -1032,10 +1129,12 @@ An abbreviated link looks like
 : [[linkword:tag][description]]
 
 #+BEGIN_SRC emacs-lisp
+
   (setq org-link-abbrev-alist
         '(("google" . "http://www.google.com/search?q=")
           ("google-map" . "http://maps.google.com/maps?q=%s")
           ))
+
 #+END_SRC
 ** Org-subtask and org-checklist
 
@@ -1052,6 +1151,7 @@ An abbreviated link looks like
 ** Org-archive-all-tasks
 
 #+BEGIN_SRC emacs-lisp
+
   (defun lengyueyang//org-archive-tasks (prefix)
     (org-map-entries
      (lambda ()
@@ -1205,12 +1305,14 @@ of text editor plugins that enable editors to read the file format and
 adhere to defined styles. EditorConfig files are easily readable and
 they work nicely with version control systems.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
+
   (use-package editorconfig
     :ensure t
     :init
     (add-hook 'prog-mode-hook (editorconfig-mode 1))
     (add-hook 'text-mode-hook (editorconfig-mode 1)))
+
 #+END_SRC
 
 ** Ess and R
@@ -1232,14 +1334,51 @@ they work nicely with version control systems.
 
 #+BEGIN_SRC emacs-lisp
 
-(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
-(setq python-fill-column 80)
-(add-hook 'inferior-python-mode-hook 'flycheck-mode)
-(add-hook 'inferior-python-mode-hook 'flyspell-mode)
+  (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+  (setq python-fill-column 80)
+  (add-hook 'inferior-python-mode-hook 'flycheck-mode)
+  (add-hook 'inferior-python-mode-hook 'flyspell-mode)
+
+#+END_SRC
+
+** JS-2 mode
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package nodejs-repl
+    :init
+    :defer t)
+
+  (add-to-load-path "~/.spacemacs.d/package/nodejs-repl-eval")
+  (use-package nodejs-repl-eval
+    :commands (nodejs-repl-eval-buffer nodejs-repl-eval-dwim nodejs-repl-eval-function)
+    :init
+    (progn
+      (spacemacs/declare-prefix-for-mode 'js2-mode
+                                         "mo" "Nodejs-repl")
+      (spacemacs/set-leader-keys-for-major-mode 'js2-mode
+        "oo" 'nodejs-repl
+        "ob" 'nodejs-repl-eval-buffer
+        "of" 'nodejs-repl-eval-function
+        "od" 'nodejs-repl-eval-dwim))
+    :defer t
+    )
 
 #+END_SRC
 
 * External package besides spacemacs
+
+** Hungry-delete
+
+[[https://github.com/nflath/hungry-delete][hungry-delete]] borrows hungry deletion from =cc-mode=, which will causes deletion
+to delete all whitespace in the direction you are deleting.
+
+#+BEGIN_SRC emacs-lisp
+
+  (req-package hungry-delete
+    :init (global-hungry-delete-mode))
+
+#+END_SRC
 
 ** Pangu-spacing
 
@@ -1264,7 +1403,7 @@ they work nicely with version control systems.
 #+BEGIN_SRC emacs-lisp
 
   ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
-  
+
   (require 'blog-admin)
 
   ;;  (setq blog-admin-backend-type 'org-page)
@@ -1353,8 +1492,8 @@ This part is some customization not belong to the anterior part.
 
 #+BEGIN_SRC emacs-lisp
 
-(add-hook 'spacemacs-buffer-mode-hook (lambda ()
-(set (make-local-variable 'mouse-1-click-follows-link) nil)))
+  (add-hook 'spacemacs-buffer-mode-hook (lambda ()
+  (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 
 #+END_SRC
 
@@ -1362,9 +1501,9 @@ This part is some customization not belong to the anterior part.
 
 #+BEGIN_SRC emacs-lisp
 
-(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
-(add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
-(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+  (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
+  (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
 
 #+END_SRC
 
@@ -1396,56 +1535,64 @@ This part is some customization not belong to the anterior part.
   (define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
 
 #+END_SRC
+
 ** Count chinese word
 
 #+BEGIN_SRC emacs-lisp
 
-(defun lengyueyang/word-count-for-chinese ()
-  "「較精確地」統計中 / 日 / 英文字數。
-- 文章中的註解不算在字數內。
-- 平假名與片假名亦包含在「中日文字數」內，每個平 / 片假名都算單獨一個字（但片假
-  名不含連音「ー」）。
-- 英文只計算「單字數」，不含標點。
-- 韓文不包含在內。
-※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
-。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
-中間的點也被 Emacs 算為一個字而不是標點符號。"
-  (interactive)
-  (let* ((v-buffer-string
-          (progn
-            (if (eq major-mode 'org-mode) ; 去掉 org 文件的 OPTIONS（以 #+ 開頭）
-                (setq v-buffer-string (replace-regexp-in-string "^#\\+.+" ""
-                                                                (buffer-substring-no-properties (point-min) (point-max))))
-              (setq v-buffer-string (buffer-substring-no-properties (point-min) (point-max))))
-            (replace-regexp-in-string (format "^ *%s *.+" comment-start) "" v-buffer-string)))
-                                        ; 把註解行刪掉（不把註解算進字數）。
-         (chinese-char-and-punc 0)
-         (chinese-punc 0)
-         (english-word 0)
-         (chinese-char 0))
-    (with-temp-buffer
-      (insert v-buffer-string)
-      (goto-char (point-min))
-      ;; 中文（含標點、片假名）
-      (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
-        (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
-      ;; 中文標點符號
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
-        (setq chinese-punc (1+ chinese-punc)))
-      ;; 英文字數（不含標點）
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-english-word nil :no-error)
-        (setq english-word (1+ english-word))))
-    (setq chinese-char (- chinese-char-and-punc chinese-punc))
-    (message
-     (format " 中日文字數（不含標點）：%s
- 中日文字數（包含標點）：%s
- 英文字數（不含標點）：%s
-=======================
- 中英文合計（不含標點）：%s"
-             chinese-char chinese-char-and-punc english-word
-             (+ chinese-char english-word)))))
+  (defvar wc-regexp-chinese-char-and-punc
+    (rx (category chinese)))
+  (defvar wc-regexp-chinese-punc
+    "[。，！？；：「」『』（）、【】《》〈〉※—]")
+  (defvar wc-regexp-english-word
+    "[a-zA-Z0-9-]+")
+
+  (defun lengyueyang/word-count-for-chinese ()
+    "「較精確地」統計中 / 日 / 英文字數。
+  - 文章中的註解不算在字數內。
+  - 平假名與片假名亦包含在「中日文字數」內，每個平 / 片假名都算單獨一個字（但片假
+    名不含連音「ー」）。
+  - 英文只計算「單字數」，不含標點。
+  - 韓文不包含在內。
+  ※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
+  。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
+  中間的點也被 Emacs 算為一個字而不是標點符號。"
+    (interactive)
+    (let* ((v-buffer-string
+            (progn
+              (if (eq major-mode 'org-mode) ; 去掉 org 文件的 OPTIONS（以 #+ 開頭）
+                  (setq v-buffer-string (replace-regexp-in-string "^#\\+.+" ""
+                                                                  (buffer-substring-no-properties (point-min) (point-max))))
+                (setq v-buffer-string (buffer-substring-no-properties (point-min) (point-max))))
+              (replace-regexp-in-string (format "^ *%s *.+" comment-start) "" v-buffer-string)))
+                                          ; 把註解行刪掉（不把註解算進字數）。
+           (chinese-char-and-punc 0)
+           (chinese-punc 0)
+           (english-word 0)
+           (chinese-char 0))
+      (with-temp-buffer
+        (insert v-buffer-string)
+        (goto-char (point-min))
+        ;; 中文（含標點、片假名）
+        (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
+          (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
+        ;; 中文標點符號
+        (goto-char (point-min))
+        (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
+          (setq chinese-punc (1+ chinese-punc)))
+        ;; 英文字數（不含標點）
+        (goto-char (point-min))
+        (while (re-search-forward wc-regexp-english-word nil :no-error)
+          (setq english-word (1+ english-word))))
+      (setq chinese-char (- chinese-char-and-punc chinese-punc))
+      (message
+       (format " 中日文字數（不含標點）：%s
+   中日文字數（包含標點）：%s
+   英文字數（不含標點）：%s
+  =======================
+   中英文合計（不含標點）：%s"
+               chinese-char chinese-char-and-punc english-word
+               (+ chinese-char english-word)))))
 
 #+END_SRC
 ** End of configuration

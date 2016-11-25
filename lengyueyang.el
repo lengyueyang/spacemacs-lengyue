@@ -10,11 +10,17 @@
   (find-file "~/.spacemacs.d/lengyueyang.org"))
 
 (global-set-key (kbd "<f2>") 'open-my-init-file)
+(spacemacs/set-leader-keys "oo" 'open-my-init-file)
 
 (require 'chinese-yasdcv)
 (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+(spacemacs/set-leader-keys "oy" 'yasdcv-translate-at-point)
 
 (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
+(spacemacs/set-leader-keys "os" 'flyspell-correct-previous-word-generic)
+
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
 
 (spacemacs/declare-prefix "om" "Bookmark")
 (spacemacs/set-leader-keys "oms" 'bookmark-set)
@@ -43,7 +49,7 @@
 (spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
 (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
 
-;;(defun zilongshanren-misc/post-init-persp-mode ()
+;;(defun lengyueyang-misc/post-init-persp-mode ()
 ;;  (setq persp-kill-foreign-buffer-action 'kill)
 ;;  (setq persp-lighter nil)
 ;;  (when (fboundp 'spacemacs|define-custom-layout)
@@ -55,8 +61,26 @@
 ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
 
 (global-set-key (kbd "<f5>") 'deft)
-(setq deft-extensions '("txt" "tex" "org"))
+(setq deft-extensions '("txt" "tex" "org" "mk" "makedown"))
 (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
+
+(req-package emmet-mode
+  :config
+  (progn
+    ;; Following mode support emmet-mode
+    (add-hook 'html-mode-hook 'emmet-mode)
+    (add-hook 'sgml-mode-hook 'emmet-mode)
+    (add-hook 'nxml-mode-hook 'emmet-mode)
+    (add-hook 'css-mode-hook  'emmet-mode)
+
+    ;; Move cursor between quotes after expand
+    (add-hook 'emmt-mode-hook
+              '(lambda()
+                 (setq emmet-move-cursor-between-quotes t)))
+
+    ;; Make tab can also expand emmt instead of use yasnippet directly
+    (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
+    (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
 
 (setq user-full-name "lengyuyang"
       user-mail-address "maoxiaoweihl@gmail.com")
@@ -65,10 +89,52 @@
       (remq 'process-kill-buffer-query-function
             kill-buffer-query-functions))
 
-(req-package hungry-delete
-  :init (global-hungry-delete-mode))
-
 (spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
+
+(dolist (command '(yank yank-pop))
+  (eval
+   `(defadvice ,command (after indent-region activate)
+      (and (not current-prefix-arg)
+           (member major-mode
+                   '(emacs-lisp-mode
+                     lisp-mode
+                     clojure-mode
+                     scheme-mode
+                     haskell-mode
+                     ruby-mode
+                     rspec-mode
+                     python-mode
+                     c-mode
+                     c++-mode
+                     objc-mode
+                     latex-mode
+                     js-mode
+                     plain-tex-mode))
+           (let ((mark-even-if-inactive transient-mark-mode))
+             (indent-region (region-beginning) (region-end) nil))))))
+
+(global-prettify-symbols-mode 1)
+(setq-default fill-column 80)
+(defadvice find-file (before make-directory-maybe
+                             (filename &optional wildcards) activate)
+  "Create parent directory if not exists while visiting file."
+  (unless (file-exists-p filename)
+    (let ((dir (file-name-directory filename)))
+      (when dir
+        (unless (file-exists-p dir)
+          (make-directory dir t))))))
+
+(setq large-file-warning-threshold 300000000)
+(defun spacemacs/check-large-file ()
+  (when (> (buffer-size) 500000)
+    (progn (fundamental-mode)
+           (hl-line-mode -1)))
+  (if (and (executable-find "wc")
+           (> (string-to-number (shell-command-to-string (format "wc -l %s" (buffer-file-name))))
+              5000))
+      (linum-mode -1)))
+
+(add-hook 'find-file-hook 'spacemacs/check-large-file)
 
 (defun indent-whole-buffer ()
   "Indent whole buffer."
@@ -207,6 +273,8 @@
 (add-hook 'org-mode-hook 'org-mode-my-init)
 
 (add-hook 'org-mode-hook 'smartparens-strict-mode)
+
+(add-hook 'org-mode-hook 'company-mode)
 
 (eval-after-load 'org
   '(progn
@@ -797,6 +865,12 @@ belongs as a list."
       org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
       org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
 
+(use-package editorconfig
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook (editorconfig-mode 1))
+  (add-hook 'text-mode-hook (editorconfig-mode 1)))
+
 (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'R-mode-hook 'smartparens-mode)
 (add-hook 'R-mode-hook 'flycheck-mode)
@@ -810,6 +884,28 @@ belongs as a list."
 (setq python-fill-column 80)
 (add-hook 'inferior-python-mode-hook 'flycheck-mode)
 (add-hook 'inferior-python-mode-hook 'flyspell-mode)
+
+(use-package nodejs-repl
+  :init
+  :defer t)
+
+(add-to-load-path "~/.spacemacs.d/package/nodejs-repl-eval")
+(use-package nodejs-repl-eval
+  :commands (nodejs-repl-eval-buffer nodejs-repl-eval-dwim nodejs-repl-eval-function)
+  :init
+  (progn
+    (spacemacs/declare-prefix-for-mode 'js2-mode
+                                       "mo" "Nodejs-repl")
+    (spacemacs/set-leader-keys-for-major-mode 'js2-mode
+      "oo" 'nodejs-repl
+      "ob" 'nodejs-repl-eval-buffer
+      "of" 'nodejs-repl-eval-function
+      "od" 'nodejs-repl-eval-dwim))
+  :defer t
+  )
+
+(req-package hungry-delete
+  :init (global-hungry-delete-mode))
 
 (req-package pangu-spacing
   :init
@@ -924,6 +1020,13 @@ org-files and bookmarks"
     (action . (("Open" . (lambda (x) (funcall x)))))))
 
 (define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
+
+(defvar wc-regexp-chinese-char-and-punc
+  (rx (category chinese)))
+(defvar wc-regexp-chinese-punc
+  "[。，！？；：「」『』（）、【】《》〈〉※—]")
+(defvar wc-regexp-english-word
+  "[a-zA-Z0-9-]+")
 
 (defun lengyueyang/word-count-for-chinese ()
   "「較精確地」統計中 / 日 / 英文字數。

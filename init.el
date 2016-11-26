@@ -100,6 +100,7 @@
                                       linum-off
                                       editorconfig
                                       emmet-mode
+                                      crux
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()

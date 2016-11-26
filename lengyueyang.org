@@ -96,8 +96,8 @@ of emacs config.
   (req-package-finish)
 
 #+END_SRC
-
 * Keybinding                                                    
+
 
 Global keybindings of emacs but for specific customization with keybinding, like some
 org related keybindings in Org-mode configuration part.
@@ -120,7 +120,8 @@ org related keybindings in Org-mode configuration part.
 
   (require 'chinese-yasdcv)
   (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
-  (spacemacs/set-leader-keys "oy" 'yasdcv-translate-at-point)
+  (spacemacs/declare-prefix "ok" "Keybindings")
+  (spacemacs/set-leader-keys "oky" 'yasdcv-translate-at-point)
 #+END_SRC
 
 ** F8 to checkout the spelling of words
@@ -128,7 +129,7 @@ org related keybindings in Org-mode configuration part.
 #+BEGIN_SRC emacs-lisp
 
   (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
-  (spacemacs/set-leader-keys "os" 'flyspell-correct-previous-word-generic)
+  (spacemacs/set-leader-keys "okf" 'flyspell-correct-previous-word-generic)
 
 #+END_SRC
 
@@ -137,8 +138,7 @@ org related keybindings in Org-mode configuration part.
 #+BEGIN_SRC emacs-lisp
 
   (global-set-key (kbd "C-c b") 'org-iswitchb)
-  ;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
-
+  (spacemacs/set-leader-keys "okb" 'org-iswitchb)
 #+END_SRC
 
 ** Bookmark keybindings reconfiguration
@@ -501,7 +501,7 @@ This problem can be solved by:
 
 ** Snippet handle by yasnippet                                   :yasnippet:
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (req-package yasnippet
     :init (yas-global-mode 1)
@@ -522,7 +522,7 @@ I really like org-mode's =easy-template= function, so I implement one called
 =major-mode-expand= which will let you use easy-template like function in any
 major-mode.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (eval-after-load 'yasnippet
     '(progn
@@ -1274,6 +1274,38 @@ An abbreviated link looks like
 
 This part is the customization to programming languages.
 
+** Yasnippet
+
+Yasnippet allows you to type an abbreviation and then expand it into a template. We can look at yasnippet’s documentation on github.
+
+Yasnippet by default checks for snippets in two places: a path relative to yasnippet.el (these are the default snippets that come with the package). If I want to make my own, I can put then in .spacemacs.d/snippets and it should find them there as well.
+
+I downloads some snippets from web like [[yasnippet-snippets][yasnippet-snippets]] and [[https://github.com/howardabrams/dot-files][dot-files]], then I defined some snippets of mine.
+
+You can use the tab key to expand a snippet once you’ve typed in the “key”. It’s pretty smart in that if tab fails for yasnippet, it then checks for whatever tab was originally bound to.
+
+#+BEGIN_SRC emacs-lisp
+
+  (setq yas-snippet-dirs
+        '("~/.spacemacs.d/snippets/lengyueyang-snippets"
+          "~/.spacemacs.d/snippets/dot-files-snippets/"
+          "~/.spacemacs.d/snippets/yasnippet-snippets/"
+          "~/.spacemacs.d/snippets/lengyueyang-snippets/"
+          ))
+  (yas-global-mode 1)
+
+  (global-set-key (kbd "C-c y i") 'yas-insert-snippet)
+  (global-set-key (kbd "C-c y n") 'yas-new-snippet)
+  (global-set-key (kbd "C-c y t") 'yas-expand-from-trigger-key)
+  ;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
+
+  (spacemacs/declare-prefix "oy" "Yasnippet")
+  (spacemacs/set-leader-keys "oyi" 'yas-insert-snippet)
+  (spacemacs/set-leader-keys "oyn" 'yas-new-snippet)
+  (spacemacs/set-leader-keys "oyt" 'yas-expand-from-trigger-key)
+
+#+END_SRC
+
 ** Add support for editorconfig                               :editorconfig:
 
 [[http://editorconfig.org/][EditorConfig]] helps developers define and maintain consistent coding
@@ -1607,3 +1639,5 @@ Following link is refrence for my emac config.
 ~[8]~ https://github.com/howardabrams/dot-files
 
 ~[9]~ [[https://github.com/coldnew/coldnew-spacemacs]]
+
+

@@ -14,13 +14,14 @@
 
 (require 'chinese-yasdcv)
 (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
-(spacemacs/set-leader-keys "oy" 'yasdcv-translate-at-point)
+(spacemacs/declare-prefix "ok" "Keybindings")
+(spacemacs/set-leader-keys "oky" 'yasdcv-translate-at-point)
 
 (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
-(spacemacs/set-leader-keys "os" 'flyspell-correct-previous-word-generic)
+(spacemacs/set-leader-keys "okf" 'flyspell-correct-previous-word-generic)
 
 (global-set-key (kbd "C-c b") 'org-iswitchb)
-;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
+(spacemacs/set-leader-keys "okb" 'org-iswitchb)
 
 (spacemacs/declare-prefix "om" "Bookmark")
 (spacemacs/set-leader-keys "oms" 'bookmark-set)
@@ -217,44 +218,6 @@
 (setq global-auto-revert-non-file-buffers t)
 (setq auto-revert-verbose nil)
 (setq revert-without-query '(".*")) ;; disable revert query
-
-(req-package yasnippet
-  :init (yas-global-mode 1)
-  :mode ("emacs.+/snippets/" . snippet-mode)
-  :config
-  (progn
-    (setq yas/prompt-functions '(yas-dropdown-prompt
-                                 yas-completing-prompt
-                                 yas-ido-prompt))
-
-    (setq yas/snippet-dirs (concat user-emacs-directory "snippets"))))
-
-(eval-after-load 'yasnippet
-  '(progn
-     (defadvice yas-expand (around major-mode-expand activate)
-       "Try to complete a structure template before point like org-mode does.
-  This looks for strings like \"<e\" on an otherwise empty line and
-  expands them.
-  Before use this function, you must setup `major-mode-name'-expand-alist variable.
-
-  Take emacs-lisp-mode as example, if you wand to use <r to expand your snippet `require'
-  in yasnippet, you muse setup the emacs-lisp-mode-expand-alist variable.
-
-   (setq emacs-lisp-expand-alist '((\"r\" . \"require\")))"
-       (let* ((l (buffer-substring (point-at-bol) (point)))
-              (expand-symbol (intern (concat (symbol-name major-mode) "-expand-alist")))
-              (expand-alist (if (boundp expand-symbol) (symbol-value expand-symbol) nil))
-              a)
-         (when (and (looking-at "[ \t]*$")
-                    (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
-                    (setq a (assoc (match-string 1 l) expand-alist)))
-           (backward-delete-char (1+ (length (car-safe a))))
-           (if (symbolp (cdr-safe a))
-               (funcall (cdr-safe a))
-             (insert (cdr-safe a)))
-           t)
-         ad-do-it))
-     ))
 
 (defun eval-buffer-until-error ()
   "Evaluate emacs buffer until error occured."
@@ -842,6 +805,24 @@ belongs as a list."
 (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
       org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
       org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+
+(setq yas-snippet-dirs
+      '("~/.spacemacs.d/snippets/lengyueyang-snippets"
+        "~/.spacemacs.d/snippets/dot-files-snippets/"
+        "~/.spacemacs.d/snippets/yasnippet-snippets/"
+        "~/.spacemacs.d/snippets/lengyueyang-snippets/"
+        ))
+(yas-global-mode 1)
+
+(global-set-key (kbd "C-c y i") 'yas-insert-snippet)
+(global-set-key (kbd "C-c y n") 'yas-new-snippet)
+(global-set-key (kbd "C-c y t") 'yas-expand-from-trigger-key)
+;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
+
+(spacemacs/declare-prefix "oy" "Yasnippet")
+(spacemacs/set-leader-keys "oyi" 'yas-insert-snippet)
+(spacemacs/set-leader-keys "oyn" 'yas-new-snippet)
+(spacemacs/set-leader-keys "oyt" 'yas-expand-from-trigger-key)
 
 (use-package editorconfig
   :ensure t

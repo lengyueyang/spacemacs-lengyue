@@ -309,38 +309,16 @@
                 '(:time "7d" :period "24h" :actions -message)
                 '(:time "30d" :actions -email))
 
-(defun notify-osx (title message)
-  (call-process "gol"
-                nil 0 nil
-                "-group" "Emacs"
-                "-title" title
-                "-sender" "org.gnu.Emacs"
-                "-message" message
-                "-activate" "oeg.gnu.Emacs"))
-(add-hook 'org-pomodoro-finished-hook
-          (lambda ()
-            (notify-osx "Pomodoro completed!" "Time for a break.")))
-(add-hook 'org-pomodoro-break-finished-hook
-          (lambda ()
-            (notify-osx "Pomodoro Short Break Finished" "Ready for Another?")))
-(add-hook 'org-pomodoro-long-break-finished-hook
-          (lambda ()
-            (notify-osx "Pomodoro Long Break Finished" "Ready for Another?")))
-(add-hook 'org-pomodoro-killed-hook
-          (lambda ()
-            (notify-osx "Pomodoro Killed" "One does not simply kill a pomodoro!")))
-;;  (add-hook 'org-pomodoro-finished-hook
-;;  (lambda ()
-;;  (lengyueyang//org-notify "Pomodoro completed!" "Time for a break.")))
-;;(add-hook 'org-pomodoro-break-finished-hook
-;;  (lambda ()
-;;  (lengyueyang//org-notify "Pomodoro Short Break Finished" "Ready for Another?")))
-;;(add-hook 'org-pomodoro-long-break-finished-hook
-;;  (lambda ()
-;;  (lengyueyang//org-notify "Pomodoro Long Break Finished" "Ready for Another?")))
-;;(add-hook 'org-pomodoro-killed-hook
-;;  (lambda ()
-;;  (lengyueyang//org-notify "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+;; [[https://www.reddit.com/r/emacs/comments/5ayjjl/pomodoro_in_emacs/][Pomodoro in Emacs : emacs]]
+(use-package org-pomodoro
+  :ensure t
+  :commands (org-pomodoro)
+  :config
+  (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
+  (setq org-pomodoro-length 50)
+  (setq org-pomodoro-short-break-length 10)
+  (setq org-pomodoro-long-break-length 30)
+)
 
 (eval-after-load 'org
   '(progn

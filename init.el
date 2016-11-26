@@ -98,9 +98,8 @@
                                       ob-ipython
                                       pangu-spacing
                                       linum-off
-                                      ;;editorconfig
+                                      editorconfig
                                       emmet-mode
-                                      yasnippet
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()

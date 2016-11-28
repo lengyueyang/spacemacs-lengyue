@@ -103,7 +103,7 @@
                                       crux
                                       )
    dotspacemacs-frozen-packages '()
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(exec-path-from-shell)
    dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()

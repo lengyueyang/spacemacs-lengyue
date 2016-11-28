@@ -278,8 +278,8 @@
   :commands (org-pomodoro)
   :config
   (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
-  (setq org-pomodoro-length 50)
-  (setq org-pomodoro-short-break-length 10)
+  (setq org-pomodoro-length 25)
+  (setq org-pomodoro-short-break-length 5)
   (setq org-pomodoro-long-break-length 30)
 )
 

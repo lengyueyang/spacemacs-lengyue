@@ -84,10 +84,10 @@
      lua
      html
      (clojure :variables clojure-enable-fancify-symbols t)
-     (elfeed :variables
-             ;;elfeed-enable-web-interface t
-             rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
-
+     gnus
+     (mu4e :variables
+           mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e")
+     elfeed
      )
    dotspacemacs-additional-packages '(
                                       nodejs-repl

@@ -200,7 +200,6 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
 
 #+END_SRC
-
 ** Deft
 
 #+BEGIN_SRC emacs-lisp
@@ -210,33 +209,83 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
 #+END_SRC
+** Elfeed
 
-** Use emmet-mode to add Zen Coding support
-
-[[https://github.com/smihica/emmet-mode][emmet-mode]] is a fork of [[https://github.com/rooney/zencoding][zencoding-mode]] which add minor mode providing support
-for Zen Coding by producing HTML from CSS-like selectors.
-
-GitHub: https://github.com/smihica/emmet-mode
+[[https://github.com/lujun9972/emacs-document/blob/master/emacs-common/%E5%9C%A8Emacs%E4%B8%AD%E7%94%A8elfeed%E9%98%85%E8%AF%BB%E4%BD%A0%E7%9A%84RSS-feeds.org][在 Emacs 中用 elfeed 阅读你的 RSS-feeds]]
 
 #+BEGIN_SRC emacs-lisp
 
-  (req-package emmet-mode
+  (use-package elfeed-org
+    :ensure t
     :config
-    (progn
-      ;; Following mode support emmet-mode
-      (add-hook 'html-mode-hook 'emmet-mode)
-      (add-hook 'sgml-mode-hook 'emmet-mode)
-      (add-hook 'nxml-mode-hook 'emmet-mode)
-      (add-hook 'css-mode-hook  'emmet-mode)
+    (elfeed-org)
+    (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
-      ;; Move cursor between quotes after expand
-      (add-hook 'emmt-mode-hook
-                '(lambda()
-                   (setq emmet-move-cursor-between-quotes t)))
+#+END_SRC
 
-      ;; Make tab can also expand emmt instead of use yasnippet directly
-      (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
-      (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
+** Gnus
+
+#+BEGIN_SRC emacs-lisp :tangle no
+
+  ;; Get email, and store in nnml
+  (setq gnus-secondary-select-methods
+        '(
+          (nntp "gmane"
+                (nntp-address "news.gmane.org"))
+          (nntp "news.eternal-september.org")
+          (nntp "nntp.aioe.org")
+          (nntp "news.gwene.org")
+          ))
+
+  (setq gnus-secondary-select-methods
+        '(
+          (nnimap "gmail"
+                  (nnimap-address
+                   "imap.gmail.com")
+                  (nnimap-server-port 993)
+                  (nnimap-stream ssl))
+          ))
+
+  ;; Send email via Gmail:
+  (setq message-send-mail-function 'smtpmail-send-it
+        smtpmail-default-smtp-server "smtp.gmail.com")
+
+  ;; Archive outgoing email in Sent folder on imap.gmail.com:
+  (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
+        gnus-message-archive-group "[Gmail]/Sent Mail")
+
+  ;; set return email address based on incoming email address
+  (setq gnus-posting-styles
+        '(((header "to" "address@outlook.com")
+           (address "address@outlook.com"))
+          ((header "to" "address@gmail.com")
+           (address "address@gmail.com"))))
+
+  ;; store email in ~/gmail directory
+  (setq nnml-directory "~/gmail")
+  (setq message-directory "~/gmail")
+
+
+#+END_SRC
+
+** Mu4e
+
+- [[https://github.com/larstvei/dot-emacs][larstvei/dot-emacs: My Emacs configurations written in Org mode]]
+- [[http://wenshanren.org/?p=111][mu4e: an E-mail Client for Emacs | 肉山博客 (Wenshan's Blog)]]
+- [[http://coldnew.github.io/blog/2016/01-02_mu4e/][在 emacs 下使用 mu4e 收發郵件 | coldnew's blog]]
+- [[http://blog.csdn.net/csfreebird/article/details/52973188][spacemacs email layer - 博客频道 - CSDN.NET]]
+- [[https://github.com/howardabrams/dot-files/blob/master/emacs-mail.org][dot-files/emacs-mail.org at master · howardabrams/dot-files]]
+- [[https://guso.ml/search?q=offlinemap+%E5%A4%9A%E5%B8%90%E6%88%B7&prmd=ivns&ei=pVc8WPPzNsv0vgTT2pn4Cw&start=10&sa=N][offlinemap 多帐户 - Google 搜索]]
+- [[https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bemail/mu4e][spacemacs/layers/+email/mu4e at master · syl20bnr/spacemacs]]
+- [[http://www.djcbsoftware.nl/code/mu/mu4e/index.html][Mu4e 0.9.16 user manual: Top]]
+- [[https://github.com/lujun9972/emacs-document/blob/master/org-mode/%E7%94%A8org-mime%E5%9C%A8org-mode%E4%B8%AD%E5%8F%91%E9%80%81html%E9%82%AE%E4%BB%B6.org][emacs-document/用 org-mime 在 org-mode 中发送 html 邮件.org at master · lujun9972/emacs-document]]
+- [[https://emacs.lujianmei.com/03-For-an-editor/init-mu4e.html][Mu4e 邮件管理 · 谁说 Emacs 不好玩？]]
+- [[http://www.bagualu.net/wordpress/archives/6555][emacs 中的 email 客户端 mu4e | 猎数博客]]
+- [[https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bemail/gnus#org-mime-in-org-layer][spacemacs/layers/+email/gnus at master · syl20bnr/spacemacs]]
+
+#+BEGIN_SRC emacs-lisp
+
+
 
 #+END_SRC
 
@@ -607,7 +656,7 @@ This part is the customization to org-mode.
 
   (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
-  (add-hook 'org-mode-hook 'company-mode)
+  ;; (add-hook 'org-mode-hook 'company-mode)
 
 #+END_SRC
 
@@ -1378,6 +1427,35 @@ they work nicely with version control systems.
 
 * External package besides spacemacs
 
+** Use emmet-mode to add Zen Coding support
+
+[[https://github.com/smihica/emmet-mode][emmet-mode]] is a fork of [[https://github.com/rooney/zencoding][zencoding-mode]] which add minor mode providing support
+for Zen Coding by producing HTML from CSS-like selectors.
+
+GitHub: https://github.com/smihica/emmet-mode
+
+#+BEGIN_SRC emacs-lisp
+
+  (req-package emmet-mode
+    :config
+    (progn
+      ;; Following mode support emmet-mode
+      (add-hook 'html-mode-hook 'emmet-mode)
+      (add-hook 'sgml-mode-hook 'emmet-mode)
+      (add-hook 'nxml-mode-hook 'emmet-mode)
+      (add-hook 'css-mode-hook  'emmet-mode)
+
+      ;; Move cursor between quotes after expand
+      (add-hook 'emmt-mode-hook
+                '(lambda()
+                   (setq emmet-move-cursor-between-quotes t)))
+
+      ;; Make tab can also expand emmt instead of use yasnippet directly
+      (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
+      (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
+
+#+END_SRC
+
 ** Hungry-delete
 
 [[https://github.com/nflath/hungry-delete][hungry-delete]] borrows hungry deletion from =cc-mode=, which will causes deletion
@@ -1545,7 +1623,6 @@ This part is some customization not belong to the anterior part.
   (define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
 
 #+END_SRC
-
 ** Count chinese word
 
 #+BEGIN_SRC emacs-lisp
@@ -1605,6 +1682,45 @@ This part is some customization not belong to the anterior part.
                (+ chinese-char english-word)))))
 
 #+END_SRC
+
+** Display Calendar numbers in calendar-mode
+
+   Define a function to display week numbers in =calender-mode=. The snippet
+   is from [[http://www.emacswiki.org/emacs/CalendarWeekNumbers][EmacsWiki]].
+
+   #+BEGIN_SRC emacs-lisp
+   (defun calendar-show-week (arg)
+     "Displaying week number in calendar-mode."
+     (interactive "P")
+     (copy-face font-lock-constant-face 'calendar-iso-week-face)
+     (set-face-attribute
+      'calendar-iso-week-face nil :height 0.7)
+     (setq calendar-intermonth-text
+           (and arg
+                '(propertize
+                  (format
+                   "%2d"
+                   (car (calendar-iso-from-absolute
+                         (calendar-absolute-from-gregorian
+                          (list month day year)))))
+                  'font-lock-face 'calendar-iso-week-face))))
+   #+END_SRC
+
+   Evaluate the =calendar-show-week= function.
+
+   #+BEGIN_SRC emacs-lisp
+   (calendar-show-week t)
+   #+END_SRC
+
+   Set Monday as the first day of the week, and set my location.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq calendar-week-start-day 1
+           calendar-latitude 39.92
+           calendar-longitude 116.46
+           calendar-location-name "Beijing, China")
+   #+END_SRC
+
 ** End of configuration
 
 Oh YA!! We finish loading emacs configuration :)

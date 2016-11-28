@@ -1034,4 +1034,27 @@ org-files and bookmarks"
              chinese-char chinese-char-and-punc english-word
              (+ chinese-char english-word)))))
 
+(defun calendar-show-week (arg)
+  "Displaying week number in calendar-mode."
+  (interactive "P")
+  (copy-face font-lock-constant-face 'calendar-iso-week-face)
+  (set-face-attribute
+   'calendar-iso-week-face nil :height 0.7)
+  (setq calendar-intermonth-text
+        (and arg
+             '(propertize
+               (format
+                "%2d"
+                (car (calendar-iso-from-absolute
+                      (calendar-absolute-from-gregorian
+                       (list month day year)))))
+               'font-lock-face 'calendar-iso-week-face))))
+
+(calendar-show-week t)
+
+(setq calendar-week-start-day 1
+      calendar-latitude 39.92
+      calendar-longitude 116.46
+      calendar-location-name "Beijing, China")
+
 (req-package-finish)

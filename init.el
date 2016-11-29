@@ -86,7 +86,8 @@
      (clojure :variables clojure-enable-fancify-symbols t)
      gnus
      (mu4e :variables
-           mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e")
+           mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e"
+           mu4e-account-alist t)
      elfeed
      )
    dotspacemacs-additional-packages '(

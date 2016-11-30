@@ -20,6 +20,7 @@
 (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
 (spacemacs/set-leader-keys "okf" 'flyspell-correct-previous-word-generic)
 
+(spacemacs/set-leader-keys "oa" 'org-agenda-list)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 (spacemacs/set-leader-keys "okb" 'org-iswitchb)
 
@@ -303,6 +304,8 @@
   (goto-char (point-min))
   (while t (eval (read (current-buffer)))))
 
+;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+
 (setq org-startup-indented t)
 
 (defun org-mode-my-init ()
@@ -363,112 +366,121 @@
 
 (eval-after-load 'org
   '(progn
-     (setq org-agenda-dir "~/Emacs-lengyue/GTD-lengyue")
-     (setq org-agenda-file-gtd (expand-file-name "GTD-lengyue.org" org-agenda-dir))
-     (setq org-agenda-files `(,org-agenda-file-gtd))
+     (setq org-agenda-files (quote ("~/Emacs-lengyue/GTD-lengyue"
+                                    "~/Emacs-lengyue/Wiki-lengyue")))
 
-     (setq org-default-notes-file org-agenda-file-gtd)
      (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d)")
-            (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "HOLD(h@/!)" "CANCELLED(c@/!)")
-            (sequence "INBOX(i)" "|" "NOTE(e)" "PHONE(p)" "MEETING(m)")
-            (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
+           (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
+                   (sequence "SOMEDAY(S)" "|" "WAITING(w@/!)"  "MEETING(m)" "PHONE(p)")
+                   (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+                   )))
+
+     (setq org-todo-keyword-faces
+           (quote (
+                   ("STARTED" :foreground "magenta" :weight bold)
+     ;;               ("NEXT" :foreground "blue" :weight bold)
+     ;;               ("DONE" :foreground "forest green" :weight bold)
+                   ("WAITING" :foreground "red" :weight bold)
+     ;;               ("HOLD" :foreground "magenta" :weight bold)
+     ;;               ("CANCELLED" :foreground "forest green" :weight bold)
+     ;;               ("MEETING" :foreground "forest green" :weight bold)
+                   ;;               ("PHONE" :foreground "forest green" :weight bold)
+                   )))
+
      (setq org-refile-targets
-           '(("GTD-lengyue.org" :maxlevel . 1)))
+           '(("~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
+
      (setq org-log-into-drawer t)
      (setq org-agenda-custom-commands
         '(
-          ("i" "Inbox" todo "INBOX")
-          ("h" "Holdtodo" todo "HOLD")
-          ("e" "Note" todo "NOTE")
-          ("s" "Someday/Maybe" todo "SOMEDAY")
-          ("b" "Blog" tags-todo "BLOG")
-          ("w" . " 任务安排 ")
-          ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
-          ("wb" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
-          ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
+          ("b" "Blog idea" tags-todo "BLOG")
+          ("s" "Someday" todo "SOMEDAY")
+          ("S" "Started" todo "STARTED")
+          ("w" "Waiting" todo "WAITING")
+          ("d" . " 任务安排 ")
+          ("da" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
+          ("db" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
+          ("dc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
           ("p" . " 项目安排 ")
-          ("W" "Weekly Review"
-           ((stuck "");; review stuck projects as designated by org-stuck-projects
-            (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
-            )))))
+          ("W" "Weekly Review" tags-todo "PROJECT")
+            ))
+     )
   )
 
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)  ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+;; (defun org-summary-todo (n-done n-not-done)
+;;   "Switch entry to DONE when all subentries are done, to TODO otherwise."
+;;   (let (org-log-done org-log-states)  ; turn off logging
+;;     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
-(add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+;; (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
 
-  ;;used by org-clock-sum-today-by-tags
-(defun filter-by-tags ()
-    (let ((head-tags (org-get-tags-at)))
-      (member current-tag head-tags)))
+;;   ;;used by org-clock-sum-today-by-tags
+;; (defun filter-by-tags ()
+;;     (let ((head-tags (org-get-tags-at)))
+;;       (member current-tag head-tags)))
 
 
-(defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-    (interactive "P")
-    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-           (files (org-add-archive-files (org-agenda-files)))
-           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
-           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-           (output-string "")
-           (tstart (or tstart
-                       (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
-                       (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
-                       (org-time-today)))
-           (tend (or tend
-                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
-                     (+ tstart 86400)))
-           h m file item prompt donesomething)
-      (while (setq file (pop files))
-        (setq org-agenda-buffer (if (file-exists-p file)
-                                    (org-get-agenda-file-buffer file)
-                                  (error "No such file %s" file)))
-        (with-current-buffer org-agenda-buffer
-          (dolist (current-tag include-tags)
-            (org-clock-sum tstart tend'filter-by-tags)
-            (setcdr (assoc current-tag tags-time-alist)
-                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-      (while (setq item (pop tags-time-alist))
-        (unless (equal (cdr item) 0)
-          (setq donesomething t)
-          (setq h (/ (cdr item) 60)
-                m (- (cdr item) (* 60 h)))
-          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-      (unless donesomething
-        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-      (unless noinsert
-        (insert output-string))
-      output-string))
+;; (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+;;     (interactive "P")
+;;     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+;;            (files (org-add-archive-files (org-agenda-files)))
+;;            (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
+;;            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+;;            (output-string "")
+;;            (tstart (or tstart
+;;                        (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
+;;                        (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+;;                        (org-time-today)))
+;;            (tend (or tend
+;;                      (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+;;                      (+ tstart 86400)))
+;;            h m file item prompt donesomething)
+;;       (while (setq file (pop files))
+;;         (setq org-agenda-buffer (if (file-exists-p file)
+;;                                     (org-get-agenda-file-buffer file)
+;;                                   (error "No such file %s" file)))
+;;         (with-current-buffer org-agenda-buffer
+;;           (dolist (current-tag include-tags)
+;;             (org-clock-sum tstart tend'filter-by-tags)
+;;             (setcdr (assoc current-tag tags-time-alist)
+;;                     (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+;;       (while (setq item (pop tags-time-alist))
+;;         (unless (equal (cdr item) 0)
+;;           (setq donesomething t)
+;;           (setq h (/ (cdr item) 60)
+;;                 m (- (cdr item) (* 60 h)))
+;;           (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+;;       (unless donesomething
+;;         (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+;;       (unless noinsert
+;;         (insert output-string))
+;;       output-string))
+
+(define-key global-map (kbd "<f9>") 'org-capture)
+(spacemacs/set-leader-keys "oc" 'org-capture)
+
+(setq org-capture-templates
+      '(("b" "Blog Ideas" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
+         "* TODO %?\n%i%U"
+         :empty-lines 1)
+        ("s" "Someday/Maybe" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
+         "* SOMEDAY %?\n%i%U"
+         :empty-lines 1)
+        ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
+         "* TODO %?\n%i%U"
+         :empty-lines 1)
+        ("w" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
+         "* TODO %?\n%i%U"
+         :empty-lines 1)
+        ("W" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+         "* %c :website:\n%?\n%U %:initial"
+         :empty-lines 1)
+        ))
 
 (add-to-load-path "~/.spacemacs.d/package/org-protocol-capture-html")
 (server-start)
 (require 'org-protocol)
 (require 'org-protocol-capture-html)
-
-(define-key global-map (kbd "<f9>") 'org-capture)
-
-(setq org-capture-templates
-        '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
-           "* %c :website:\n%?\n%U %:initial"
-          :empty-lines 1)
-          ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
-           "* INBOX %?\n%i%U"
-           :empty-lines 1)
-          ("e" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick Notes")
-           "* NOTE %?\n%i%U"
-           :empty-lines 1)
-          ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("m" "Someday/Maybe" entry (file+headline org-agenda-file-gtd "Someday/Maybe")
-           "* SOMEDAY %?\n%i%U"
-           :empty-lines 1)))
 
 (setq org-confirm-babel-evaluate nil)
 
@@ -991,6 +1003,8 @@ belongs as a list."
 (setq blog-admin-backend-new-post-in-drafts t)
 (setq blog-admin-backend-new-post-with-same-name-dir t)
 
+(spacemacs/set-leader-keys "ob" 'blog-admin-start)
+
 (require'cl)
 
 (setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
@@ -1064,17 +1078,18 @@ org-files and bookmarks"
   "Construct the helm sources for my hotspots"
   `((name . "lengyueyang's center")
     (candidates . (
-                   ("Agenda" . (lambda () (org-agenda "" "a")))
+                   ("Agenda List" . (lambda () (org-agenda "" "a")))
+                   ("Agenda Menu" . (lambda () (org-agenda)))
                    ("Blog" . (lambda() (blog-admin-start)))
                    ("Elfeed" . (lambda () (elfeed)))
-                   ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
-                   ("Agenda Menu" . (lambda () (org-agenda)))
+                   ;; ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
                    ("Open Github" . (lambda() (browse-url "https://github.com/lengyueyang")))
                    ("Open Blog" . (lambda() (browse-url "http://lengyueyang.github.io")))))
     (candidate-number-limit)
     (action . (("Open" . (lambda (x) (funcall x)))))))
 
 (define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
+(spacemacs/set-leader-keys "oh" 'lengyueyang/hotspots)
 
 (defvar wc-regexp-chinese-char-and-punc
   (rx (category chinese)))

@@ -751,6 +751,19 @@ This part is the customization to org-mode.
   ;; (add-hook 'org-mode-hook 'company-mode)
 
 #+END_SRC
+** Org-agenda font size
+Changed the org-agenda font size with the below link methods
+https://emacs-china.org/t/agenda-view/1392
+
+#+BEGIN_SRC emacs-lisp
+
+  (custom-set-faces
+   '(org-agenda-done ((t (:foreground "#86dc2f" :height 1.0)))))
+
+  (custom-set-faces
+   '(org-scheduled-today ((t (:foreground "#bc6ec5" :height 1.0)))))
+
+#+END_SRC
 
 ** Org columns and properties
 

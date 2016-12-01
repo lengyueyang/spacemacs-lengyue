@@ -320,6 +320,12 @@
 
 ;; (add-hook 'org-mode-hook 'company-mode)
 
+(custom-set-faces
+ '(org-agenda-done ((t (:foreground "#86dc2f" :height 1.0)))))
+
+(custom-set-faces
+ '(org-scheduled-today ((t (:foreground "#bc6ec5" :height 1.0)))))
+
 (eval-after-load 'org
   '(progn
      (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")

@@ -407,7 +407,9 @@ implement some of them to make my emacs more easy to use.
 
 #+BEGIN_SRC emacs-lisp
 
-  (spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
+  ;; (spacemacs//set-monospaced-font "Inconsolata" "Source Han Sans CN" 16 20)
+  (spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
+  ;; (spacemacs//set-monospaced-font "DejaVu Sans Mono" "Source Han Sans CN" 16 20)
 
 #+END_SRC
 ** Add auto format paste code

@@ -128,7 +128,15 @@
                          monokai
                          zenburn)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font '("WenQuanYi Micro Hei Mono"
+   dotspacemacs-default-font '(
+                               "Fira Mono"
+                               ;; "Inconsolata"
+                               ;; "Droid Sans Mono"
+                               ;; "Ubuntu Mono"
+                               ;; "Source Code Pro"
+                               ;; "DejaVu Sans Mono"
+                               ;; "Source Han Sans CN"
+                               ;;"WenQuanYi Micro Hei Mono"
                                :size 16
                                :weight normal
                                :width normal

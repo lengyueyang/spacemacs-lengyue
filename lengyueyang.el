@@ -169,7 +169,9 @@
       (remq 'process-kill-buffer-query-function
             kill-buffer-query-functions))
 
-(spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
+;; (spacemacs//set-monospaced-font "Inconsolata" "Source Han Sans CN" 16 20)
+(spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
+;; (spacemacs//set-monospaced-font "DejaVu Sans Mono" "Source Han Sans CN" 16 20)
 
 (dolist (command '(yank yank-pop))
   (eval

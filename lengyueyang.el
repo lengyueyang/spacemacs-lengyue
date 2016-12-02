@@ -415,12 +415,12 @@
      )
   )
 
-;; (defun org-summary-todo (n-done n-not-done)
-;;   "Switch entry to DONE when all subentries are done, to TODO otherwise."
-;;   (let (org-log-done org-log-states)  ; turn off logging
-;;     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)  ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
-;; (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+(add-hook'org-after-todo-statistics-hook 'org-summary-todo)
 
 ;;   ;;used by org-clock-sum-today-by-tags
 ;; (defun filter-by-tags ()
@@ -477,10 +477,10 @@
         ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
          "* TODO %?\n%i%U"
          :empty-lines 1)
-        ("w" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
+        ("r" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
          "* TODO %?\n%i%U"
          :empty-lines 1)
-        ("W" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+        ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
          "* %c :website:\n%?\n%U %:initial"
          :empty-lines 1)
         ))

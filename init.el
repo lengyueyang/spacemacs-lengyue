@@ -102,6 +102,7 @@
                                       editorconfig
                                       emmet-mode
                                       crux
+                                      emms
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)

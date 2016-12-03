@@ -331,6 +331,24 @@
 
 (eval-after-load 'org
   '(progn
+    (add-to-list 'org-structure-template-alist
+                 '("el" "#+BEGIN_SRC emacs-lisp\n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("sh" "#+BEGIN_SRC sh\n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("pl" "#+BEGIN_SRC plantuml :file \n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n #+END_SRC"))
+    ;; (add-to-list 'org-structure-template-alist
+    ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
+    ;; (add-to-list 'org-structure-template-alist
+    ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
+    ))
+
+(eval-after-load 'org
+  '(progn
      (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
      (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
                                          ("STYLE_ALL" . "habit"))))

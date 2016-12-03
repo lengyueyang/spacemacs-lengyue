@@ -768,6 +768,30 @@ https://emacs-china.org/t/agenda-view/1392
 
 #+END_SRC
 
+** Extend org-mode's easy templates
+
+#+BEGIN_SRC emacs-lisp
+
+  (eval-after-load 'org
+    '(progn
+      (add-to-list 'org-structure-template-alist
+                   '("el" "#+BEGIN_SRC emacs-lisp\n\n?\n\n #+END_SRC"))
+      (add-to-list 'org-structure-template-alist
+                   '("sh" "#+BEGIN_SRC sh\n\n?\n\n #+END_SRC"))
+      (add-to-list 'org-structure-template-alist
+                   '("pl" "#+BEGIN_SRC plantuml :file \n\n?\n\n #+END_SRC"))
+      (add-to-list 'org-structure-template-alist
+                   '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
+      (add-to-list 'org-structure-template-alist
+                   '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n #+END_SRC"))
+      ;; (add-to-list 'org-structure-template-alist
+      ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
+      ;; (add-to-list 'org-structure-template-alist
+      ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
+      ))
+
+#+END_SRC
+
 ** Org columns and properties
 
 #+BEGIN_SRC emacs-lisp

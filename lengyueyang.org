@@ -270,7 +270,6 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
 
 #+END_SRC
-
 ** Mu4e
 
 - [[https://github.com/larstvei/dot-emacs][larstvei/dot-emacs: My Emacs configurations written in Org mode]]
@@ -378,6 +377,38 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq smtpmail-smtp-service 587)
   (setq smtpmail-smtp-user "maoxiaoweihl@gmail") ; FIXME: add your gmail addr here
 #+END_SRC
+
+** Magit
+
+*** Magit auto complete
+
+#+BEGIN_SRC emacs-lisp
+
+  (defun my/dabbrev-friend-buffer (other-buffer)
+    (cond ( ;; ignore very large files
+           (> (buffer-size other-buffer) (* 1024 1024))
+           nil)
+          ( ;; doing a magit commit - use the magit status buffer
+           (and (boundp git-commit-mode) git-commit-mode)
+           (with-current-buffer other-buffer
+             (eq major-mode 'magit-status-mode)))
+          ( ;; in projectile project - use projectile buffers
+           (and (buffer-file-name other-buffer)
+                (not (file-remote-p (buffer-file-name other-buffer)))
+                (projectile-project-p))
+           (string= (projectile-project-name)
+                    (with-current-buffer other-buffer
+                      (projectile-project-name))))
+          (t ;; fallback - same mod
+           (dabbrev--same-major-mode-p other-buffer))))
+
+  (add-hook 'text-mode-hook 'company-mode)
+  (add-hook 'text-mode-hook
+            (lambda ()
+              (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+            )
+
+ #+END_SRC
 
 * Basic setup
 
@@ -751,9 +782,22 @@ This part is the customization to org-mode.
 
   (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
-  ;; (add-hook 'org-mode-hook 'company-mode)
 
 #+END_SRC
+** Org-mode auto complete
+
+#+BEGIN_SRC emacs-lisp
+
+  (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
+
+  (add-hook 'org-mode-hook 'company-mode)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+            )
+
+#+END_SRC
+
 ** Org-agenda font size
 Changed the org-agenda font size with the below link methods
 https://emacs-china.org/t/agenda-view/1392
@@ -783,7 +827,7 @@ https://emacs-china.org/t/agenda-view/1392
       (add-to-list 'org-structure-template-alist
                    '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
       (add-to-list 'org-structure-template-alist
-                   '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n #+END_SRC"))
+                   '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n#+END_SRC"))
       ;; (add-to-list 'org-structure-template-alist
       ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
       ;; (add-to-list 'org-structure-template-alist
@@ -1504,7 +1548,7 @@ You can use the tab key to expand a snippet once you’ve typed in the “key”
 
 #+END_SRC
 
-** Add support for editorconfig                               :editorconfig:
+** Add support for editorconfig
 
 [[http://editorconfig.org/][EditorConfig]] helps developers define and maintain consistent coding
 styles between different editors and IDEs. The EditorConfig project
@@ -1548,7 +1592,6 @@ they work nicely with version control systems.
   (add-hook 'inferior-python-mode-hook 'flyspell-mode)
 
 #+END_SRC
-
 ** JS-2 mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1573,6 +1616,16 @@ they work nicely with version control systems.
     )
 
 #+END_SRC
+
+** Elisp enhanced
+
+*** Emacs Lisp 自动配对问题
+
+#+BEGIN_SRC emacs-lisp
+
+(sp-local-pair '(emacs-lisp-mode lisp-interaction-mode) "'" nil :actions nil)
+
+ #+END_SRC
 
 * External package besides spacemacs
 

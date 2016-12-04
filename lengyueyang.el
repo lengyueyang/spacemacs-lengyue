@@ -162,6 +162,30 @@
 (setq smtpmail-smtp-service 587)
 (setq smtpmail-smtp-user "maoxiaoweihl@gmail") ; FIXME: add your gmail addr here
 
+(defun my/dabbrev-friend-buffer (other-buffer)
+  (cond ( ;; ignore very large files
+         (> (buffer-size other-buffer) (* 1024 1024))
+         nil)
+        ( ;; doing a magit commit - use the magit status buffer
+         (and (boundp git-commit-mode) git-commit-mode)
+         (with-current-buffer other-buffer
+           (eq major-mode 'magit-status-mode)))
+        ( ;; in projectile project - use projectile buffers
+         (and (buffer-file-name other-buffer)
+              (not (file-remote-p (buffer-file-name other-buffer)))
+              (projectile-project-p))
+         (string= (projectile-project-name)
+                  (with-current-buffer other-buffer
+                    (projectile-project-name))))
+        (t ;; fallback - same mod
+         (dabbrev--same-major-mode-p other-buffer))))
+
+(add-hook 'text-mode-hook 'company-mode)
+(add-hook 'text-mode-hook
+          (lambda ()
+            (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+          )
+
 (setq user-full-name "lengyuyang"
       user-mail-address "maoxiaoweihl@gmail.com")
 
@@ -321,7 +345,13 @@
 
 (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
-;; (add-hook 'org-mode-hook 'company-mode)
+(load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
+
+(add-hook 'org-mode-hook 'company-mode)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+          )
 
 (custom-set-faces
  '(org-agenda-done ((t (:foreground "#86dc2f" :height 1.0)))))
@@ -340,7 +370,7 @@
     (add-to-list 'org-structure-template-alist
                  '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
-                 '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n #+END_SRC"))
+                 '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n#+END_SRC"))
     ;; (add-to-list 'org-structure-template-alist
     ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
     ;; (add-to-list 'org-structure-template-alist
@@ -979,6 +1009,8 @@ belongs as a list."
       "od" 'nodejs-repl-eval-dwim))
   :defer t
   )
+
+(sp-local-pair '(emacs-lisp-mode lisp-interaction-mode) "'" nil :actions nil)
 
 (req-package emmet-mode
   :config

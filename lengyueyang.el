@@ -333,6 +333,8 @@
 
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
+(require 'org-habit)
+
  (setq org-startup-indented t)
 
  (defun org-mode-my-init ()
@@ -1479,6 +1481,7 @@ Return the previous point-max before adding."
 (add-hook 'spacemacs-buffer-mode-hook (lambda ()
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 
+(add-hook 'magit-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))

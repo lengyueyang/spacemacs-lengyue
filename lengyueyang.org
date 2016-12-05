@@ -770,6 +770,8 @@ This part is the customization to org-mode.
 
    ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
+  (require 'org-habit)
+
    (setq org-startup-indented t)
 
    (defun org-mode-my-init ()
@@ -2156,6 +2158,7 @@ This part is some customization not belong to the anterior part.
 
 #+BEGIN_SRC emacs-lisp
 
+  (add-hook 'magit-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))

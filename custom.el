@@ -15,7 +15,8 @@
  '(magit-log-section-arguments (quote ("--decorate" "-n256")))
  '(org-agenda-files
    (quote
-    ("/media/My Data/DCH/CPG/肺癌临床路径/肺癌临床路径.org" "/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org")))
+    ("/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bioinformatics.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Booklists.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bookmark.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Data scientist.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Elfeed.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Emacs.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Life.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Linux.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Notes.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Programming.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Research.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Resume.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Tools.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Wiki-lengyue.org")))
+ '(org-agenda-skip-scheduled-if-deadline-is-shown (quote repeated-after-deadline))
  '(org-babel-python-command "python")
  '(org-pomodoro-length 1)
  '(org-pomodoro-short-break-length 1)

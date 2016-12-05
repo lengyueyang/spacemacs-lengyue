@@ -333,17 +333,19 @@
 
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
-(setq org-startup-indented t)
+ (setq org-startup-indented t)
 
-(defun org-mode-my-init ()
-  (define-key org-mode-map (kbd "×") (kbd "*"))
-  ;;(define-key org-mode-map (kbd "－") (kbd "-"))
-  (define-key org-mode-map (kbd "（") (kbd "("))
-  (define-key org-mode-map (kbd "）") (kbd ")"))
-  )
-(add-hook 'org-mode-hook 'org-mode-my-init)
+ (defun org-mode-my-init ()
+   (define-key org-mode-map (kbd "×") (kbd "*"))
+   ;;(define-key org-mode-map (kbd "－") (kbd "-"))
+   (define-key org-mode-map (kbd "（") (kbd "("))
+   (define-key org-mode-map (kbd "）") (kbd ")"))
+   )
+ (add-hook 'org-mode-hook 'org-mode-my-init)
 
-(add-hook 'org-mode-hook 'smartparens-strict-mode)
+ (add-hook 'org-mode-hook 'smartparens-strict-mode)
+
+(setq org-startup-with-inline-images nil)
 
 (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
 

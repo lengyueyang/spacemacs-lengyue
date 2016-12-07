@@ -1478,6 +1478,10 @@ Return the previous point-max before adding."
 (spacemacs/set-leader-keys "oen" 'emms-next)
 (spacemacs/set-leader-keys "oep" 'emms-previous)
 
+(require 'fill-column-indicator)
+(setq fci-rule-column 80)
+(add-hook 'prog-mode-hook 'fci-mode)
+
 (add-hook 'spacemacs-buffer-mode-hook (lambda ()
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 

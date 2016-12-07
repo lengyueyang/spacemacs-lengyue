@@ -2145,6 +2145,17 @@ to delete all whitespace in the direction you are deleting.
 
 This part is some customization not belong to the anterior part.
 
+** Column indicator
+
+#+BEGIN_SRC emacs-lisp
+
+  (require 'fill-column-indicator)
+  (setq fci-rule-column 80)
+  (add-hook 'prog-mode-hook 'fci-mode)
+
+#+END_SRC
+
+(add-hook 'git-commit-mode-hook 'fci-mode)
 ** Disable auto paste from clipboard
 
 #+BEGIN_SRC emacs-lisp

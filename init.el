@@ -89,6 +89,7 @@
            mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e"
            mu4e-account-alist t)
      elfeed
+     octave
      )
    dotspacemacs-additional-packages '(
                                       nodejs-repl

@@ -295,17 +295,17 @@ Include the configuration of spacemacs itself layers and better use of its defau
            (mu4e-drafts-folder "/Gmail/[Gmail].Drafts")
            (user-mail-address "maoxiaoweihl@gmail.com")
            (user-full-name "Mao Xiaowei"))
+          ("Foxmail"
+           (mu4e-sent-messages-behavior sent)
+           (mu4e-sent-folder "/Foxmail/Sent Messages")
+           (mu4e-drafts-folder "/Foxmail/Drafts")
+           (user-mail-address "maoxiaowei1988@qq.com")
+          (user-full-name "Mao Xiaowei"))
           ("Lengyue-163"
            (mu4e-sent-messages-behavior sent)
            (mu4e-sent-folder "/Lengyue-163/Sent Items")
            (mu4e-drafts-folder "/Lengyue-163/Drafts")
            (user-mail-address "zanghuahong@163.com")
-           (user-full-name "Mao Xiaowei"))
-          ("Lengyue-163"
-           (mu4e-sent-messages-behavior sent)
-           (mu4e-sent-folder "/Lengyue-126/Sent Items")
-           (mu4e-drafts-folder "/Lengyue-126/Drafts")
-           (user-mail-address "maoweirm@126.com")
            (user-full-name "Mao Xiaowei"))
          )
   )
@@ -325,8 +325,8 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;;; Mail directory shortcuts
   (setq mu4e-maildir-shortcuts
         '(("/Gmail/INBOX" . ?g)
-          ("/Lengyue-126/INBOX" . ?2)
-          ("/Lengyue-163/INBOX" . ?3)))
+          ("/Foxmail/INBOX" . ?f)
+          ("/Lengyue-163/INBOX" . ?n)))
 
   ;;; Bookmarks
   (setq mu4e-bookmarks
@@ -365,17 +365,34 @@ Include the configuration of spacemacs itself layers and better use of its defau
               (local-set-key (kbd "<tab>") 'shr-next-link)
               (local-set-key (kbd "<backtab>") 'shr-previous-link)))
 
-  ;; SMTP setup
-  (setq message-send-mail-function 'smtpmail-send-it
+  ;; something about ourselves
+  (require 'smtpmail)  
+  (setq user-mail-address "maoxiaowei1988@qq.com"  
+        user-full-name "Xiaowei, Mao"
         smtpmail-stream-type 'starttls
-        starttls-use-gnutls t)
-  ;; Personal info
-  (setq user-full-name "Xiaowei, Mao")          ; FIXME: add your info here
-  (setq user-mail-address "maoxiaoweihl@gmail.com"); FIXME: add your info here
-  ;; gmail setup
-  (setq smtpmail-smtp-server "smtp.gmail.com")
-  (setq smtpmail-smtp-service 587)
-  (setq smtpmail-smtp-user "maoxiaoweihl@gmail") ; FIXME: add your gmail addr here
+        starttls-use-gnutls t
+        mu4e-compose-signature  
+        (concat  
+         "Xiaowei Mao\n"  
+         "Email: maoxiaoweihl@gmail.com\n"  
+         "Email: maoxiaowei1988@qq.com\n"  
+         "Blog: http://lengyueyang.github.io\n"  
+         "\n")  
+        mu4e-compose-signature-auto-include t  
+        )  
+
+  (setq send-mail-function            'smtpmail-send-it
+        message-send-mail-function    'smtpmail-send-it
+        smtpmail-auth-credentials     (expand-file-name "~/.authinfo")
+        smtpmail-stream-type          'tls
+        smtpmail-smtp-server          "smtp.qq.com"
+        smtpmail-smtp-service         465
+        smtpmail-smtp-user "maoxiaowei1988@qq.com")
+
+  (setq message-kill-buffer-on-exit t)
+
+  ;; save attachment to my desktop (this can also be a function)  
+  (setq mu4e-attachment-dir "~/Documents/Mu4e/Attachment")  
 #+END_SRC
 
 ** Magit

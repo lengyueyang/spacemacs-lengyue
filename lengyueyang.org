@@ -324,9 +324,16 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
   ;;; Mail directory shortcuts
   (setq mu4e-maildir-shortcuts
-        '(("/Gmail/INBOX" . ?g)
+        '(
           ("/Foxmail/INBOX" . ?f)
-          ("/Lengyue-163/INBOX" . ?n)))
+          ("/Foxmail/Drafts" . ?d)
+          ("/Foxmail/Sent Messages" . ?s)
+          ("/Gmail/INBOX" . ?g)
+          ("/Gmail/[Gmail].All Mail" . ?a)
+          ("/Gmail/[Gmail].Drafts" . ?r)
+          ("/Gmail/[Gmail].Sent Mail" . ?m)
+          ("/Gmail/[Gmail].Trash" . ?t)
+          ("/Lengyue-163/INBOX" . ?i)))
 
   ;;; Bookmarks
   (setq mu4e-bookmarks
@@ -392,7 +399,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq message-kill-buffer-on-exit t)
 
   ;; save attachment to my desktop (this can also be a function)  
-  (setq mu4e-attachment-dir "~/Documents/Mu4e/Attachment")  
+  (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
 #+END_SRC
 
 ** Magit
@@ -1166,7 +1173,6 @@ A complete agenda and capture configuration
                '("" "listings"))
   (add-to-list 'org-latex-listings
                '("" "color"))
-
   (add-to-list 'org-latex-packages-alist
                '("" "xcolor" t))
   (add-to-list 'org-latex-packages-alist

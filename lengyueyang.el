@@ -109,9 +109,16 @@
 
 ;;; Mail directory shortcuts
 (setq mu4e-maildir-shortcuts
-      '(("/Gmail/INBOX" . ?g)
+      '(
         ("/Foxmail/INBOX" . ?f)
-        ("/Lengyue-163/INBOX" . ?n)))
+        ("/Foxmail/Drafts" . ?d)
+        ("/Foxmail/Sent Messages" . ?s)
+        ("/Gmail/INBOX" . ?g)
+        ("/Gmail/[Gmail].All Mail" . ?a)
+        ("/Gmail/[Gmail].Drafts" . ?r)
+        ("/Gmail/[Gmail].Sent Mail" . ?m)
+        ("/Gmail/[Gmail].Trash" . ?t)
+        ("/Lengyue-163/INBOX" . ?i)))
 
 ;;; Bookmarks
 (setq mu4e-bookmarks
@@ -177,7 +184,7 @@
 (setq message-kill-buffer-on-exit t)
 
 ;; save attachment to my desktop (this can also be a function)  
-(setq mu4e-attachment-dir "~/Documents/Mu4e/Attachment")
+(setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")
 
 (defun my/dabbrev-friend-buffer (other-buffer)
   (cond ( ;; ignore very large files
@@ -637,7 +644,6 @@
              '("" "listings"))
 (add-to-list 'org-latex-listings
              '("" "color"))
-
 (add-to-list 'org-latex-packages-alist
              '("" "xcolor" t))
 (add-to-list 'org-latex-packages-alist

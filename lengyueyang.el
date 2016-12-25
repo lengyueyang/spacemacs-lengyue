@@ -617,6 +617,7 @@
         (gnuplot . t)
         (latex . t)
         (C . t)
+        (octave . t)
         (ditaa . t)))
      )
   )

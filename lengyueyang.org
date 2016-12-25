@@ -1134,6 +1134,7 @@ A complete agenda and capture configuration
           (gnuplot . t)
           (latex . t)
           (C . t)
+          (octave . t)
           (ditaa . t)))
        )
     )

@@ -84,19 +84,29 @@
      lua
      html
      (clojure :variables clojure-enable-fancify-symbols t)
-     (elfeed :variables
-             ;;elfeed-enable-web-interface t
-             rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org"))
-
+     gnus
+     (mu4e :variables
+           mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e"
+           mu4e-account-alist t)
+     elfeed
+     octave
      )
-   dotspacemacs-additional-packages '(nodejs-repl
+   dotspacemacs-additional-packages '(
+                                      nodejs-repl
                                       youdao-dictionary
                                       chinese-yasdcv
                                       req-package
                                       blog-admin
-                                      ob-ipython)
+                                      ob-ipython
+                                      pangu-spacing
+                                      linum-off
+                                      editorconfig
+                                      emmet-mode
+                                      crux
+                                      emms
+                                      )
    dotspacemacs-frozen-packages '()
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(exec-path-from-shell)
    dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
@@ -120,7 +130,15 @@
                          monokai
                          zenburn)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font '("WenQuanYi Micro Hei Mono"
+   dotspacemacs-default-font '(
+                               "Fira Mono"
+                               ;; "Inconsolata"
+                               ;; "Droid Sans Mono"
+                               ;; "Ubuntu Mono"
+                               ;; "Source Code Pro"
+                               ;; "DejaVu Sans Mono"
+                               ;; "Source Han Sans CN"
+                               ;;"WenQuanYi Micro Hei Mono"
                                :size 16
                                :weight normal
                                :width normal
@@ -175,7 +193,6 @@
         '(("melpa-cn" . "http://elpa.zilongshanren.com/melpa/")
           ("org-cn"   . "http://elpa.zilongshanren.com/org/")
           ("gnu-cn"   . "http://elpa.zilongshanren.com/gnu/")))
-  (setq org-startup-indented t)
   )
 
 (defun dotspacemacs/user-config ()

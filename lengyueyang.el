@@ -5,14 +5,24 @@
 
 (require 'req-package)
 
-(require 'chinese-yasdcv)
-(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
-
 (defun open-my-init-file()
   (interactive)
   (find-file "~/.spacemacs.d/lengyueyang.org"))
 
 (global-set-key (kbd "<f2>") 'open-my-init-file)
+(spacemacs/set-leader-keys "oo" 'open-my-init-file)
+
+(require 'chinese-yasdcv)
+(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+(spacemacs/declare-prefix "ok" "Keybindings")
+(spacemacs/set-leader-keys "oky" 'yasdcv-translate-at-point)
+
+(define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
+(spacemacs/set-leader-keys "okf" 'flyspell-correct-previous-word-generic)
+
+(spacemacs/set-leader-keys "oa" 'org-agenda-list)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+(spacemacs/set-leader-keys "okb" 'org-iswitchb)
 
 (spacemacs/declare-prefix "om" "Bookmark")
 (spacemacs/set-leader-keys "oms" 'bookmark-set)
@@ -28,19 +38,20 @@
   (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
 
 (setq lengyueyang-configuration-path "~/.spacemacs.d/")
+
 (defun lengyueyang/load-my-layout ()
   (interactive)
   (persp-load-state-from-file (concat lengyueyang-configuration-path "lengyueyang")))
-(spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
 
 (defun lengyueyang/save-my-layout ()
   (interactive)
   (persp-save-state-to-file (concat lengyueyang-configuration-path "lengyueyang")))
 
 (spacemacs/declare-prefix "ol" "Layout-lengyueyang")
+(spacemacs/set-leader-keys "oll" 'lengyueyang/load-my-layout)
 (spacemacs/set-leader-keys "ols" 'lengyueyang/save-my-layout)
 
-;;(defun zilongshanren-misc/post-init-persp-mode ()
+;;(defun lengyueyang-misc/post-init-persp-mode ()
 ;;  (setq persp-kill-foreign-buffer-action 'kill)
 ;;  (setq persp-lighter nil)
 ;;  (when (fboundp 'spacemacs|define-custom-layout)
@@ -52,13 +63,355 @@
 ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
 
 (global-set-key (kbd "<f5>") 'deft)
-(setq deft-extensions '("txt" "tex" "org"))
+(setq deft-extensions '("txt" "tex" "org" "mk" "makedown"))
 (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
-(setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
+(use-package elfeed-org
+  :ensure t
+  :config
+  (elfeed-org)
+  (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
-(setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
-                                    ("STYLE_ALL" . "habit"))))
+(setq mu4e-account-alist
+      '(("Gmail"
+         ;; Under each account, set the account-specific variables you want.
+         (mu4e-sent-messages-behavior delete)
+         (mu4e-sent-folder "/Gmail/[Gmail].Sent Mail")
+         (mu4e-drafts-folder "/Gmail/[Gmail].Drafts")
+         (user-mail-address "maoxiaoweihl@gmail.com")
+         (user-full-name "Mao Xiaowei"))
+        ("Foxmail"
+         (mu4e-sent-messages-behavior sent)
+         (mu4e-sent-folder "/Foxmail/Sent Messages")
+         (mu4e-drafts-folder "/Foxmail/Drafts")
+         (user-mail-address "maoxiaowei1988@qq.com")
+        (user-full-name "Mao Xiaowei"))
+        ("Lengyue-163"
+         (mu4e-sent-messages-behavior sent)
+         (mu4e-sent-folder "/Lengyue-163/Sent Items")
+         (mu4e-drafts-folder "/Lengyue-163/Drafts")
+         (user-mail-address "zanghuahong@163.com")
+         (user-full-name "Mao Xiaowei"))
+       )
+)
+
+(mu4e/mail-account-reset)
+
+;;; Set up some common mu4e variables
+(setq mu4e-maildir "~/Documents/Mu4e"
+      mu4e-trash-folder "/Gmail/Trash"
+      mu4e-refile-folder "/Gmail/Archive"
+      ;; mu4e-get-mail-command "mbsync -a"
+      mu4e-update-interval nil
+      mu4e-compose-signature-auto-include nil
+      mu4e-view-show-images t
+      mu4e-view-show-addresses t)
+
+;;; Mail directory shortcuts
+(setq mu4e-maildir-shortcuts
+      '(
+        ("/Foxmail/INBOX" . ?f)
+        ("/Foxmail/Drafts" . ?d)
+        ("/Foxmail/Sent Messages" . ?s)
+        ("/Gmail/INBOX" . ?g)
+        ("/Gmail/[Gmail].All Mail" . ?a)
+        ("/Gmail/[Gmail].Drafts" . ?r)
+        ("/Gmail/[Gmail].Sent Mail" . ?m)
+        ("/Gmail/[Gmail].Trash" . ?t)
+        ("/Lengyue-163/INBOX" . ?i)))
+
+;;; Bookmarks
+(setq mu4e-bookmarks
+      `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+        ("date:today..now" "Today's messages" ?t)
+        ("date:7d..now" "Last 7 days" ?w)
+        ("mime:image/*" "Messages with images" ?p)
+        (,(mapconcat 'identity
+                     (mapcar
+                      (lambda (maildir)
+                        (concat "maildir:" (car maildir)))
+                      mu4e-maildir-shortcuts) " OR ")
+         "All inboxes" ?i)))
+
+(setq mu4e-enable-notifications t)
+
+(with-eval-after-load 'mu4e-alert
+  ;; Enable Desktop notifications
+  ;; (mu4e-alert-set-default-style 'notifications)) ; For linux
+  (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
+  ;; (mu4e-alert-set-default-style 'notifier))   ; For Mac OSX (through the
+                                        ; terminal notifier app)
+;; (mu4e-alert-set-default-style 'growl))      ; Alternative for Mac OSX
+
+(setq mu4e-enable-mode-line t)
+
+(setq mu4e-get-mail-command "offlineimap")
+;; Fetch mail in 60 sec interval
+(setq mu4e-update-interval 60)
+
+(require 'mu4e-contrib)
+(setq mu4e-html2text-command 'mu4e-shr2text)
+;; try to emulate some of the eww key-bindings
+(add-hook 'mu4e-view-mode-hook
+          (lambda ()
+            (local-set-key (kbd "<tab>") 'shr-next-link)
+            (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+
+;; something about ourselves
+(require 'smtpmail)  
+(setq user-mail-address "maoxiaowei1988@qq.com"  
+      user-full-name "Xiaowei, Mao"
+      smtpmail-stream-type 'starttls
+      starttls-use-gnutls t
+      mu4e-compose-signature  
+      (concat  
+       "Xiaowei Mao\n"  
+       "Email: maoxiaoweihl@gmail.com\n"  
+       "Email: maoxiaowei1988@qq.com\n"  
+       "Blog: http://lengyueyang.github.io\n"  
+       "\n")  
+      mu4e-compose-signature-auto-include t  
+      )  
+
+(setq send-mail-function            'smtpmail-send-it
+      message-send-mail-function    'smtpmail-send-it
+      smtpmail-auth-credentials     (expand-file-name "~/.authinfo")
+      smtpmail-stream-type          'tls
+      smtpmail-smtp-server          "smtp.qq.com"
+      smtpmail-smtp-service         465
+      smtpmail-smtp-user "maoxiaowei1988@qq.com")
+
+(setq message-kill-buffer-on-exit t)
+
+;; save attachment to my desktop (this can also be a function)  
+(setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")
+
+(defun my/dabbrev-friend-buffer (other-buffer)
+  (cond ( ;; ignore very large files
+         (> (buffer-size other-buffer) (* 1024 1024))
+         nil)
+        ( ;; doing a magit commit - use the magit status buffer
+         (and (boundp git-commit-mode) git-commit-mode)
+         (with-current-buffer other-buffer
+           (eq major-mode 'magit-status-mode)))
+        ( ;; in projectile project - use projectile buffers
+         (and (buffer-file-name other-buffer)
+              (not (file-remote-p (buffer-file-name other-buffer)))
+              (projectile-project-p))
+         (string= (projectile-project-name)
+                  (with-current-buffer other-buffer
+                    (projectile-project-name))))
+        (t ;; fallback - same mod
+         (dabbrev--same-major-mode-p other-buffer))))
+
+(add-hook 'text-mode-hook 'company-mode)
+(add-hook 'text-mode-hook
+          (lambda ()
+            (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+          )
+
+(setq user-full-name "lengyuyang"
+      user-mail-address "maoxiaoweihl@gmail.com")
+
+(setq kill-buffer-query-functions
+      (remq 'process-kill-buffer-query-function
+            kill-buffer-query-functions))
+
+;; (spacemacs//set-monospaced-font "Inconsolata" "Source Han Sans CN" 16 20)
+(spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
+;; (spacemacs//set-monospaced-font "Fira Mono" "Wenquanyi Micro Hei" 16 20)
+;; (spacemacs//set-monospaced-font "DejaVu Sans Mono" "Source Han Sans CN" 16 20)
+
+(dolist (command '(yank yank-pop))
+  (eval
+   `(defadvice ,command (after indent-region activate)
+      (and (not current-prefix-arg)
+           (member major-mode
+                   '(emacs-lisp-mode
+                     lisp-mode
+                     clojure-mode
+                     scheme-mode
+                     haskell-mode
+                     ruby-mode
+                     rspec-mode
+                     python-mode
+                     c-mode
+                     c++-mode
+                     objc-mode
+                     latex-mode
+                     js-mode
+                     plain-tex-mode))
+           (let ((mark-even-if-inactive transient-mark-mode))
+             (indent-region (region-beginning) (region-end) nil))))))
+
+(global-prettify-symbols-mode 1)
+(setq-default fill-column 80)
+(defadvice find-file (before make-directory-maybe
+                             (filename &optional wildcards) activate)
+  "Create parent directory if not exists while visiting file."
+  (unless (file-exists-p filename)
+    (let ((dir (file-name-directory filename)))
+      (when dir
+        (unless (file-exists-p dir)
+          (make-directory dir t))))))
+
+(setq large-file-warning-threshold 300000000)
+(defun spacemacs/check-large-file ()
+  (when (> (buffer-size) 500000)
+    (progn (fundamental-mode)
+           (hl-line-mode -1)))
+  (if (and (executable-find "wc")
+           (> (string-to-number (shell-command-to-string (format "wc -l %s" (buffer-file-name))))
+              5000))
+      (linum-mode -1)))
+
+(add-hook 'find-file-hook 'spacemacs/check-large-file)
+
+(defun indent-whole-buffer ()
+  "Indent whole buffer."
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max))))
+
+(defun quick-folding-source ()
+  "Use emacs buildin easy to folding code."
+  (interactive)
+  (set-selective-display
+   (if selective-display nil 1)))
+
+(defun insert-U200B-char ()
+  "Insert <U200B> char, this character is nice use in org-mode."
+  (interactive)
+  (insert "\ufeff"))
+
+(defun insert-empty-line ()
+  "Insert an empty line after current line and position cursor on newline."
+  (interactive)
+  (move-end-of-line nil)
+  (open-line 1)
+  (next-line 1))
+
+(defun file-reopen-as-root ()
+  (interactive)
+  (when buffer-file-name
+    (find-alternate-file
+     (concat "/sudo:root@localhost:"
+             buffer-file-name))))
+
+(defun delete-current-buffer-file ()
+  "Removes file connected to current buffer and kills buffer."
+  (interactive)
+  (let ((filename (buffer-file-name))
+        (buffer (current-buffer))
+        (name (buffer-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (ido-kill-buffer)
+      (when (yes-or-no-p "Are you sure you want to remove this file? ")
+        (delete-file filename)
+        (kill-buffer buffer)
+        (message "File '%s' successfully removed" filename)))))
+
+(defun rename-current-buffer-file ()
+  "Renames current buffer and file it is visiting."
+  (interactive)
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "New name: " filename)))
+        (if (get-buffer new-name)
+            (error "A buffer named '%s' already exists!" new-name)
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil)
+          (message "File '%s' successfully renamed to '%s'"
+                   name (file-name-nondirectory new-name)))))))
+
+(defun set-file-executable()
+  "Add executable permissions on current file."
+  (interactive)
+  (when (buffer-file-name)
+    (set-file-modes buffer-file-name
+                    (logior (file-modes buffer-file-name) #o100))
+    (message (concat "Made " buffer-file-name " executable"))))
+
+(defun clone-file-and-open (filename)
+  "Clone the current buffer writing it into FILENAME and open it"
+  (interactive "FClone to file: ")
+  (save-restriction
+    (widen)
+    (write-region (point-min) (point-max) filename nil nil nil 'confirm))
+  (find-file filename))
+
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+(setq revert-without-query '(".*")) ;; disable revert query
+
+(defun eval-buffer-until-error ()
+  "Evaluate emacs buffer until error occured."
+  (interactive)
+  (goto-char (point-min))
+  (while t (eval (read (current-buffer)))))
+
+;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+
+(require 'org-habit)
+
+ (setq org-startup-indented t)
+
+ (defun org-mode-my-init ()
+   (define-key org-mode-map (kbd "×") (kbd "*"))
+   ;;(define-key org-mode-map (kbd "－") (kbd "-"))
+   (define-key org-mode-map (kbd "（") (kbd "("))
+   (define-key org-mode-map (kbd "）") (kbd ")"))
+   )
+ (add-hook 'org-mode-hook 'org-mode-my-init)
+
+ (add-hook 'org-mode-hook 'smartparens-strict-mode)
+
+(setq org-startup-with-inline-images nil)
+
+(load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
+
+(add-hook 'org-mode-hook 'company-mode)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+          )
+
+(custom-set-faces
+ '(org-agenda-done ((t (:foreground "#86dc2f" :height 1.0)))))
+
+(custom-set-faces
+ '(org-scheduled-today ((t (:foreground "#bc6ec5" :height 1.0)))))
+
+(eval-after-load 'org
+  '(progn
+    (add-to-list 'org-structure-template-alist
+                 '("el" "#+BEGIN_SRC emacs-lisp\n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("sh" "#+BEGIN_SRC sh\n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("pl" "#+BEGIN_SRC plantuml :file \n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
+    (add-to-list 'org-structure-template-alist
+                 '("ipb" "#+BEGIN_SRC ipython :session :exports both :file \n\n?\n\n#+END_SRC"))
+    ;; (add-to-list 'org-structure-template-alist
+    ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
+    ;; (add-to-list 'org-structure-template-alist
+    ;;              '("p" "#+BEGIN_SRC plantuml :file uml.png \n\n?\n\n#+END_SRC"))
+    ))
+
+(eval-after-load 'org
+  '(progn
+     (setq org-columns-default-format "%50ITEM(Task) %CATEGORY %SCHEDULED %5Effort %5CLOCKSUM %PRIORITY")
+     (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
+                                         ("STYLE_ALL" . "habit"))))
+     )
+  )
 
 (defun lengyueyang/org-ispell ()
   "Configure `ispell-skip-region-alist' for `org-mode'."
@@ -73,37 +426,71 @@
   (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
 (add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
 
-(setq org-agenda-dir "~/Emacs-lengyue/GTD-lengyue")
-    (setq org-agenda-file-gtd (expand-file-name "GTD-lengyue.org" org-agenda-dir))
-    (setq org-agenda-files `(,org-agenda-file-gtd))
+(require 'org-notify)
+(org-notify-start)
+(org-notify-add 'appt
+                '(:time "-1s" :period "20s" :duration 10
+                        :actions (-message -ding))
+                '(:time "15m" :period "2m" :duration 100
+                        :actions -notify)
+                '(:time "2h" :period "10m" :actions -message)
+                '(:time "3d" :period "12h" :actions -message)
+                '(:time "7d" :period "24h" :actions -message)
+                '(:time "30d" :actions -email))
 
-    (setq org-default-notes-file org-agenda-file-gtd)
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d)")
-            (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "HOLD(h@/!)" "CANCELLED(c@/!)")
-            (sequence "INBOX(i)" "|" "NOTE(e)" "PHONE(p)" "MEETING(m)")
-            (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
-(setq org-refile-targets
-        '(("GTD-lengyue.org" :maxlevel . 1)))
+;; [[https://www.reddit.com/r/emacs/comments/5ayjjl/pomodoro_in_emacs/][Pomodoro in Emacs : emacs]]
+(use-package org-pomodoro
+  :ensure t
+  :commands (org-pomodoro)
+  :config
+  (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
+  (setq org-pomodoro-length 25)
+  (setq org-pomodoro-short-break-length 5)
+  (setq org-pomodoro-long-break-length 30)
+)
 
-(setq org-log-into-drawer t)
+(eval-after-load 'org
+  '(progn
+     (setq org-agenda-files (quote ("~/Emacs-lengyue/GTD-lengyue"
+                                    "~/Emacs-lengyue/Wiki-lengyue")))
 
-(setq org-agenda-custom-commands
+     (setq org-todo-keywords
+           (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
+                   (sequence "SOMEDAY(S)" "|" "WAITING(w@/!)"  "MEETING(m)" "PHONE(p)")
+                   (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+                   )))
+
+     (setq org-todo-keyword-faces
+           (quote (
+                   ("STARTED" :foreground "magenta" :weight bold)
+     ;;               ("NEXT" :foreground "blue" :weight bold)
+     ;;               ("DONE" :foreground "forest green" :weight bold)
+                   ("WAITING" :foreground "red" :weight bold)
+     ;;               ("HOLD" :foreground "magenta" :weight bold)
+     ;;               ("CANCELLED" :foreground "forest green" :weight bold)
+     ;;               ("MEETING" :foreground "forest green" :weight bold)
+                   ;;               ("PHONE" :foreground "forest green" :weight bold)
+                   )))
+
+     (setq org-refile-targets
+           '(("~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
+
+     (setq org-log-into-drawer t)
+     (setq org-agenda-custom-commands
         '(
-          ("i" "Inbox" todo "INBOX")
-          ("h" "Holdtodo" todo "HOLD")
-          ("e" "Note" todo "NOTE")
-          ("s" "Someday/Maybe" todo "SOMEDAY")
-          ("b" "Blog" tags-todo "BLOG")
-          ("w" . " 任务安排 ")
-          ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
-          ("wb" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
-          ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
+          ("b" "Blog idea" tags-todo "BLOG")
+          ("s" "Someday" todo "SOMEDAY")
+          ("S" "Started" todo "STARTED")
+          ("w" "Waiting" todo "WAITING")
+          ("d" . " 任务安排 ")
+          ("da" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
+          ("db" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
+          ("dc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
           ("p" . " 项目安排 ")
-          ("W" "Weekly Review"
-           ((stuck "")            ;; review stuck projects as designated by org-stuck-projects
-            (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
-            ))))
+          ("W" "Weekly Review" tags-todo "PROJECT")
+            ))
+     )
+  )
 
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -111,75 +498,74 @@
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
 (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
-  
-  ;;used by org-clock-sum-today-by-tags
-(defun filter-by-tags ()
-    (let ((head-tags (org-get-tags-at)))
-      (member current-tag head-tags)))
+
+;;   ;;used by org-clock-sum-today-by-tags
+;; (defun filter-by-tags ()
+;;     (let ((head-tags (org-get-tags-at)))
+;;       (member current-tag head-tags)))
 
 
-  (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-    (interactive "P")
-    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-           (files (org-add-archive-files (org-agenda-files)))
-           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
-           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-           (output-string "")
-           (tstart (or tstart
-                       (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
-                       (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
-                       (org-time-today)))
-           (tend (or tend
-                     (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
-                     (+ tstart 86400)))
-           h m file item prompt donesomething)
-      (while (setq file (pop files))
-        (setq org-agenda-buffer (if (file-exists-p file)
-                                    (org-get-agenda-file-buffer file)
-                                  (error "No such file %s" file)))
-        (with-current-buffer org-agenda-buffer
-          (dolist (current-tag include-tags)
-            (org-clock-sum tstart tend'filter-by-tags)
-            (setcdr (assoc current-tag tags-time-alist)
-                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-      (while (setq item (pop tags-time-alist))
-        (unless (equal (cdr item) 0)
-          (setq donesomething t)
-          (setq h (/ (cdr item) 60)
-                m (- (cdr item) (* 60 h)))
-          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-      (unless donesomething
-        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-      (unless noinsert
-        (insert output-string))
-      output-string))
+;; (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+;;     (interactive "P")
+;;     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+;;            (files (org-add-archive-files (org-agenda-files)))
+;;            (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
+;;            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+;;            (output-string "")
+;;            (tstart (or tstart
+;;                        (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
+;;                        (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+;;                        (org-time-today)))
+;;            (tend (or tend
+;;                      (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+;;                      (+ tstart 86400)))
+;;            h m file item prompt donesomething)
+;;       (while (setq file (pop files))
+;;         (setq org-agenda-buffer (if (file-exists-p file)
+;;                                     (org-get-agenda-file-buffer file)
+;;                                   (error "No such file %s" file)))
+;;         (with-current-buffer org-agenda-buffer
+;;           (dolist (current-tag include-tags)
+;;             (org-clock-sum tstart tend'filter-by-tags)
+;;             (setcdr (assoc current-tag tags-time-alist)
+;;                     (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+;;       (while (setq item (pop tags-time-alist))
+;;         (unless (equal (cdr item) 0)
+;;           (setq donesomething t)
+;;           (setq h (/ (cdr item) 60)
+;;                 m (- (cdr item) (* 60 h)))
+;;           (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+;;       (unless donesomething
+;;         (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+;;       (unless noinsert
+;;         (insert output-string))
+;;       output-string))
+
+(define-key global-map (kbd "<f9>") 'org-capture)
+(spacemacs/set-leader-keys "oc" 'org-capture)
+
+(setq org-capture-templates
+      '(("b" "Blog Ideas" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
+         "* TODO %?\n%i%U"
+         :empty-lines 1)
+        ("s" "Someday/Maybe" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
+         "* SOMEDAY %?\n%i%U"
+         :empty-lines 1)
+        ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
+         "* TODO %?\n%i%U"
+         :empty-lines 1)
+        ("r" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
+         "* TODO %?\n%i%U"
+         :empty-lines 1)
+        ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+         "* %c :website:\n%?\n%U %:initial"
+         :empty-lines 1)
+        ))
 
 (add-to-load-path "~/.spacemacs.d/package/org-protocol-capture-html")
 (server-start)
 (require 'org-protocol)
 (require 'org-protocol-capture-html)
-
-(define-key global-map (kbd "<f9>") 'org-capture)
-
-(setq org-capture-templates
-        '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
-           "* %c :website:\n%?\n%U %:initial"
-          :empty-lines 1)
-          ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
-           "* INBOX %?\n%i%U"
-           :empty-lines 1)
-          ("e" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick Notes")
-           "* NOTE %?\n%i%U"
-           :empty-lines 1)
-          ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("m" "Someday/Maybe" entry (file+headline org-agenda-file-gtd "Someday/Maybe")
-           "* SOMEDAY %?\n%i%U"
-           :empty-lines 1)))
 
 (setq org-confirm-babel-evaluate nil)
 
@@ -231,6 +617,7 @@
         (gnuplot . t)
         (latex . t)
         (C . t)
+        (octave . t)
         (ditaa . t)))
      )
   )
@@ -250,59 +637,60 @@
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
 ;;org-mode export to latex
-  (require 'ox-latex)
-  (setq org-export-latex-listings t)
+(require 'ox-latex)
+(setq org-export-latex-listings t)
 
-  ;;org-mode source code setup in exporting to latex
-  (add-to-list 'org-latex-listings '("" "listings"))
-  (add-to-list 'org-latex-listings '("" "color"))
+;;org-mode source code setup in exporting to latex
+(add-to-list 'org-latex-listings
+             '("" "listings"))
+(add-to-list 'org-latex-listings
+             '("" "color"))
+(add-to-list 'org-latex-packages-alist
+             '("" "xcolor" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "listings" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "fontspec" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "indentfirst" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "xunicode" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "geometry"))
+(add-to-list 'org-latex-packages-alist
+             '("" "float"))
+(add-to-list 'org-latex-packages-alist
+             '("" "longtable"))
+(add-to-list 'org-latex-packages-alist
+             '("" "tikz"))
+(add-to-list 'org-latex-packages-alist
+             '("" "fancyhdr"))
+(add-to-list 'org-latex-packages-alist
+             '("" "textcomp"))
+(add-to-list 'org-latex-packages-alist
+             '("" "amsmath"))
+(add-to-list 'org-latex-packages-alist
+             '("" "tabularx" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "booktabs" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "grffile" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "wrapfig" t))
+(add-to-list 'org-latex-packages-alist
+             '("normalem" "ulem" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "amssymb" t))
+(add-to-list 'org-latex-packages-alist
+             '("" "capt-of" t))
+(add-to-list 'org-latex-packages-alist
+             '("figuresright" "rotating" t))
+(add-to-list 'org-latex-packages-alist
+             '("Lenny" "fncychap" t))
 
-  (add-to-list 'org-latex-packages-alist
-               '("" "xcolor" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "listings" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "fontspec" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "indentfirst" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "xunicode" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "geometry"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "float"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "longtable"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "tikz"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "fancyhdr"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "textcomp"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "amsmath"))
-  (add-to-list 'org-latex-packages-alist
-               '("" "tabularx" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "booktabs" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "grffile" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "wrapfig" t))
-  (add-to-list 'org-latex-packages-alist
-               '("normalem" "ulem" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "amssymb" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "capt-of" t))
-  (add-to-list 'org-latex-packages-alist
-               '("figuresright" "rotating" t))
-  (add-to-list 'org-latex-packages-alist
-               '("Lenny" "fncychap" t))
-
-  (add-to-list 'org-latex-classes
-               '("lengyue-org-book"
-                 "\\documentclass{book}
+(add-to-list 'org-latex-classes
+             '("lengyue-org-book"
+               "\\documentclass{book}
 \\usepackage[slantfont, boldfont]{xeCJK}
 % chapter set
 \\usepackage{titlesec}
@@ -348,9 +736,9 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-  (add-to-list 'org-latex-classes
-               '("lengyue-org-article"
-                 "\\documentclass{article}
+(add-to-list 'org-latex-classes
+             '("lengyue-org-article"
+               "\\documentclass{article}
 \\usepackage[slantfont, boldfont]{xeCJK}
 \\usepackage{titlesec}
 \\usepackage{hyperref}
@@ -395,9 +783,9 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-  (add-to-list 'org-latex-classes
-               '("lengyue-org-beamer"
-                 "\\documentclass{beamer}
+(add-to-list 'org-latex-classes
+             '("lengyue-org-beamer"
+               "\\documentclass{beamer}
 \\usepackage[slantfont, boldfont]{xeCJK}
 % beamer set
 \\usepackage[none]{hyphenat}
@@ -441,12 +829,17 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-  (setq org-latex-pdf-process
+(setq org-latex-pdf-process
         '("xelatex -interaction nonstopmode -output-directory %o %f"
           ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
           "bibtex %b"
           "xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"))
+
+(setq org-link-abbrev-alist
+      '(("google" . "http://www.google.com/search?q=")
+        ("google-map" . "http://maps.google.com/maps?q=%s")
+        ))
 
 (add-to-load-path "~/.spacemacs.d/package/org-subtask-reset")
 (require 'org-subtask-reset)
@@ -454,12 +847,163 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 (add-to-load-path "~/.spacemacs.d/package/org-checklist")
 (require 'org-checklist)
 
-;; It's wrong to load org-archive-subtree-hierarchical, so add here
-(load "~/.spacemacs.d/package/org-archive-subtree-hierarchical/org-archive-subtree-hierarchical.el")
+(defun lengyueyang//org-archive-tasks (prefix)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (outline-previous-heading)))
+   (format "/%s" prefix) 'file))
+
+(defun lengyueyang/org-archive-all-tasks ()
+  (interactive)
+  (lengyueyang//org-archive-tasks "DONE")
+  (lengyueyang//org-archive-tasks "CANCELLED")
+  (lengyueyang//org-archive-tasks "FIXED")
+  )
+
+;; org-archive-subtree-hierarchical.el
+;; modified from https://lists.gnu.org/archive/html/emacs-orgmode/2014-08/msg00109.html
+
+;; In orgmode
+;; * A
+;; ** AA
+;; *** AAA
+;; ** AB
+;; *** ABA
+;; Archiving AA will remove the subtree from the original file and create
+;; it like that in archive target:
+
+;; * AA
+;; ** AAA
+
+;; And this give you
+;; * A
+;; ** AA
+;; *** AAA
+
+
+(require 'org-archive)
+
+(defun org-archive-subtree-hierarchical--line-content-as-string ()
+  "Returns the content of the current line as a string"
+  (save-excursion
+    (beginning-of-line)
+    (buffer-substring-no-properties
+     (line-beginning-position) (line-end-position))))
+
+(defun org-archive-subtree-hierarchical--org-child-list ()
+  "This function returns all children of a heading as a list. "
+  (interactive)
+  (save-excursion
+    ;; this only works with org-version > 8.0, since in previous
+    ;; org-mode versions the function (org-outline-level) returns
+    ;; gargabe when the point is not on a heading.
+    (if (= (org-outline-level) 0)
+        (outline-next-visible-heading 1)
+      (org-goto-first-child))
+    (let ((child-list (list (org-archive-subtree-hierarchical--line-content-as-string))))
+      (while (org-goto-sibling)
+        (setq child-list (cons (org-archive-subtree-hierarchical--line-content-as-string) child-list)))
+      child-list)))
+
+(defun org-archive-subtree-hierarchical--org-struct-subtree ()
+  "This function returns the tree structure in which a subtree
+belongs as a list."
+  (interactive)
+  (let ((archive-tree nil))
+    (save-excursion
+      (while (org-up-heading-safe)
+        (let ((heading
+               (buffer-substring-no-properties
+                (line-beginning-position) (line-end-position))))
+          (if (eq archive-tree nil)
+              (setq archive-tree (list heading))
+            (setq archive-tree (cons heading archive-tree))))))
+    archive-tree))
+
+(defun org-archive-subtree-hierarchical ()
+  "This function archives a subtree hierarchical"
+  (interactive)
+  (let ((org-tree (org-archive-subtree-hierarchical--org-struct-subtree))
+        (this-buffer (current-buffer))
+        (file (abbreviate-file-name
+               (or (buffer-file-name (buffer-base-buffer))
+                   (error "No file associated to buffer")))))
+    (save-excursion
+      (setq location (org-get-local-archive-location)
+            afile (org-extract-archive-file location)
+            heading (org-extract-archive-heading location)
+            infile-p (equal file (abbreviate-file-name (or afile ""))))
+      (unless afile
+        (error "Invalid `org-archive-location'"))
+      (if (> (length afile) 0)
+          (setq newfile-p (not (file-exists-p afile))
+                visiting (find-buffer-visiting afile)
+                buffer (or visiting (find-file-noselect afile)))
+        (setq buffer (current-buffer)))
+      (unless buffer
+        (error "Cannot access file \"%s\"" afile))
+      (org-cut-subtree)
+      (set-buffer buffer)
+      (org-mode)
+      (goto-char (point-min))
+      (while (not (equal org-tree nil))
+        (let ((child-list (org-archive-subtree-hierarchical--org-child-list)))
+          (if (member (car org-tree) child-list)
+              (progn
+                (search-forward (car org-tree) nil t)
+                (setq org-tree (cdr org-tree)))
+            (progn
+              (goto-char (point-max))
+              (newline)
+              (org-insert-struct org-tree)
+              (setq org-tree nil)))))
+      (newline)
+      (org-yank)
+      (when (not (eq this-buffer buffer))
+        (save-buffer))
+      (message "Subtree archived %s"
+               (concat "in file: " (abbreviate-file-name afile))))))
+
+(defun org-insert-struct (struct)
+  "TODO"
+  (interactive)
+  (when struct
+    (insert (car struct))
+    (newline)
+    (org-insert-struct (cdr struct))))
+
+(defun org-archive-subtree ()
+  (org-archive-subtree-hierarchical)
+)
 
 (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
       org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
       org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+
+(setq yas-snippet-dirs
+      '("~/.spacemacs.d/snippets/lengyueyang-snippets"
+        "~/.spacemacs.d/snippets/dot-files-snippets/"
+        "~/.spacemacs.d/snippets/yasnippet-snippets/"
+        "~/.spacemacs.d/snippets/lengyueyang-snippets/"
+        ))
+(yas-global-mode 1)
+
+(global-set-key (kbd "C-c y i") 'yas-insert-snippet)
+(global-set-key (kbd "C-c y n") 'yas-new-snippet)
+(global-set-key (kbd "C-c y t") 'yas-expand-from-trigger-key)
+;;(global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
+
+(spacemacs/declare-prefix "oy" "Yasnippet")
+(spacemacs/set-leader-keys "oyi" 'yas-insert-snippet)
+(spacemacs/set-leader-keys "oyn" 'yas-new-snippet)
+(spacemacs/set-leader-keys "oyt" 'yas-expand-from-trigger-key)
+
+(use-package editorconfig
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook (editorconfig-mode 1))
+  (add-hook 'text-mode-hook (editorconfig-mode 1)))
 
 (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'R-mode-hook 'smartparens-mode)
@@ -475,90 +1019,57 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 (add-hook 'inferior-python-mode-hook 'flycheck-mode)
 (add-hook 'inferior-python-mode-hook 'flyspell-mode)
 
-(setq user-full-name "lengyuyang"
-      user-mail-address "maoxiaoweihl@gmail.com")
+(use-package nodejs-repl
+  :init
+  :defer t)
+
+(add-to-load-path "~/.spacemacs.d/package/nodejs-repl-eval")
+(use-package nodejs-repl-eval
+  :commands (nodejs-repl-eval-buffer nodejs-repl-eval-dwim nodejs-repl-eval-function)
+  :init
+  (progn
+    (spacemacs/declare-prefix-for-mode 'js2-mode
+                                       "mo" "Nodejs-repl")
+    (spacemacs/set-leader-keys-for-major-mode 'js2-mode
+      "oo" 'nodejs-repl
+      "ob" 'nodejs-repl-eval-buffer
+      "of" 'nodejs-repl-eval-function
+      "od" 'nodejs-repl-eval-dwim))
+  :defer t
+  )
+
+(sp-local-pair '(emacs-lisp-mode lisp-interaction-mode) "'" nil :actions nil)
+
+(req-package emmet-mode
+  :config
+  (progn
+    ;; Following mode support emmet-mode
+    (add-hook 'html-mode-hook 'emmet-mode)
+    (add-hook 'sgml-mode-hook 'emmet-mode)
+    (add-hook 'nxml-mode-hook 'emmet-mode)
+    (add-hook 'css-mode-hook  'emmet-mode)
+
+    ;; Move cursor between quotes after expand
+    (add-hook 'emmt-mode-hook
+              '(lambda()
+                 (setq emmet-move-cursor-between-quotes t)))
+
+    ;; Make tab can also expand emmt instead of use yasnippet directly
+    (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
+    (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
 
 (req-package hungry-delete
   :init (global-hungry-delete-mode))
 
-(add-hook 'spacemacs-buffer-mode-hook (lambda ()
-(set (make-local-variable 'mouse-1-click-follows-link) nil)))
-
-(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
-(add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
-(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
-
-(spacemacs//set-monospaced-font "WenQuanYi Micro Hei Mono" "WenQuanYi Micro Hei Mono" 16 20)
-
-(defun lengyueyang/hotspots ()
-  "helm interface to my hotspots, which includes my locations,
-org-files and bookmarks"
-  (interactive)
-  (helm :buffer "*helm: utities*"
-        :sources `(,(lengyueyang//hotspots-sources))))
-
-(defun lengyueyang//hotspots-sources ()
-  "Construct the helm sources for my hotspots"
-  `((name . "lengyueyang's center")
-    (candidates . (
-                   ("Agenda" . (lambda () (org-agenda "" "a")))
-                   ("Blog" . (lambda() (blog-admin-start)))
-                   ("Elfeed" . (lambda () (elfeed)))
-                   ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
-                   ("Agenda Menu" . (lambda () (org-agenda)))
-                   ("Open Github" . (lambda() (browse-url "https://github.com/lengyueyang")))
-                   ("Open Blog" . (lambda() (browse-url "http://lengyueyang.github.io")))))
-    (candidate-number-limit)
-    (action . (("Open" . (lambda (x) (funcall x)))))))
-
-(define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
-
-(defun lengyueyang/word-count-for-chinese ()
-  "「較精確地」統計中 / 日 / 英文字數。
-- 文章中的註解不算在字數內。
-- 平假名與片假名亦包含在「中日文字數」內，每個平 / 片假名都算單獨一個字（但片假
-  名不含連音「ー」）。
-- 英文只計算「單字數」，不含標點。
-- 韓文不包含在內。
-※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
-。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
-中間的點也被 Emacs 算為一個字而不是標點符號。"
-  (interactive)
-  (let* ((v-buffer-string
-          (progn
-            (if (eq major-mode 'org-mode) ; 去掉 org 文件的 OPTIONS（以 #+ 開頭）
-                (setq v-buffer-string (replace-regexp-in-string "^#\\+.+" ""
-                                                                (buffer-substring-no-properties (point-min) (point-max))))
-              (setq v-buffer-string (buffer-substring-no-properties (point-min) (point-max))))
-            (replace-regexp-in-string (format "^ *%s *.+" comment-start) "" v-buffer-string)))
-                                        ; 把註解行刪掉（不把註解算進字數）。
-         (chinese-char-and-punc 0)
-         (chinese-punc 0)
-         (english-word 0)
-         (chinese-char 0))
-    (with-temp-buffer
-      (insert v-buffer-string)
-      (goto-char (point-min))
-      ;; 中文（含標點、片假名）
-      (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
-        (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
-      ;; 中文標點符號
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
-        (setq chinese-punc (1+ chinese-punc)))
-      ;; 英文字數（不含標點）
-      (goto-char (point-min))
-      (while (re-search-forward wc-regexp-english-word nil :no-error)
-        (setq english-word (1+ english-word))))
-    (setq chinese-char (- chinese-char-and-punc chinese-punc))
-    (message
-     (format " 中日文字數（不含標點）：%s
- 中日文字數（包含標點）：%s
- 英文字數（不含標點）：%s
-=======================
- 中英文合計（不含標點）：%s"
-             chinese-char chinese-char-and-punc english-word
-             (+ chinese-char english-word)))))
+(req-package pangu-spacing
+  :init
+  (progn
+    ;; start pangu-spacing globally
+    (global-pangu-spacing-mode 1)
+    ;; Always insert `real' space in org-mode.
+    (add-hook 'org-mode-hook
+              '(lambda ()
+                 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))))
 
 ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
 
@@ -578,6 +1089,8 @@ org-files and bookmarks"
 (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
 (setq blog-admin-backend-new-post-in-drafts t)
 (setq blog-admin-backend-new-post-with-same-name-dir t)
+
+(spacemacs/set-leader-keys "ob" 'blog-admin-start)
 
 (require'cl)
 
@@ -633,5 +1146,473 @@ You can run this function in dired or a hexo article."
                                   nil)
                (message (format "The article has been moved to %s" dest-dir))))
     (message "You have to run this in a hexo article buffer or dired"))
+
+;; https://github.com/tumashu/emacs-helper/blob/master/eh-emms.el
+
+(use-package emms
+  :config
+
+  (use-package emms-setup
+    :ensure nil)
+  (use-package emms-info-libtag
+    :ensure nil)
+  (use-package dired
+    :ensure nil)
+  ;; (use-package chinese-pyim)
+
+  (emms-devel)
+  (emms-default-players)
+  (when (fboundp 'emms-cache) (emms-cache 1))
+
+  (emms-history-load)
+  ;; EMMS 目录
+  (setq emms-source-file-default-directory "~/Music/Lengyueyang-music")
+
+  (unless (file-directory-p emms-source-file-default-directory)
+    (make-directory (file-name-as-directory emms-source-file-default-directory)))
+
+  (setq emms-directory "~/Music/.emms/")
+  (setq emms-history-file "~/Music/.emms/history")
+  (setq emms-cache-file "~/Music/.emms/cache")
+  (setq emms-stream-bookmarks-file "~/Music/.emms/streams")
+  (setq emms-score-file "~/Music/.emms/scores")
+
+  ;; 设定 EMMS 主模式为 Playlist 模式
+  (setq emms-playlist-default-major-mode 'emms-playlist-mode)
+
+  ;; 修复播放完后的 BUG
+  (setq emms-player-next-function 'emms-next)
+
+  ;; 设定音轨初始化信息
+  (add-to-list 'emms-track-initialize-functions 'emms-info-initialize-track)
+
+  ;; 关闭 EMMS 信息异步模式
+  (setq emms-info-asynchronously nil)
+
+  ;; 设定 EMMS 启动列表循环播放
+  (setq emms-repeat-playlist t)
+
+  ;; 排序方法: 艺术家 -> 专辑 -> 序号
+  (setq emms-playlist-sort-function
+        'emms-playlist-sort-by-natural-order)
+
+  ;; 使用 Gnu find 查找文件
+  (setq emms-source-file-directory-tree-function
+        'emms-source-file-directory-tree-find)
+
+  ;; 在 minibuffer 中显示播放信息(emms-show)
+  (add-hook 'emms-player-started-hook 'emms-show)
+  (setq emms-show-format "正在播放: [%s]")
+
+  ;;设置 Mode-line 的显示方式
+  (setq emms-mode-line-format "%s")
+  (setq emms-playing-time-display-format "%s ]")
+  (setq global-mode-string
+        '(" " emms-mode-line-string " " emms-playing-time-string " "))
+  (setq emms-mode-line-mode-line-function
+        'eh-emms-mode-line-playlist-current)
+
+  (defun eh-emms-mode-line-playlist-current ()
+    "Format the currently playing."
+    (let ((track (emms-playlist-current-selected-track)))
+      (if (eq 'file (emms-track-type track))
+          (if (and (emms-track-get track 'info-artist)
+                   (emms-track-get track 'info-title))
+              (let ((art  (emms-track-get track 'info-artist))
+                    (tit  (emms-track-get track 'info-title)))
+                (format "[ %s -- %s" art tit))
+            (format "[ %s"
+                    (file-relative-name (emms-track-name track)
+                                        emms-source-file-default-directory))))))
+
+  ;; 显示歌词
+  (emms-lyrics 1)
+  (setq emms-lyrics-display-on-modeline t)
+
+
+  ;; Function used to format track
+  (setq emms-track-description-function
+        #'(lambda (track)
+            (concat " " (eh-emms-make-track-description track))))
+
+  ;; 设置 Playlist 的显示方式
+  (setq emms-last-played-format-alist
+        '(((emms-last-played-seconds-today) . "%H:%M")
+          (604800                           . "%H:%M")
+          ((emms-last-played-seconds-month) . "%d")
+          ((emms-last-played-seconds-year)  . "%m-%d")
+          (t                                . "%Y")))
+
+  (defun eh-emms-make-track-description (track)
+    "Return a description of the current track."
+    (let ((track-type (emms-track-type track))
+          (play-count (or (emms-track-get track 'play-count) 0))
+          (last-played (or (emms-track-get track 'last-played) '(0 0 0)))
+          (name (emms-track-name track))
+          (pmin (emms-track-get track 'info-playing-time-min))
+          (psec (emms-track-get track 'info-playing-time-sec))
+          (ptot (emms-track-get track 'info-playing-time))
+          (title (emms-track-get track 'info-title))
+          (artist (emms-track-get track 'info-artist))
+          (album (emms-track-get track 'info-album)))
+      (if (eq 'file track-type)
+          (format "%5s %3s |-> %-s"
+                  (emms-last-played-format-date last-played)
+                  play-count
+                  (cond ((and pmin psec) (format "%s %s -- %s [%02d:%02d]" artist album title pmin psec))
+                        (ptot (format  "%s %s -- %s [%02d:%02d]" artist album title (/ ptot 60) (% ptot 60)))
+                        (t (format "%s %s -- %s" artist album  title)))))))
+
+
+  ;; Function used to get music tags, for example IDv2.3!
+  (setq emms-info-functions '(eh-emms-info-libtag eh-emms-info-add-pinyin-alias))
+
+  (defun eh-emms-info-libtag (track)
+    (when (and (eq 'file (emms-track-type track))
+               (string-match
+                "\\.\\([Mm][Pp]3\\|[oO][gG][gG]\\|[fF][lL][aA][cC]\\|[sS][pP][xX]\\)\\'"
+                (emms-track-name track)))
+      (let ((info-list
+             (split-string (file-relative-name
+                            (emms-track-name track)
+                            emms-source-file-default-directory) "/" t)))
+        (emms-track-set track 'info-artist (if (> (length info-list) 1) (nth 0 info-list) "未知艺术家"))
+        (emms-track-set track 'info-album  (if (> (length info-list) 2) (nth 1 info-list) "杂项"))
+        (emms-track-set track 'info-title (car (reverse info-list))))
+      (with-temp-buffer
+        (when (string= "0"
+                       (format "%s" (let ((coding-system-for-read 'utf-8))
+                                      (call-process emms-info-libtag-program-name
+                                                    nil '(t nil) nil
+                                                    (emms-track-name track)))))
+          (goto-char (point-min))
+          ;; Crush the trailing whitespace
+          (while (re-search-forward "[[:space:]]+$" nil t)
+            (replace-match "" nil nil))
+          (goto-char (point-min))
+          (while (looking-at "^\\([^=\n]+\\)=\\(.*\\)$")
+            (let ((name (intern-soft (match-string 1)))
+                  (value (match-string 2)))
+              (when (> (length value)
+                       0)
+                (emms-track-set track
+                                name
+                                (if (eq name 'info-playing-time)
+                                    (string-to-number value)
+                                  value))))
+            (forward-line 1))))))
+
+  (defun eh-emms-info-add-pinyin-alias (track)
+    "Add pinyin alias to the track"
+    (when (and (featurep 'chinese-pyim)
+               (eq 'file (emms-track-type track)))
+      (emms-track-set track 'info-artist-alias (pyim-hanzi2pinyin (emms-track-get track 'info-artist) t))
+      (emms-track-set track 'info-album-alias (pyim-hanzi2pinyin (emms-track-get track 'info-album) t))
+      (emms-track-set track 'info-title-alias (pyim-hanzi2pinyin (emms-track-get track 'info-title) t))))
+
+  ;; 设置 EMMS 浏览器, 默认显示方式为: 显示所有
+  (emms-browser-set-filter (assoc "EVERYTHING" emms-browser-filters))
+  ;; filter: 显示所有
+  (emms-browser-make-filter "EVERYTHING" 'ignore)
+  ;; filter: 只显示文件
+  (emms-browser-make-filter "ALL-FILES" (emms-browser-filter-only-type 'file))
+  ;; filter: 最近一个星期播放的
+  (emms-browser-make-filter "LAST-WEEK" (emms-browser-filter-only-recent 7))
+  ;; filter: 最近一个月都没有播放的
+  (emms-browser-make-filter "LAST-MONTH-NOT-PLAYED" (lambda (track) (not (funcall (emms-browser-filter-only-recent 30) track))))
+  ;; EMMS 浏览器, 删除文件不提醒
+  (put 'emms-browser-delete-files 'disabled nil)
+
+  ;; 设置 emms buffer 显示格式
+  (setq emms-browser-info-artist-format "* %n")
+  (setq emms-browser-info-album-format  "  - %n")
+  (setq emms-browser-info-title-format  "    ♪. %n")
+  (setq emms-browser-playlist-info-title-format "%n")
+
+  ;; 自定义 emms-browser-add-tracks, 禁止在 playlist 文件中添加
+  ;; artist 行 和 album 行，同时使 emacs-browser-playlist-*-*-format
+  ;; 中 "%i"位置符失效
+  ;;
+  ;; 注: emms-browser-playlist-info-artist-format
+  ;;     emms-browser-playlist-info-album-format
+  ;;     两个变量设置在这里不起作用
+
+  (defun eh-emms-browser-add-tracks ()
+    "Add all tracks at point.
+Return the previous point-max before adding."
+    (interactive)
+    (let ((first-new-track (with-current-emms-playlist (point-max)))
+          (bdata (emms-browser-bdata-at-point)))
+      (eh-emms-browser-playlist-insert-bdata bdata)
+      (run-hook-with-args 'emms-browser-tracks-added-hook
+                          first-new-track)
+      first-new-track))
+
+  (defun eh-emms-browser-playlist-insert-bdata (bdata)
+    "Add all tracks in BDATA to the playlist."
+    (let ((type (emms-browser-bdata-type bdata)))
+      ;; recurse or add tracks
+      (dolist (item (emms-browser-bdata-data bdata))
+        (if (not (eq type 'info-title))
+            (eh-emms-browser-playlist-insert-bdata item)
+          (emms-browser-playlist-insert-track bdata)))))
+
+  (defun eh-emms-browser-make-name (entry type)
+    "Override `emms-browser-make-name'. Return a name for ENTRY, used for making a bdata object."
+    (let ((key (car entry))
+          (track (cadr entry))
+          artist title) ;; only the first track
+      (cond
+       ((eq type 'info-title)
+        (eh-emms-make-track-description track))
+       (t key))))
+
+  (advice-add 'emms-browser-make-name :override #'eh-emms-browser-make-name)
+
+  ;; 快捷函数
+  (defun eh-emms-toggle-playing ()
+    (interactive)
+    (if emms-player-playing-p
+        (emms-pause)
+      (emms-start)))
+
+  (defun eh-emms-search ()
+    (interactive)
+    (goto-char (point-min))
+    (call-interactively 'isearch-forward))
+
+  (defun eh-emms ()
+    (interactive)
+    (if (or (null emms-playlist-buffer)
+            (not (buffer-live-p emms-playlist-buffer)))
+        (let ((playlist (concat
+                         (file-name-as-directory emms-source-file-default-directory)
+                         "default.playlist")))
+          (if (not (file-readable-p playlist))
+              (eh-emms-add-directory-tree)
+            (emms-add-playlist playlist))))
+    (emms-playlist-mode-go))
+
+  (defun eh-emms-add-directory-tree ()
+    (interactive)
+    (emms-add-directory-tree
+     (ido-read-directory-name
+      "Add directory tree:"
+      emms-source-file-default-directory)))
+
+  (defun eh-emms-add-file ()
+    (interactive)
+    (let ((file (ido-read-file-name
+                 "Add directory tree:"
+                 emms-source-file-default-directory)))
+      (cond
+       ((string-match "\\.\\(m3u\\|pls\\)\\'" file)
+        (emms-add-playlist file))
+       (t (emms-add-file file)))))
+
+  (defun eh-emms-browser-search-by-names ()
+    (interactive)
+    (emms-browser-search '(info-artist info-artist-alias info-title info-title-alias info-album info-album-alias)))
+
+  (defun eh-emms-browser-search-by-artist ()
+    (interactive)
+    (emms-browser-search '(info-artist info-artist-alias)))
+
+  (defun eh-emms-browser-search-by-title ()
+    (interactive)
+    (emms-browser-search '(info-title info-title-alias)))
+
+  (add-to-list 'emms-info-functions 'emms-info-cueinfo)
+  (evil-add-hjkl-bindings emms-playlist-mode-map 'emacs)
+  ;; Global keybinding for emms
+  (global-unset-key (kbd "C-c e"))
+  (global-set-key (kbd "C-c e e") 'eh-emms)
+  (global-set-key (kbd "C-c e d") 'eh-emms-add-directory-tree)
+  (global-set-key (kbd "C-c e f") 'eh-emms-add-file)
+
+  (global-set-key (kbd "C-c e SPC") 'eh-emms-toggle-playing)
+  (global-set-key (kbd "C-c e q") 'emms-stop)
+
+  (global-set-key (kbd "C-c e n") 'emms-next)
+  (global-set-key (kbd "C-c e p") 'emms-previous)
+  (global-set-key (kbd "C-c e o") 'emms-show)
+
+  (global-set-key (kbd "C-c e h") 'emms-shuffle)
+  (global-set-key (kbd "C-c e H") 'emms-sort)
+
+  (global-set-key (kbd "C-c e r")   'emms-toggle-repeat-track)
+  (global-set-key (kbd "C-c e R")   'emms-toggle-repeat-playlist)
+
+  (global-set-key (kbd "C-c e s u") 'emms-score-up-playing)
+  (global-set-key (kbd "C-c e s d") 'emms-score-down-playing)
+  (global-set-key (kbd "C-c e s o") 'emms-score-show-playing)
+
+  ;; browser mode map
+  (define-key emms-browser-mode-map (kbd "SPC") 'emms-browser-next-non-track)
+  (define-key emms-browser-mode-map (kbd "<return>") (lambda ()
+                                                       (interactive)
+                                                       (eh-emms-browser-add-tracks)
+                                                       (message "Add current track to playlist")))
+  (define-key emms-browser-mode-map (kbd "C-SPC") 'emms-browser-next-non-track)
+  (define-key emms-browser-mode-map (kbd "<tab>") 'emms-browser-toggle-subitems)
+  (define-key emms-browser-mode-map (kbd "o") 'emms-playlist-mode-go)
+  (define-key emms-browser-mode-map (kbd "w") 'emms-browser-show-LAST-WEEK)
+  (define-key emms-browser-mode-map (kbd "a") 'emms-browser-show-EVERYTHING)
+  (define-key emms-browser-mode-map (kbd "m") 'emms-browser-show-LAST-MONTH-NOT-PLAYED)
+  (define-key emms-browser-mode-map (kbd "s s") 'eh-emms-browser-search-by-names)
+  (define-key emms-browser-mode-map (kbd "s a") 'eh-emms-browser-search-by-artist)
+  (define-key emms-browser-mode-map (kbd "s t") 'eh-emms-browser-search-by-title)
+
+  ;; playlist-mode-map
+  (define-key emms-playlist-mode-map (kbd "o") 'emms-browser-show-LAST-WEEK)
+  (define-key emms-playlist-mode-map (kbd "SPC") 'emms-pause)
+  (define-key emms-playlist-mode-map (kbd "/") 'eh-emms-search)
+  (define-key emms-playlist-mode-map (kbd "+") 'emms-volume-raise)
+  (define-key emms-playlist-mode-map (kbd "-") 'emms-volume-lower)
+  (define-key emms-playlist-mode-map (kbd "C-<right>") (lambda () (interactive) (emms-seek +10)))
+  (define-key emms-playlist-mode-map (kbd "C-<left>") (lambda () (interactive) (emms-seek -10)))
+  (define-key emms-playlist-mode-map (kbd "C-<right>") (lambda () (interactive) (emms-seek +60)))
+  (define-key emms-playlist-mode-map (kbd "C-<left>") (lambda () (interactive) (emms-seek -60)))
+  (define-key emms-playlist-mode-map (kbd "S u") 'emms-score-up-file-on-line)
+  (define-key emms-playlist-mode-map (kbd "S d") 'emms-score-down-file-on-line)
+  (define-key emms-playlist-mode-map (kbd "S o") 'emms-score-show-file-on-line)
+  (define-key emms-playlist-mode-map (kbd "S l") 'emms-score-less-tolerant)
+  (define-key emms-playlist-mode-map (kbd "S m") 'emms-score-more-tolerant)
+  (define-key emms-playlist-mode-map (kbd "S t") 'emms-score-set-tolerance)
+  (define-key emms-playlist-mode-map (kbd "S s") 'emms-score-show-playing))
+
+;; https://www.gnu.org/software/emms/manual/#Introduction
+;; (require 'emms-setup)
+;; (emms-all)
+;; (emms-default-players)
+
+;; (setq emms-directory "~/Music/.emms")
+;; (setq emms-cache-file "~/Music/.emms/cache")
+;; (setq emms-score-file "~/Music/.emms/scores")
+;; (setq emms-history-file "~/Music/.emms/history")
+;; (setq emms-source-file-default-directory "~/Music/")
+;; (emms-history-load)
+
+
+(spacemacs/declare-prefix "oe" "Emms-Music")
+(spacemacs/set-leader-keys "oee" 'emms)
+(spacemacs/set-leader-keys "oea" 'emms-add-directory-tree)
+(spacemacs/set-leader-keys "oef" 'emms-play-file)
+(spacemacs/set-leader-keys "oes" 'emms-stop)
+(spacemacs/set-leader-keys "oen" 'emms-next)
+(spacemacs/set-leader-keys "oep" 'emms-previous)
+
+(require 'fill-column-indicator)
+(setq fci-rule-column 80)
+(add-hook 'prog-mode-hook 'fci-mode)
+
+(add-hook 'spacemacs-buffer-mode-hook (lambda ()
+(set (make-local-variable 'mouse-1-click-follows-link) nil)))
+
+(add-hook 'magit-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+
+(defun lengyueyang/hotspots ()
+  "helm interface to my hotspots, which includes my locations,
+org-files and bookmarks"
+  (interactive)
+  (helm :buffer "*helm: utities*"
+        :sources `(,(lengyueyang//hotspots-sources))))
+
+(defun lengyueyang//hotspots-sources ()
+  "Construct the helm sources for my hotspots"
+  `((name . "lengyueyang's center")
+    (candidates . (
+                   ("Agenda List" . (lambda () (org-agenda "" "a")))
+                   ("Agenda Menu" . (lambda () (org-agenda)))
+                   ("Blog" . (lambda() (blog-admin-start)))
+                   ("Elfeed" . (lambda () (elfeed)))
+                   ;; ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
+                   ("Open Github" . (lambda() (browse-url "https://github.com/lengyueyang")))
+                   ("Open Blog" . (lambda() (browse-url "http://lengyueyang.github.io")))))
+    (candidate-number-limit)
+    (action . (("Open" . (lambda (x) (funcall x)))))))
+
+(define-key global-map (kbd "<f1>") 'lengyueyang/hotspots)
+(spacemacs/set-leader-keys "oh" 'lengyueyang/hotspots)
+
+(defvar wc-regexp-chinese-char-and-punc
+  (rx (category chinese)))
+(defvar wc-regexp-chinese-punc
+  "[。，！？；：「」『』（）、【】《》〈〉※—]")
+(defvar wc-regexp-english-word
+  "[a-zA-Z0-9-]+")
+
+(defun lengyueyang/word-count-for-chinese ()
+  "「較精確地」統計中 / 日 / 英文字數。
+- 文章中的註解不算在字數內。
+- 平假名與片假名亦包含在「中日文字數」內，每個平 / 片假名都算單獨一個字（但片假
+  名不含連音「ー」）。
+- 英文只計算「單字數」，不含標點。
+- 韓文不包含在內。
+※計算標準太多種了，例如英文標點是否算入、以及可能有不太常用的標點符號沒算入等
+。且中日文標點的計算標準要看 Emacs 如何定義特殊標點符號如ヴァランタン・アルカン
+中間的點也被 Emacs 算為一個字而不是標點符號。"
+  (interactive)
+  (let* ((v-buffer-string
+          (progn
+            (if (eq major-mode 'org-mode) ; 去掉 org 文件的 OPTIONS（以 #+ 開頭）
+                (setq v-buffer-string (replace-regexp-in-string "^#\\+.+" ""
+                                                                (buffer-substring-no-properties (point-min) (point-max))))
+              (setq v-buffer-string (buffer-substring-no-properties (point-min) (point-max))))
+            (replace-regexp-in-string (format "^ *%s *.+" comment-start) "" v-buffer-string)))
+                                        ; 把註解行刪掉（不把註解算進字數）。
+         (chinese-char-and-punc 0)
+         (chinese-punc 0)
+         (english-word 0)
+         (chinese-char 0))
+    (with-temp-buffer
+      (insert v-buffer-string)
+      (goto-char (point-min))
+      ;; 中文（含標點、片假名）
+      (while (re-search-forward wc-regexp-chinese-char-and-punc nil :no-error)
+        (setq chinese-char-and-punc (1+ chinese-char-and-punc)))
+      ;; 中文標點符號
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-chinese-punc nil :no-error)
+        (setq chinese-punc (1+ chinese-punc)))
+      ;; 英文字數（不含標點）
+      (goto-char (point-min))
+      (while (re-search-forward wc-regexp-english-word nil :no-error)
+        (setq english-word (1+ english-word))))
+    (setq chinese-char (- chinese-char-and-punc chinese-punc))
+    (message
+     (format " 中日文字數（不含標點）：%s
+ 中日文字數（包含標點）：%s
+ 英文字數（不含標點）：%s
+=======================
+ 中英文合計（不含標點）：%s"
+             chinese-char chinese-char-and-punc english-word
+             (+ chinese-char english-word)))))
+
+(defun calendar-show-week (arg)
+  "Displaying week number in calendar-mode."
+  (interactive "P")
+  (copy-face font-lock-constant-face 'calendar-iso-week-face)
+  (set-face-attribute
+   'calendar-iso-week-face nil :height 0.7)
+  (setq calendar-intermonth-text
+        (and arg
+             '(propertize
+               (format
+                "%2d"
+                (car (calendar-iso-from-absolute
+                      (calendar-absolute-from-gregorian
+                       (list month day year)))))
+               'font-lock-face 'calendar-iso-week-face))))
+
+(calendar-show-week t)
+
+(setq calendar-week-start-day 1
+      calendar-latitude 39.92
+      calendar-longitude 116.46
+      calendar-location-name "Beijing, China")
 
 (req-package-finish)

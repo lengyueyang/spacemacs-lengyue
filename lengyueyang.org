@@ -809,7 +809,7 @@ This part is the customization to org-mode.
    (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
   (setq org-startup-with-inline-images nil)
-
+  (setq org-image-actual-width (quote (600)))
 #+END_SRC
 ** Org-mode auto complete
 

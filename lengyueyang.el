@@ -372,6 +372,7 @@
  (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
 (setq org-startup-with-inline-images nil)
+(setq org-image-actual-width (quote (600)))
 
 (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
 

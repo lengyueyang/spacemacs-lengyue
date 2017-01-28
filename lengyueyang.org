@@ -287,6 +287,10 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
 #+BEGIN_SRC emacs-lisp
 
+  (add-to-load-path "~/.spacemacs.d/package/mu4e")
+
+  (require 'mu4e)
+
   (setq mu4e-account-alist
         '(("Gmail"
            ;; Under each account, set the account-specific variables you want.

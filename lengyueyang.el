@@ -72,6 +72,10 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
+(add-to-load-path "~/.spacemacs.d/package/mu4e")
+
+(require 'mu4e)
+
 (setq mu4e-account-alist
       '(("Gmail"
          ;; Under each account, set the account-specific variables you want.

@@ -61,7 +61,7 @@
      version-control
      (colors :variables
              colors-enable-nyan-cat-progress-bar t)
-
+     nlinum
      pandoc
      semantic
      graphviz

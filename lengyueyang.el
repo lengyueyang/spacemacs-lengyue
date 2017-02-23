@@ -88,7 +88,7 @@
          (mu4e-sent-messages-behavior sent)
          (mu4e-sent-folder "/Foxmail/Sent Messages")
          (mu4e-drafts-folder "/Foxmail/Drafts")
-         (user-mail-address "maoxiaowei1988@qq.com")
+         (user-mail-address "maoxiaowei1988@foxmail.com")
         (user-full-name "Mao Xiaowei"))
         ("Lengyue-163"
          (mu4e-sent-messages-behavior sent)
@@ -163,7 +163,7 @@
 
 ;; something about ourselves
 (require 'smtpmail)  
-(setq user-mail-address "maoxiaowei1988@qq.com"  
+(setq user-mail-address "maoxiaowei1988@foxmail.com"  
       user-full-name "Xiaowei, Mao"
       smtpmail-stream-type 'starttls
       starttls-use-gnutls t

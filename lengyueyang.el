@@ -378,6 +378,12 @@
 (setq org-startup-with-inline-images nil)
 (setq org-image-actual-width (quote (600)))
 
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+(spacemacs/declare-prefix "ou" "Org-latex-preview")
+(spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
+(spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
+
 (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
 
 (add-hook 'org-mode-hook 'company-mode)
@@ -654,12 +660,12 @@
              '("" "xcolor" t))
 (add-to-list 'org-latex-packages-alist
              '("" "listings" t))
-(add-to-list 'org-latex-packages-alist
-             '("" "fontspec" t))
+;;(add-to-list 'org-latex-packages-alist
+;;             '("" "fontspec" t))
 (add-to-list 'org-latex-packages-alist
              '("" "indentfirst" t))
-(add-to-list 'org-latex-packages-alist
-             '("" "xunicode" t))
+;;(add-to-list 'org-latex-packages-alist
+;;             '("" "xunicode" t))
 (add-to-list 'org-latex-packages-alist
              '("" "geometry"))
 (add-to-list 'org-latex-packages-alist
@@ -700,6 +706,8 @@
 % chapter set
 \\usepackage{titlesec}
 \\usepackage{hyperref}
+\\usepackage{fontspec}
+\\usepackage{xunicode}
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -747,6 +755,9 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 \\usepackage[slantfont, boldfont]{xeCJK}
 \\usepackage{titlesec}
 \\usepackage{hyperref}
+\\usepackage{fontspec}
+\\usepackage{xunicode}
+
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -795,6 +806,9 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 % beamer set
 \\usepackage[none]{hyphenat}
 \\usepackage[abs]{overpic}
+\\usepackage{fontspec}
+\\usepackage{xunicode}
+
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -982,9 +996,11 @@ belongs as a list."
   (org-archive-subtree-hierarchical)
 )
 
+(setq reftex-default-bibliography '("~/Emacs-lengyue/Papers/references.bib"))
 (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
       org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
       org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+(setq org-ref-completion-library 'org-ref-ivy-cite)
 
 (setq yas-snippet-dirs
       '("~/.spacemacs.d/snippets/lengyueyang-snippets"

@@ -386,7 +386,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
         (concat  
          "Xiaowei Mao\n"  
          "Email: maoxiaoweihl@gmail.com\n"  
-         "Email: maoxiaowei1988@qq.com\n"  
+         "Email: maoxiaowei1988@foxmail.com\n"  
          "Blog: http://lengyueyang.github.io\n"  
          "\n")  
         mu4e-compose-signature-auto-include t  
@@ -814,6 +814,13 @@ This part is the customization to org-mode.
 
   (setq org-startup-with-inline-images nil)
   (setq org-image-actual-width (quote (600)))
+
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+  (spacemacs/declare-prefix "ou" "Org-latex-preview")
+  (spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
+  (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
+
 #+END_SRC
 ** Org-mode auto complete
 
@@ -1182,12 +1189,12 @@ A complete agenda and capture configuration
                '("" "xcolor" t))
   (add-to-list 'org-latex-packages-alist
                '("" "listings" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "fontspec" t))
+  ;;(add-to-list 'org-latex-packages-alist
+  ;;             '("" "fontspec" t))
   (add-to-list 'org-latex-packages-alist
                '("" "indentfirst" t))
-  (add-to-list 'org-latex-packages-alist
-               '("" "xunicode" t))
+  ;;(add-to-list 'org-latex-packages-alist
+  ;;             '("" "xunicode" t))
   (add-to-list 'org-latex-packages-alist
                '("" "geometry"))
   (add-to-list 'org-latex-packages-alist
@@ -1228,6 +1235,8 @@ A complete agenda and capture configuration
   % chapter set
   \\usepackage{titlesec}
   \\usepackage{hyperref}
+  \\usepackage{fontspec}
+  \\usepackage{xunicode}
 
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]
@@ -1275,6 +1284,9 @@ A complete agenda and capture configuration
   \\usepackage[slantfont, boldfont]{xeCJK}
   \\usepackage{titlesec}
   \\usepackage{hyperref}
+  \\usepackage{fontspec}
+  \\usepackage{xunicode}
+
 
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]
@@ -1323,6 +1335,9 @@ A complete agenda and capture configuration
   % beamer set
   \\usepackage[none]{hyphenat}
   \\usepackage[abs]{overpic}
+  \\usepackage{fontspec}
+  \\usepackage{xunicode}
+
 
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]
@@ -1538,11 +1553,14 @@ An abbreviated link looks like
 
 #+BEGIN_SRC emacs-lisp
 
+  (setq reftex-default-bibliography '("~/Emacs-lengyue/Papers/references.bib"))
   (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
         org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
         org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+  (setq org-ref-completion-library 'org-ref-ivy-cite)
 
 #+END_SRC
+
 * Programming Languages
 
 This part is the customization to programming languages.

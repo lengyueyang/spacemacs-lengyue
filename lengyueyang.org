@@ -17,7 +17,6 @@
 #+LATEX_HEADER_EXTRA:
 #+LaTeX_HEADER: \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 #+LaTeX_HEADER: \graphicspath{{pic/}}
-#+LaTeX_HEADER: \hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 #+LaTeX_HEADER: \linespread{1.2}
 
 #+NAME: Note
@@ -1235,6 +1234,7 @@ A complete agenda and capture configuration
   % chapter set
   \\usepackage{titlesec}
   \\usepackage{hyperref}
+  \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
   \\usepackage{fontspec}
   \\usepackage{xunicode}
 
@@ -1284,6 +1284,7 @@ A complete agenda and capture configuration
   \\usepackage[slantfont, boldfont]{xeCJK}
   \\usepackage{titlesec}
   \\usepackage{hyperref}
+  \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
   \\usepackage{fontspec}
   \\usepackage{xunicode}
 

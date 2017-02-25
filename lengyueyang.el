@@ -171,7 +171,7 @@
       (concat  
        "Xiaowei Mao\n"  
        "Email: maoxiaoweihl@gmail.com\n"  
-       "Email: maoxiaowei1988@qq.com\n"  
+       "Email: maoxiaowei1988@foxmail.com\n"  
        "Blog: http://lengyueyang.github.io\n"  
        "\n")  
       mu4e-compose-signature-auto-include t  
@@ -706,6 +706,7 @@
 % chapter set
 \\usepackage{titlesec}
 \\usepackage{hyperref}
+\\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 \\usepackage{fontspec}
 \\usepackage{xunicode}
 
@@ -755,6 +756,7 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 \\usepackage[slantfont, boldfont]{xeCJK}
 \\usepackage{titlesec}
 \\usepackage{hyperref}
+\\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 \\usepackage{fontspec}
 \\usepackage{xunicode}
 

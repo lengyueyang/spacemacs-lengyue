@@ -303,13 +303,13 @@ Include the configuration of spacemacs itself layers and better use of its defau
            (mu4e-sent-folder "/Foxmail/Sent Messages")
            (mu4e-drafts-folder "/Foxmail/Drafts")
            (user-mail-address "maoxiaowei1988@foxmail.com")
-          (user-full-name "Mao Xiaowei"))
-          ("Lengyue-163"
-           (mu4e-sent-messages-behavior sent)
-           (mu4e-sent-folder "/Lengyue-163/Sent Items")
-           (mu4e-drafts-folder "/Lengyue-163/Drafts")
-           (user-mail-address "zanghuahong@163.com")
            (user-full-name "Mao Xiaowei"))
+          ;; ("Lengyue-163"
+          ;;  (mu4e-sent-messages-behavior sent)
+          ;;  (mu4e-sent-folder "/Lengyue-163/Sent Items")
+          ;;  (mu4e-drafts-folder "/Lengyue-163/Drafts")
+          ;;  (user-mail-address "zanghuahong@163.com")
+          ;;  (user-full-name "Mao Xiaowei"))
          )
   )
 
@@ -332,11 +332,12 @@ Include the configuration of spacemacs itself layers and better use of its defau
           ("/Foxmail/Drafts" . ?d)
           ("/Foxmail/Sent Messages" . ?s)
           ("/Gmail/INBOX" . ?g)
-          ("/Gmail/[Gmail].All Mail" . ?a)
+          ;; ("/Gmail/[Gmail].All Mail" . ?a)
           ("/Gmail/[Gmail].Drafts" . ?r)
           ("/Gmail/[Gmail].Sent Mail" . ?m)
           ("/Gmail/[Gmail].Trash" . ?t)
-          ("/Lengyue-163/INBOX" . ?i)))
+          ;; ("/Lengyue-163/INBOX" . ?i)
+          ))
 
   ;;; Bookmarks
   (setq mu4e-bookmarks
@@ -404,6 +405,9 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;; save attachment to my desktop (this can also be a function)  
   (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
 #+END_SRC
+
+#+RESULTS:
+: /home/lengyue/Documents/Mu4e/Attachment
 
 ** Magit
 

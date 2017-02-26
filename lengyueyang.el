@@ -89,13 +89,13 @@
          (mu4e-sent-folder "/Foxmail/Sent Messages")
          (mu4e-drafts-folder "/Foxmail/Drafts")
          (user-mail-address "maoxiaowei1988@foxmail.com")
-        (user-full-name "Mao Xiaowei"))
-        ("Lengyue-163"
-         (mu4e-sent-messages-behavior sent)
-         (mu4e-sent-folder "/Lengyue-163/Sent Items")
-         (mu4e-drafts-folder "/Lengyue-163/Drafts")
-         (user-mail-address "zanghuahong@163.com")
          (user-full-name "Mao Xiaowei"))
+        ;; ("Lengyue-163"
+        ;;  (mu4e-sent-messages-behavior sent)
+        ;;  (mu4e-sent-folder "/Lengyue-163/Sent Items")
+        ;;  (mu4e-drafts-folder "/Lengyue-163/Drafts")
+        ;;  (user-mail-address "zanghuahong@163.com")
+        ;;  (user-full-name "Mao Xiaowei"))
        )
 )
 
@@ -118,11 +118,12 @@
         ("/Foxmail/Drafts" . ?d)
         ("/Foxmail/Sent Messages" . ?s)
         ("/Gmail/INBOX" . ?g)
-        ("/Gmail/[Gmail].All Mail" . ?a)
+        ;; ("/Gmail/[Gmail].All Mail" . ?a)
         ("/Gmail/[Gmail].Drafts" . ?r)
         ("/Gmail/[Gmail].Sent Mail" . ?m)
         ("/Gmail/[Gmail].Trash" . ?t)
-        ("/Lengyue-163/INBOX" . ?i)))
+        ;; ("/Lengyue-163/INBOX" . ?i)
+        ))
 
 ;;; Bookmarks
 (setq mu4e-bookmarks

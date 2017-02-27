@@ -334,8 +334,8 @@ Include the configuration of spacemacs itself layers and better use of its defau
           ("/Gmail/INBOX" . ?g)
           ;; ("/Gmail/[Gmail].All Mail" . ?a)
           ("/Gmail/[Gmail].Drafts" . ?r)
-          ("/Gmail/[Gmail].Sent Mail" . ?m)
-          ("/Gmail/[Gmail].Trash" . ?t)
+          ("/Gmail/[Gmail].Sent Mail" . ?e)
+          ;;("/Gmail/[Gmail].Trash" . ?t)
           ;; ("/Lengyue-163/INBOX" . ?i)
           ))
 
@@ -352,21 +352,26 @@ Include the configuration of spacemacs itself layers and better use of its defau
                         mu4e-maildir-shortcuts) " OR ")
            "All inboxes" ?i)))
 
-  (setq mu4e-enable-notifications t)
+  (mu4e-alert-set-default-style 'libnotify)
+  (alert-add-rule :category "mu4e-alert" :style 'fringe :predicate (lambda (_) (string-match-p "^mu4e-" (symbol-name major-mode))) :continue t)
+  (mu4e-alert-enable-notifications)
+  ;; (setq mu4e-alert-email-notification-types '(count))
+  (setq mu4e-alert-email-notification-types '(subjects))
 
-  (with-eval-after-load 'mu4e-alert
+  ;; (setq mu4e-enable-notifications t)
+  ;; (with-eval-after-load 'mu4e-alert
     ;; Enable Desktop notifications
     ;; (mu4e-alert-set-default-style 'notifications)) ; For linux
-    (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
+    ;; (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
     ;; (mu4e-alert-set-default-style 'notifier))   ; For Mac OSX (through the
                                           ; terminal notifier app)
   ;; (mu4e-alert-set-default-style 'growl))      ; Alternative for Mac OSX
 
-  (setq mu4e-enable-mode-line t)
+  ;; (setq mu4e-enable-mode-line t)
 
   (setq mu4e-get-mail-command "offlineimap")
   ;; Fetch mail in 60 sec interval
-  (setq mu4e-update-interval 60)
+  (setq mu4e-update-interval 1200)
 
   (require 'mu4e-contrib)
   (setq mu4e-html2text-command 'mu4e-shr2text)
@@ -406,8 +411,6 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
 #+END_SRC
 
-#+RESULTS:
-: /home/lengyue/Documents/Mu4e/Attachment
 
 ** Magit
 

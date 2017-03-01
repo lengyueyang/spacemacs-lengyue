@@ -13,9 +13,13 @@
 (spacemacs/set-leader-keys "oo" 'open-my-init-file)
 
 (require 'chinese-yasdcv)
-(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+(define-key global-map (kbd "<f3>") 'youdao-dictionary-search-at-point+)
+
 (spacemacs/declare-prefix "ok" "Keybindings")
 (spacemacs/set-leader-keys "oky" 'yasdcv-translate-at-point)
+
+(spacemacs/set-leader-keys "oks" 'youdao-dictionary-search-from-input)
+(spacemacs/set-leader-keys "oki" 'youdao-dictionary-search-at-point+)
 
 (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
 (spacemacs/set-leader-keys "okf" 'flyspell-correct-previous-word-generic)

@@ -118,9 +118,13 @@ org related keybindings in Org-mode configuration part.
 #+BEGIN_SRC emacs-lisp
 
   (require 'chinese-yasdcv)
-  (define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+  (define-key global-map (kbd "<f3>") 'youdao-dictionary-search-at-point+)
+
   (spacemacs/declare-prefix "ok" "Keybindings")
   (spacemacs/set-leader-keys "oky" 'yasdcv-translate-at-point)
+
+  (spacemacs/set-leader-keys "oks" 'youdao-dictionary-search-from-input)
+  (spacemacs/set-leader-keys "oki" 'youdao-dictionary-search-at-point+)
 
 #+END_SRC
 

@@ -13,9 +13,13 @@
 (spacemacs/set-leader-keys "oo" 'open-my-init-file)
 
 (require 'chinese-yasdcv)
-(define-key global-map (kbd "<f3>") 'yasdcv-translate-at-point)
+(define-key global-map (kbd "<f3>") 'youdao-dictionary-search-at-point+)
+
 (spacemacs/declare-prefix "ok" "Keybindings")
 (spacemacs/set-leader-keys "oky" 'yasdcv-translate-at-point)
+
+(spacemacs/set-leader-keys "oks" 'youdao-dictionary-search-from-input)
+(spacemacs/set-leader-keys "oki" 'youdao-dictionary-search-at-point+)
 
 (define-key global-map (kbd "<f8>") 'flyspell-correct-previous-word-generic)
 (spacemacs/set-leader-keys "okf" 'flyspell-correct-previous-word-generic)
@@ -72,6 +76,10 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
+(add-to-load-path "~/.spacemacs.d/package/mu4e")
+
+(require 'mu4e)
+
 (setq mu4e-account-alist
       '(("Gmail"
          ;; Under each account, set the account-specific variables you want.
@@ -84,14 +92,14 @@
          (mu4e-sent-messages-behavior sent)
          (mu4e-sent-folder "/Foxmail/Sent Messages")
          (mu4e-drafts-folder "/Foxmail/Drafts")
-         (user-mail-address "maoxiaowei1988@qq.com")
-        (user-full-name "Mao Xiaowei"))
-        ("Lengyue-163"
-         (mu4e-sent-messages-behavior sent)
-         (mu4e-sent-folder "/Lengyue-163/Sent Items")
-         (mu4e-drafts-folder "/Lengyue-163/Drafts")
-         (user-mail-address "zanghuahong@163.com")
+         (user-mail-address "maoxiaowei1988@foxmail.com")
          (user-full-name "Mao Xiaowei"))
+        ;; ("Lengyue-163"
+        ;;  (mu4e-sent-messages-behavior sent)
+        ;;  (mu4e-sent-folder "/Lengyue-163/Sent Items")
+        ;;  (mu4e-drafts-folder "/Lengyue-163/Drafts")
+        ;;  (user-mail-address "zanghuahong@163.com")
+        ;;  (user-full-name "Mao Xiaowei"))
        )
 )
 
@@ -114,11 +122,12 @@
         ("/Foxmail/Drafts" . ?d)
         ("/Foxmail/Sent Messages" . ?s)
         ("/Gmail/INBOX" . ?g)
-        ("/Gmail/[Gmail].All Mail" . ?a)
+        ;; ("/Gmail/[Gmail].All Mail" . ?a)
         ("/Gmail/[Gmail].Drafts" . ?r)
-        ("/Gmail/[Gmail].Sent Mail" . ?m)
-        ("/Gmail/[Gmail].Trash" . ?t)
-        ("/Lengyue-163/INBOX" . ?i)))
+        ("/Gmail/[Gmail].Sent Mail" . ?e)
+        ;;("/Gmail/[Gmail].Trash" . ?t)
+        ;; ("/Lengyue-163/INBOX" . ?i)
+        ))
 
 ;;; Bookmarks
 (setq mu4e-bookmarks
@@ -133,21 +142,26 @@
                       mu4e-maildir-shortcuts) " OR ")
          "All inboxes" ?i)))
 
-(setq mu4e-enable-notifications t)
+(mu4e-alert-set-default-style 'libnotify)
+(alert-add-rule :category "mu4e-alert" :style 'fringe :predicate (lambda (_) (string-match-p "^mu4e-" (symbol-name major-mode))) :continue t)
+(mu4e-alert-enable-notifications)
+;; (setq mu4e-alert-email-notification-types '(count))
+(setq mu4e-alert-email-notification-types '(subjects))
 
-(with-eval-after-load 'mu4e-alert
+;; (setq mu4e-enable-notifications t)
+;; (with-eval-after-load 'mu4e-alert
   ;; Enable Desktop notifications
   ;; (mu4e-alert-set-default-style 'notifications)) ; For linux
-  (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
+  ;; (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
   ;; (mu4e-alert-set-default-style 'notifier))   ; For Mac OSX (through the
                                         ; terminal notifier app)
 ;; (mu4e-alert-set-default-style 'growl))      ; Alternative for Mac OSX
 
-(setq mu4e-enable-mode-line t)
+;; (setq mu4e-enable-mode-line t)
 
 (setq mu4e-get-mail-command "offlineimap")
 ;; Fetch mail in 60 sec interval
-(setq mu4e-update-interval 60)
+(setq mu4e-update-interval 1200)
 
 (require 'mu4e-contrib)
 (setq mu4e-html2text-command 'mu4e-shr2text)
@@ -159,7 +173,7 @@
 
 ;; something about ourselves
 (require 'smtpmail)  
-(setq user-mail-address "maoxiaowei1988@qq.com"  
+(setq user-mail-address "maoxiaowei1988@foxmail.com"  
       user-full-name "Xiaowei, Mao"
       smtpmail-stream-type 'starttls
       starttls-use-gnutls t
@@ -167,7 +181,7 @@
       (concat  
        "Xiaowei Mao\n"  
        "Email: maoxiaoweihl@gmail.com\n"  
-       "Email: maoxiaowei1988@qq.com\n"  
+       "Email: maoxiaowei1988@foxmail.com\n"  
        "Blog: http://lengyueyang.github.io\n"  
        "\n")  
       mu4e-compose-signature-auto-include t  
@@ -372,6 +386,13 @@
  (add-hook 'org-mode-hook 'smartparens-strict-mode)
 
 (setq org-startup-with-inline-images nil)
+(setq org-image-actual-width (quote (600)))
+
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+(spacemacs/declare-prefix "ou" "Org-latex-preview")
+(spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
+(spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
 (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
 
@@ -649,12 +670,12 @@
              '("" "xcolor" t))
 (add-to-list 'org-latex-packages-alist
              '("" "listings" t))
-(add-to-list 'org-latex-packages-alist
-             '("" "fontspec" t))
+;;(add-to-list 'org-latex-packages-alist
+;;             '("" "fontspec" t))
 (add-to-list 'org-latex-packages-alist
              '("" "indentfirst" t))
-(add-to-list 'org-latex-packages-alist
-             '("" "xunicode" t))
+;;(add-to-list 'org-latex-packages-alist
+;;             '("" "xunicode" t))
 (add-to-list 'org-latex-packages-alist
              '("" "geometry"))
 (add-to-list 'org-latex-packages-alist
@@ -695,6 +716,9 @@
 % chapter set
 \\usepackage{titlesec}
 \\usepackage{hyperref}
+\\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
+\\usepackage{fontspec}
+\\usepackage{xunicode}
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -742,6 +766,10 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 \\usepackage[slantfont, boldfont]{xeCJK}
 \\usepackage{titlesec}
 \\usepackage{hyperref}
+\\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
+\\usepackage{fontspec}
+\\usepackage{xunicode}
+
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -790,6 +818,9 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 % beamer set
 \\usepackage[none]{hyphenat}
 \\usepackage[abs]{overpic}
+\\usepackage{fontspec}
+\\usepackage{xunicode}
+
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -977,9 +1008,11 @@ belongs as a list."
   (org-archive-subtree-hierarchical)
 )
 
+(setq reftex-default-bibliography '("~/Emacs-lengyue/Papers/references.bib"))
 (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
       org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
       org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+(setq org-ref-completion-library 'org-ref-ivy-cite)
 
 (setq yas-snippet-dirs
       '("~/.spacemacs.d/snippets/lengyueyang-snippets"

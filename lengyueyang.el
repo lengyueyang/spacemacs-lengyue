@@ -1574,6 +1574,8 @@ Return the previous point-max before adding."
 (setq fci-rule-column 80)
 (add-hook 'prog-mode-hook 'fci-mode)
 
+(add-hook 'git-commit-mode-hook 'fci-mode)
+
 (add-hook 'spacemacs-buffer-mode-hook (lambda ()
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 

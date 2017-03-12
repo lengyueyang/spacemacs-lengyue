@@ -95,6 +95,7 @@ of emacs config.
   (req-package-finish)
 
 #+END_SRC
+
 * Keybinding                                                    
 
 Global keybindings of emacs but for specific customization with keybinding, like some
@@ -206,6 +207,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;;      (find-file "~/cocos2d-x/cocos/cocos2d.cpp"))))
 
 #+END_SRC
+
 ** Deft
 
 #+BEGIN_SRC emacs-lisp
@@ -215,6 +217,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
 
 #+END_SRC
+
 ** Elfeed
 
 [[https://github.com/lujun9972/emacs-document/blob/master/emacs-common/%E5%9C%A8Emacs%E4%B8%AD%E7%94%A8elfeed%E9%98%85%E8%AF%BB%E4%BD%A0%E7%9A%84RSS-feeds.org][在 Emacs 中用 elfeed 阅读你的 RSS-feeds]]
@@ -268,11 +271,11 @@ Include the configuration of spacemacs itself layers and better use of its defau
            (address "address@gmail.com"))))
 
   ;; store email in ~/gmail directory
-  (setq nnml-directory "~/gmail")
-  (setq message-directory "~/gmail")
-
+  (setq nnml-directory "~/Documents/Gnus")
+  (setq message-directory "~/Documents/Gnus")
 
 #+END_SRC
+
 ** Mu4e
 
 - [[https://github.com/larstvei/dot-emacs][larstvei/dot-emacs: My Emacs configurations written in Org mode]]
@@ -415,7 +418,6 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
 #+END_SRC
 
-
 ** Magit
 
 *** Magit auto complete
@@ -463,6 +465,7 @@ implement some of them to make my emacs more easy to use.
         user-mail-address "maoxiaoweihl@gmail.com")
 
 #+END_SRC
+
 ** Don't ask me when kill process buffer
 
 #+BEGIN_SRC emacs-lisp
@@ -472,6 +475,7 @@ implement some of them to make my emacs more easy to use.
               kill-buffer-query-functions))
 
 #+END_SRC
+
 ** Set the chinese font alignment
 
 #+BEGIN_SRC emacs-lisp
@@ -482,6 +486,7 @@ implement some of them to make my emacs more easy to use.
   ;; (spacemacs//set-monospaced-font "DejaVu Sans Mono" "Source Han Sans CN" 16 20)
 
 #+END_SRC
+
 ** Add auto format paste code
 
 #+BEGIN_SRC emacs-lisp
@@ -832,6 +837,7 @@ This part is the customization to org-mode.
   (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
 #+END_SRC
+
 ** Org-mode auto complete
 
 #+BEGIN_SRC emacs-lisp
@@ -922,6 +928,7 @@ https://emacs-china.org/t/agenda-view/1392
   (add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
 
 #+END_SRC
+
 ** Org-notify
 
 #+BEGIN_SRC emacs-lisp
@@ -1097,7 +1104,6 @@ A complete agenda and capture configuration
   (server-start)
   (require 'org-protocol)
   (require 'org-protocol-capture-html)
-
 
 #+END_SRC
 
@@ -1396,8 +1402,8 @@ A complete agenda and capture configuration
             "xelatex -interaction nonstopmode -output-directory %o %f"
             "xelatex -interaction nonstopmode -output-directory %o %f"))
 
-
 #+END_SRC
+
 ** Setup link abbreviations
 
 [[https://www.gnu.org/software/emacs/manual/html_node/org/Link-abbreviations.html][Link abbreviations]]
@@ -1414,6 +1420,7 @@ An abbreviated link looks like
           ))
 
 #+END_SRC
+
 ** Org-subtask and org-checklist
 
 #+BEGIN_SRC emacs-lisp
@@ -1653,6 +1660,7 @@ they work nicely with version control systems.
   (add-hook 'inferior-python-mode-hook 'flyspell-mode)
 
 #+END_SRC
+
 ** JS-2 mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1684,7 +1692,7 @@ they work nicely with version control systems.
 
 #+BEGIN_SRC emacs-lisp
 
-(sp-local-pair '(emacs-lisp-mode lisp-interaction-mode) "'" nil :actions nil)
+  (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode) "'" nil :actions nil)
 
  #+END_SRC
 
@@ -1812,6 +1820,7 @@ to delete all whitespace in the direction you are deleting.
   (spacemacs/set-leader-keys "ob" 'blog-admin-start)
 
 #+END_SRC
+
 ** Hexo configuration
 
 #+BEGIN_SRC emacs-lisp
@@ -2234,8 +2243,6 @@ to delete all whitespace in the direction you are deleting.
 
 #+END_SRC
 
-#+RESULTS:
-
 * Other customization
 
 This part is some customization not belong to the anterior part.
@@ -2248,9 +2255,10 @@ This part is some customization not belong to the anterior part.
   (setq fci-rule-column 80)
   (add-hook 'prog-mode-hook 'fci-mode)
 
+  (add-hook 'git-commit-mode-hook 'fci-mode)
+
 #+END_SRC
 
-(add-hook 'git-commit-mode-hook 'fci-mode)
 ** Disable auto paste from clipboard
 
 #+BEGIN_SRC emacs-lisp
@@ -2300,6 +2308,7 @@ This part is some customization not belong to the anterior part.
   (spacemacs/set-leader-keys "oh" 'lengyueyang/hotspots)
 
 #+END_SRC
+
 ** Count chinese word
 
 #+BEGIN_SRC emacs-lisp

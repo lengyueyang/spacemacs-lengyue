@@ -41,6 +41,7 @@
  '(org-pomodoro-length 1)
  '(org-pomodoro-short-break-length 1)
  '(org-pretty-entities t)
+ '(org-preview-latex-image-directory "/home/lengyue/Documents/ltximg/")
  '(org-src-window-setup (quote other-window))
  '(org-startup-with-inline-images t)
  '(package-selected-packages

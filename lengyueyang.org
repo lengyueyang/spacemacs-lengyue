@@ -36,6 +36,8 @@ manager may own configuration of emacs beyond spacemacs.
 After searched in google and with my research, I found the way below,
 I want to manager my own emacs configuration from now ([2016-11-07 Mon 21:00]).
 
+You could found my org config file in [[https://github.com/lengyueyang/spacemacs-lengyue]]
+
 ** Custom.el setup
 
 In order to reduce the size of =init.el= in =.spacemacs= folder, create a =custom.el= file

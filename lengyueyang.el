@@ -394,12 +394,35 @@
 (spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
 (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
+(use-package company-math
+  :ensure t)
+
+(use-package company-auctex
+  :ensure t
+  :config (progn
+            (defun company-auctex-labels (command &optional arg &rest ignored)
+              "company-auctex-labels backend"
+              (interactive (list 'interactive))
+              (case command
+                (interactive (company-begin-backend 'company-auctex-labels))
+                (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
+                (candidates (company-auctex-label-candidates arg))))
+
+            (add-to-list 'company-backends
+                         '(company-auctex-macros
+                           company-auctex-environments
+                           company-math-symbols-unicode
+                           company-math-symbols-latex))
+
+            (add-to-list 'company-backends #'company-auctex-labels)
+            (add-to-list 'company-backends #'company-auctex-bibs)))
+
 (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
 
 (add-hook 'org-mode-hook 'company-mode)
 (add-hook 'org-mode-hook
           (lambda ()
-            (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+            (set (make-local-variable 'company-backends) '(company-math-symbols-unicode company-math-symbols-latex company-files company-en-words company-dabbrev)))
           )
 
 (custom-set-faces

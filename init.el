@@ -104,6 +104,7 @@
                                       emmet-mode
                                       crux
                                       emms
+                                      company-math
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)

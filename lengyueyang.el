@@ -394,12 +394,35 @@
 (spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
 (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
+(use-package company-math
+  :ensure t)
+
+(use-package company-auctex
+  :ensure t
+  :config (progn
+            (defun company-auctex-labels (command &optional arg &rest ignored)
+              "company-auctex-labels backend"
+              (interactive (list 'interactive))
+              (case command
+                (interactive (company-begin-backend 'company-auctex-labels))
+                (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
+                (candidates (company-auctex-label-candidates arg))))
+
+            (add-to-list 'company-backends
+                         '(company-auctex-macros
+                           company-auctex-environments
+                           company-math-symbols-unicode
+                           company-math-symbols-latex))
+
+            (add-to-list 'company-backends #'company-auctex-labels)
+            (add-to-list 'company-backends #'company-auctex-bibs)))
+
 (load "~/.spacemacs.d/package/emacscompanywords/company-words-discn")
 
 (add-hook 'org-mode-hook 'company-mode)
 (add-hook 'org-mode-hook
           (lambda ()
-            (set (make-local-variable 'company-backends) '(company-files company-en-words company-dabbrev)))
+            (set (make-local-variable 'company-backends) '(company-math-symbols-unicode company-math-symbols-latex company-files company-en-words company-dabbrev)))
           )
 
 (custom-set-faces
@@ -1091,8 +1114,43 @@ belongs as a list."
     (define-key emmt-mode-keymap (kbd "TAB") 'emmt-expand-yas)
     (define-key emmt-mode-keymap (kbd "<tab>") 'emmt-expand-yas)))
 
-(req-package hungry-delete
-  :init (global-hungry-delete-mode))
+(use-package hungry-delete
+  :config
+  (progn
+    (setq hungry-delete-chars-to-skip " \t\r\f\v")
+
+    ;; Mon Nov 21 08:45:42 EST 2016 - kmodi
+    ;; Override the default definitions of `hungry-delete-skip-ws-forward' and
+    ;; `hungry-delete-skip-ws-backward'; do not delete back-slashes at EOL.
+    (defun hungry-delete-skip-ws-forward ()
+      "Skip over any whitespace following point.
+This function skips over horizontal and vertical whitespace."
+      (skip-chars-forward hungry-delete-chars-to-skip)
+      (while (get-text-property (point) 'read-only)
+        (backward-char)))
+
+    (defun hungry-delete-skip-ws-backward ()
+      "Skip over any whitespace preceding point.
+This function skips over horizontal and vertical whitespace."
+      (skip-chars-backward hungry-delete-chars-to-skip)
+      (while (get-text-property (point) 'read-only)
+        (forward-char)))
+
+    (defun modi/turn-off-hungry-delete-mode ()
+      "Turn off hungry delete mode."
+      (hungry-delete-mode -1))
+
+    ;; Enable `hungry-delete-mode' everywhere ..
+    (global-hungry-delete-mode)
+
+    ;; Except ..
+    ;; `hungry-delete-mode'-loaded backspace does not work in `wdired-mode',
+    ;; i.e. when editing file names in the *Dired* buffer.
+    (add-hook 'wdired-mode-hook #'modi/turn-off-hungry-delete-mode)
+    ;; and in python-mode-hook
+    (add-hook 'python-mode-hook #'modi/turn-off-hungry-delete-mode)
+    ;; and in minibuffer
+    (add-hook 'minibuffer-setup-hook #'modi/turn-off-hungry-delete-mode)))
 
 (req-package pangu-spacing
   :init
@@ -1538,6 +1596,8 @@ Return the previous point-max before adding."
 (require 'fill-column-indicator)
 (setq fci-rule-column 80)
 (add-hook 'prog-mode-hook 'fci-mode)
+
+(add-hook 'git-commit-mode-hook 'fci-mode)
 
 (add-hook 'spacemacs-buffer-mode-hook (lambda ()
 (set (make-local-variable 'mouse-1-click-follows-link) nil)))

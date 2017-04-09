@@ -1197,7 +1197,7 @@ This function skips over horizontal and vertical whitespace."
 (defun lengyueyang/hexo-org-add-read-more ()
   "add <!--more-->"
   (interactive)
-  (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
+  (insert "#+BEGIN_EXPORT html\n<!--more-->\n#+END_EXPORT"))
 
 (defun lengyueyang/hexo-org-new-open-post (post-name)
   "create a hexo org post"

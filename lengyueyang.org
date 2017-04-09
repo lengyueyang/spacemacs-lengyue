@@ -1614,7 +1614,7 @@ Yasnippet allows you to type an abbreviation and then expand it into a template.
 
 Yasnippet by default checks for snippets in two places: a path relative to yasnippet.el (these are the default snippets that come with the package). If I want to make my own, I can put then in .spacemacs.d/snippets and it should find them there as well.
 
-I downloads some snippets from web like [[yasnippet-snippets][yasnippet-snippets]] and [[https://github.com/howardabrams/dot-files][dot-files]], then I defined some snippets of mine.
+I downloads some snippets from web like [[https://github.com/AndreaCrotti/yasnippet-snippets][yasnippet-snippet]] and [[https://github.com/howardabrams/dot-files][dot-files]], then I defined some snippets of mine.
 
 You can use the tab key to expand a snippet once you’ve typed in the “key”. It’s pretty smart in that if tab fails for yasnippet, it then checks for whatever tab was originally bound to.
 
@@ -1863,7 +1863,7 @@ to delete all whitespace in the direction you are deleting.
   (defun lengyueyang/hexo-org-add-read-more ()
     "add <!--more-->"
     (interactive)
-    (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
+    (insert "#+BEGIN_EXPORT html\n<!--more-->\n#+END_EXPORT"))
 
   (defun lengyueyang/hexo-org-new-open-post (post-name)
     "create a hexo org post"

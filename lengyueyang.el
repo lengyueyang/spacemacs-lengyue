@@ -714,6 +714,8 @@
 (add-to-list 'org-latex-packages-alist
              '("" "amsmath"))
 (add-to-list 'org-latex-packages-alist
+             '("" "amsthm"))
+(add-to-list 'org-latex-packages-alist
              '("" "tabularx" t))
 (add-to-list 'org-latex-packages-alist
              '("" "booktabs" t))

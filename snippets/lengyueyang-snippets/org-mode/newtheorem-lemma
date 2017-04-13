@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-lemma
+# key: newtheorem-lemma
+# --
+\begin{lemma}[$1]
+$0
+\end{lemma}
+

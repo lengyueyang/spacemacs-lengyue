@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-proof
+# key: newtheorem-proof
+# --
+\begin{proof}
+$0
+\end{proof}
+

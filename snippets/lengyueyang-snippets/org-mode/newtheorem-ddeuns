@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-ddefinition unmark
+# key: newtheorem-ddefinition unmark
+# --
+\begin{ddeus}[$1]
+$0
+\end{ddeus}
+

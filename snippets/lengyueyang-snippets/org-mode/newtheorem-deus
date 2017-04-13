@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-definition unmark
+# key: newtheorem-definition unmark
+# --
+\begin{deus}[$1]
+$0
+\end{deus}
+

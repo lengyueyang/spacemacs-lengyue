@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-corollary
+# key: newtheorem-corollary
+# --
+\begin{cor}[$1]
+$0
+\end{cor}
+

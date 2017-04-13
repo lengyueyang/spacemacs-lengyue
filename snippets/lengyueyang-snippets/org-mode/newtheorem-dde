@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-ddefinition
+# key: newtheorem-ddefinition
+# --
+\begin{dde}[$1]
+$0
+\end{dde}
+

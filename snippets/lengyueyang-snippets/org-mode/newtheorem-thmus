@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-theroem unmark
+# key: newtheorem-theroem unmark
+# --
+\begin{thmus}[$1]
+$0
+\end{thmus}
+

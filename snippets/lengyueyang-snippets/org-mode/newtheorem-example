@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-example
+# key: newtheorem-example
+# --
+\begin{ex}
+$0
+\end{ex}
+

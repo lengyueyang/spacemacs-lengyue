@@ -1,4 +1,5 @@
 .projectile
-snippets/
+snippets/dot-files-snippets/
+snippets/yasnippet-snippets/
 !/snippets/README.md
 modifierlayer/

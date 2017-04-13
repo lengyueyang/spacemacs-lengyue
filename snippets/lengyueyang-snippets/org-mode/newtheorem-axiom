@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-axiom
+# key: newtheorem-axiom
+# --
+\begin{axiom}[$1]
+$0
+\end{axiom}
+

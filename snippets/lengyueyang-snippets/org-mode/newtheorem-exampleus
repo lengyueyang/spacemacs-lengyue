@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-example unmark
+# key: newtheorem-example unmark
+# --
+\begin{exus}
+$0
+\end{exus}
+

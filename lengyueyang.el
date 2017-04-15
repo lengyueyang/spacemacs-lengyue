@@ -390,8 +390,13 @@
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-(spacemacs/declare-prefix "ou" "Org-latex-preview")
+(add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
+(require 'org-edit-latex)
+(add-hook 'org-mode-hook 'org-edit-latex-mode)
+
+(spacemacs/declare-prefix "ou" "Org-latex")
 (spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
+(spacemacs/set-leader-keys "oui" 'org-edit-special)
 (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
 (use-package company-math

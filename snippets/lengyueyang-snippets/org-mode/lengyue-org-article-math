@@ -1,0 +1,58 @@
+# -*- mode: snippet -*-
+# name: lengyue-org-article-math
+# key: lengyue-org-article-math
+# --
+#+TITLE: $1
+#+AUTHOR: lengyueyang
+#+DATE: \today
+#+EMAIL: maoxiaowei1988@foxmail.com, maoxiaoweihl@gmail.com
+
+#+OPTIONS: H:5 num:t toc:2 \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+DESCRIPTION: $0
+#+KEYWORDS: 
+#+LANGUAGE: zh
+
+#+LATEX_CLASS: lengyue-org-article
+#+LATEX_CLASS_OPTIONS: [oneside,A4paper,12pt]
+#+LaTeX_HEADER: \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+#+LaTeX_HEADER: \renewcommand{\contentsname}{目录}
+#+LATEX_HEADER: \makeatletter \def\@maketitle{\null \begin{center} {\vskip 5em \Huge \@title} \vskip 30em {\LARGE \@author} \vskip 3em {\LARGE \@date} \end{center} \newpage} \makeatother
+#+LaTeX_HEADER: \setcounter{secnumdepth}{4}
+#+LaTeX_HEADER: \renewcommand\refname{}
+#+LaTeX_HEADER: \graphicspath{{pic/}}
+#+LaTeX_HEADER: \linespread{1.2}
+
+#+LaTeX_HEADER: \usepackage[math-style=ISO]{unicode-math}
+#+LaTeX_HEADER: \setmathfont{xits-math.otf}
+#+LaTeX_HEADER: \usepackage[slantfont, boldfont]{xeCJK}
+#+LaTeX_HEADER: \usepackage{fontspec}
+#+LaTeX_HEADER: \setCJKmainfont{WenQuanYi Micro Hei}
+#+LaTeX_HEADER: \setmainfont{WenQuanYi Micro Hei}
+
+#+LaTeX_HEADER: \theoremstyle{plain}
+#+LaTeX_HEADER: \newtheorem{axiom}{\hskip 2em 公理}[section] %公理 axiom，独立编号
+#+LaTeX_HEADER: \newtheorem{de}{\hskip 2em 定义}[subsection] %定义 definition，简写为 de，独立编号
+#+LaTeX_HEADER: \newtheorem*{deus}{\hskip 2em 定义} %定义不编号 definition，简写为 deus
+#+LaTeX_HEADER: \newtheorem{thm}{\hskip 2em 定理}[subsection] %定理 theroem，简写为 thm，独立编号
+#+LaTeX_HEADER: \newtheorem*{thmus}{\hskip 2em 定理} %定理不编号 theroem，简写为 thmus
+#+LaTeX_HEADER: \newtheorem{lemma}[thm]{\hskip 2em 引理} %引理，记为 lemma，与 thm 共用编号
+#+LaTeX_HEADER: \newtheorem*{lemmaus}{\hskip 2em 引理} %引理不编号，记为 lemmaus
+#+LaTeX_HEADER: \newtheorem{cor}{\hskip 2em 推论}[thm] %推论 Corollary，简写为 col，在 thm 下面编号
+#+LaTeX_HEADER: \newtheorem{ex}{\emph{\hskip 2em 实例}}[thm] %example 獨立編號
+#+LaTeX_HEADER: \newtheorem*{exus}{\emph{\hskip 2em 实例}} %example 獨立編號
+#+LaTeX_HEADER: \theoremstyle{remark}
+#+LaTeX_HEADER: \newtheorem*{remark}{\bf{\hskip 2em 点评}}
+#+LaTeX_HEADER: \theoremstyle{definition}
+#+LaTeX_HEADER: \newtheorem{dde}{\hskip 2em 定义}
+#+LaTeX_HEADER: \newtheorem*{ddeus}{\hskip 2em 定义}
+#+LaTeX_HEADER: \renewcommand\qedsymbol{$\blacksquare$}
+#+LaTeX_HEADER: \renewcommand{\proofname}{\bf{\hskip 2em 证明}}
+#+LaTeX_HEADER: \newtheorem*{jd}{\emph{\hskip 2em 解答}}
+
+\newpage
+
+

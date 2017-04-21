@@ -2,8 +2,10 @@
 # name: mlinequetion
 # key: mlinequetion
 # --
+#+name: $1
 \begin{equation}
 \begin{split}
-$0
+$0 &
+ &
 \end{split}
 \end{equation}

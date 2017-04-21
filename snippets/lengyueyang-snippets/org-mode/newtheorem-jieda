@@ -2,7 +2,7 @@
 # name: newtheorem-jieda
 # key: newtheorem-jieda
 # --
+#+name: $0
 \begin{jd}
-$0
 \end{jd}
 

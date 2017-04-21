@@ -2,7 +2,7 @@
 # name: newtheorem-ddefinition unmark
 # key: newtheorem-ddefinition unmark
 # --
-\begin{ddeus}[$1]
-$0
+#+name: $1
+\begin{ddeus}[$0]
 \end{ddeus}
 

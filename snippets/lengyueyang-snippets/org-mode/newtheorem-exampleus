@@ -2,7 +2,7 @@
 # name: newtheorem-example unmark
 # key: newtheorem-example unmark
 # --
+#+name: $0
 \begin{exus}
-$0
 \end{exus}
 

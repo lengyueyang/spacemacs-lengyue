@@ -2,7 +2,7 @@
 # name: newtheorem-corollary
 # key: newtheorem-corollary
 # --
-\begin{cor}[$1]
-$0
+#+name: $1
+\begin{cor}[$0]
 \end{cor}
 

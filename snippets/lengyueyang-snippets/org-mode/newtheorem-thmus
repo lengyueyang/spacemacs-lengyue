@@ -2,7 +2,7 @@
 # name: newtheorem-theroem unmark
 # key: newtheorem-theroem unmark
 # --
-\begin{thmus}[$1]
-$0
+#+name: $1
+\begin{thmus}[$0]
 \end{thmus}
 

@@ -2,7 +2,7 @@
 # name: newtheorem-axiom
 # key: newtheorem-axiom
 # --
-\begin{axiom}[$1]
-$0
+#+name: $1
+\begin{axiom}[$0]
 \end{axiom}
 

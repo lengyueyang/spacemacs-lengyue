@@ -2,7 +2,7 @@
 # name: newtheorem-definition unmark
 # key: newtheorem-definition unmark
 # --
-\begin{deus}[$1]
-$0
+#+name: $1
+\begin{deus}[$0]
 \end{deus}
 

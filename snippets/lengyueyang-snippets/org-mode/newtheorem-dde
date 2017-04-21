@@ -2,7 +2,7 @@
 # name: newtheorem-ddefinition
 # key: newtheorem-ddefinition
 # --
-\begin{dde}[$1]
-$0
+#+name: $1
+\begin{dde}[$0]
 \end{dde}
 

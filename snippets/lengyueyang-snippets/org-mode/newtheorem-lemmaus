@@ -2,7 +2,7 @@
 # name: newtheorem-lemma unmark
 # key: newtheorem-lemma unmark
 # --
-\begin{lemmaus}[$1]
-$0
+#+name: $1
+\begin{lemmaus}[$0]
 \end{lemmaus}
 

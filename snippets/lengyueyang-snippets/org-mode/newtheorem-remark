@@ -3,6 +3,5 @@
 # key: newtheorem-remark
 # --
 \begin{remark}
-$0
 \end{remark}
 

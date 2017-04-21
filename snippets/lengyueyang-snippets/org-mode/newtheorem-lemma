@@ -2,7 +2,7 @@
 # name: newtheorem-lemma
 # key: newtheorem-lemma
 # --
-\begin{lemma}[$1]
-$0
+#+name: $1
+\begin{lemma}[$0]
 \end{lemma}
 

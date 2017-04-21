@@ -2,7 +2,7 @@
 # name: newtheorem-example
 # key: newtheorem-example
 # --
+#+name: $0
 \begin{ex}
-$0
 \end{ex}
 

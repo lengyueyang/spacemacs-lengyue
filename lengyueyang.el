@@ -892,7 +892,7 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 
 (setq org-latex-pdf-process
         '("xelatex -interaction nonstopmode -output-directory %o %f"
-          ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+          ;; "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
           "bibtex %b"
           "xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"))

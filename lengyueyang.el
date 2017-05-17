@@ -671,6 +671,8 @@
      )
   )
 
+(spacemacs/set-leader-keys "oi" 'lengyueyang/org-insert-src-block)
+
 
 ;; Resume clocking task when emacs is restarted
 (org-clock-persistence-insinuate)

@@ -751,7 +751,7 @@
 \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 \\usepackage{fontspec}
 \\usepackage{xunicode}
-\\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
 
@@ -801,7 +801,7 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 \\usepackage{fontspec}
 \\usepackage{xunicode}
-\\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]

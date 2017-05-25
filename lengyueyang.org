@@ -1294,7 +1294,7 @@ A complete agenda and capture configuration
   \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
   \\usepackage{fontspec}
   \\usepackage{xunicode}
-  \\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+  \\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]
 
@@ -1344,7 +1344,7 @@ A complete agenda and capture configuration
   \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
   \\usepackage{fontspec}
   \\usepackage{xunicode}
-  \\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+  \\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
 
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]

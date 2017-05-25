@@ -53,5 +53,8 @@
 #+LaTeX_HEADER: \renewcommand{\proofname}{\bf{\hskip 2em 证明}}
 #+LaTeX_HEADER: \newtheorem*{jd}{\emph{\hskip 2em 解答}}
 
-\newpage
 
+* Reference
+\vspace{-1.5cm}
+bibliographystyle:ieeetr
+bibliography:~/Emacs-lengyue/Papers/references.bib

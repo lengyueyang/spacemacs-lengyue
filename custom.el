@@ -6,6 +6,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-auto-local "/home/lengyue/Documents/tex-auto")
  '(TeX-engine (quote xetex))
  '(custom-safe-themes
    (quote
@@ -38,6 +39,9 @@
      ("" "amssymb" t)
      ("" "capt-of" nil)
      ("" "hyperref" nil))))
+ '(org-latex-logfiles-extensions
+   (quote
+    ("aux" "bcf" "blg" "fdb_latexmk" "fls" "figlist" "idx" "log" "nav" "out" "ptc" "run.xml" "snm" "toc" "vrb" "xdv" "bbl" "el")))
  '(org-pomodoro-length 1)
  '(org-pomodoro-short-break-length 1)
  '(org-pretty-entities t)

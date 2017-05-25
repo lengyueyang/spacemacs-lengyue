@@ -55,4 +55,8 @@
 
 \newpage
 
+* Reference
+\vspace{-1.5cm}
+bibliographystyle:ieeetr
+bibliography:~/Emacs-lengyue/Papers/references.bib
 

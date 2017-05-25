@@ -32,3 +32,10 @@
 #+LaTeX_HEADER: \usepackage{fontspec}
 #+LaTeX_HEADER: \setCJKmainfont{WenQuanYi Micro Hei}
 #+LaTeX_HEADER: \setmainfont{WenQuanYi Micro Hei}
+
+
+
+* Reference
+\vspace{-1.5cm}
+bibliographystyle:ieeetr
+bibliography:~/Emacs-lengyue/Papers/references.bib

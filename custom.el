@@ -14,6 +14,7 @@
  '(emms-directory "~/.emacs.d/emms/s")
  '(large-file-warning-threshold 210000000)
  '(magit-log-section-arguments (quote ("--decorate" "-n256")))
+ '(ob-ipython-driver-hostname "127.0.0.1")
  '(org-agenda-files
    (quote
     ("~/Emacs-lengyue/Data scientist/Machine learning/ML Notes-lengyue.org" "/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bioinformatics.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Booklists.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bookmark.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Data scientist.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Elfeed.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Emacs.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Life.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Linux.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Notes.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Programming.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Research.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Resume.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Tools.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Wiki-lengyue.org")))

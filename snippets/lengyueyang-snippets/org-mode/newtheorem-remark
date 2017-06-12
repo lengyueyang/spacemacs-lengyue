@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: newtheorem-remark
+# key: newtheorem-remark
+# --
+\begin{remark}
+\end{remark}
+

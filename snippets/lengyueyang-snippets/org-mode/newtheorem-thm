@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-theroem
+# key: newtheorem-theroem
+# --
+#+name: $1
+\begin{thm}[$0]
+\end{thm}
+

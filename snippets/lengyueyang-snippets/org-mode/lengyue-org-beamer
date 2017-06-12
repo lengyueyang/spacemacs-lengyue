@@ -1,0 +1,50 @@
+# -*- mode: snippet -*-
+# name: lengyue-org-beamer
+# key: lengyue-org-beamer
+# --
+#+TITLE: $0
+#+AUTHOR: Xiaowei Mao
+#+DATE: \today
+#+EMAIL: maoxiaoweihl@gmail.com, maoxiaowei1988@foxmail.com
+#+BEAMER_HEADER: \date[\today]{\today}
+#+BEAMER_HEADER: \author[Xiaowei Mao]{Xiaowei Mao}
+#+BEAMER_HEADER: \title[]{}
+#+BEAMER_HEADER: \subtitle{}
+#+BEAMER_HEADER: \institute[]{} 
+
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE: zh
+
+#+startup: beamer
+#+LaTeX_CLASS: lengyue-org-beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 3
+#+LaTeX_HEADER: \usetheme{CambridgeUS}
+#+LaTeX_HEADER: \setbeamertemplate{navigation symbols}{}
+#+LaTeX_HEADER: \renewcommand\maketitle{\frame[plain]{\titlepage}}
+
+#+LaTeX_HEADER: %\AtBeginSection{\begin{frame}{Outline}   \tableofcontents[currentsection, sectionstyle=show/show, subsectionstyle=show/show/hide] \end{frame} }
+#+LaTeX_HEADER: \AtBeginSubsection[]{\begin{frame}<beamer> \frametitle{Outline} \tableofcontents[currentsubsection, sectionstyle=show/show, subsectionstyle=show/shaded/hide] \end{frame}}
+#+LaTeX_HEADER: \graphicspath{{pic/}}
+#+LaTeX_HEADER: \beamertemplatetextbibitems
+
+
+* 
+** 
+*** Reference
+\vspace{-1.5cm}
+bibliographystyle:ieeetr
+bibliography:../Terminology-meeting.bib;~/Emacs-lengyue/Papers/references.bib
+
+* 
+** 
+*** 
+**** \huge \vskip 1cm Thanks for your attention.
+**** \vskip 1cm \centering \Huge Questions?
+

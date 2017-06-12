@@ -390,8 +390,13 @@
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-(spacemacs/declare-prefix "ou" "Org-latex-preview")
+(add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
+(require 'org-edit-latex)
+(add-hook 'org-mode-hook 'org-edit-latex-mode)
+
+(spacemacs/declare-prefix "ou" "Org-latex")
 (spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
+(spacemacs/set-leader-keys "oui" 'org-edit-special)
 (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
 (use-package company-math
@@ -666,6 +671,8 @@
      )
   )
 
+(spacemacs/set-leader-keys "oi" 'lengyueyang/org-insert-src-block)
+
 
 ;; Resume clocking task when emacs is restarted
 (org-clock-persistence-insinuate)
@@ -714,6 +721,8 @@
 (add-to-list 'org-latex-packages-alist
              '("" "amsmath"))
 (add-to-list 'org-latex-packages-alist
+             '("" "amsthm"))
+(add-to-list 'org-latex-packages-alist
              '("" "tabularx" t))
 (add-to-list 'org-latex-packages-alist
              '("" "booktabs" t))
@@ -742,7 +751,7 @@
 \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 \\usepackage{fontspec}
 \\usepackage{xunicode}
-
+\\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
 
@@ -792,7 +801,7 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
 \\usepackage{fontspec}
 \\usepackage{xunicode}
-
+\\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
 
 [NO-DEFAULT-PACKAGES]
 [PACKAGES]
@@ -885,7 +894,7 @@ rulesepcolor= \\color{ red!20!green!20!blue!20}
 
 (setq org-latex-pdf-process
         '("xelatex -interaction nonstopmode -output-directory %o %f"
-          ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+          ;; "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
           "bibtex %b"
           "xelatex -interaction nonstopmode -output-directory %o %f"
           "xelatex -interaction nonstopmode -output-directory %o %f"))
@@ -1197,7 +1206,7 @@ This function skips over horizontal and vertical whitespace."
 (defun lengyueyang/hexo-org-add-read-more ()
   "add <!--more-->"
   (interactive)
-  (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
+  (insert "#+BEGIN_EXPORT html\n<!--more-->\n#+END_EXPORT"))
 
 (defun lengyueyang/hexo-org-new-open-post (post-name)
   "create a hexo org post"

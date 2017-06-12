@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-lemma unmark
+# key: newtheorem-lemma unmark
+# --
+#+name: $1
+\begin{lemmaus}[$0]
+\end{lemmaus}
+

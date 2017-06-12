@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-jieda
+# key: newtheorem-jieda
+# --
+#+name: $0
+\begin{jd}
+\end{jd}
+

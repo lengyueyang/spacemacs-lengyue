@@ -834,11 +834,23 @@ This part is the customization to org-mode.
 
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-  (spacemacs/declare-prefix "ou" "Org-latex-preview")
+#+END_SRC
+
+** Org latex configuration
+
+#+BEGIN_SRC emacs-lisp
+
+  (add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
+  (require 'org-edit-latex)
+  (add-hook 'org-mode-hook 'org-edit-latex-mode)
+
+  (spacemacs/declare-prefix "ou" "Org-latex")
   (spacemacs/set-leader-keys "ouu" 'org-toggle-latex-fragment)
+  (spacemacs/set-leader-keys "oui" 'org-edit-special)
   (spacemacs/set-leader-keys "ouo" 'org-preview-latex-fragment)
 
 #+END_SRC
+
 
 ** Org-mode auto complete
 
@@ -1190,6 +1202,8 @@ A complete agenda and capture configuration
        )
     )
 
+  (spacemacs/set-leader-keys "oi" 'lengyueyang/org-insert-src-block)
+
 
   ;; Resume clocking task when emacs is restarted
   (org-clock-persistence-insinuate)
@@ -1250,6 +1264,8 @@ A complete agenda and capture configuration
   (add-to-list 'org-latex-packages-alist
                '("" "amsmath"))
   (add-to-list 'org-latex-packages-alist
+               '("" "amsthm"))
+  (add-to-list 'org-latex-packages-alist
                '("" "tabularx" t))
   (add-to-list 'org-latex-packages-alist
                '("" "booktabs" t))
@@ -1278,7 +1294,7 @@ A complete agenda and capture configuration
   \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
   \\usepackage{fontspec}
   \\usepackage{xunicode}
-
+  \\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]
 
@@ -1328,7 +1344,7 @@ A complete agenda and capture configuration
   \\hypersetup{colorlinks,linkcolor=black,filecolor=black,urlcolor=blue,citecolor=black}
   \\usepackage{fontspec}
   \\usepackage{xunicode}
-
+  \\titleformat{\\paragraph}{\\normalfont\\normalsize\\bfseries}{\\theparagraph}{1em}{}
 
   [NO-DEFAULT-PACKAGES]
   [PACKAGES]
@@ -1421,7 +1437,7 @@ A complete agenda and capture configuration
 
   (setq org-latex-pdf-process
           '("xelatex -interaction nonstopmode -output-directory %o %f"
-            ;;"biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
+            ;; "biber %b" "xelatex -interaction nonstopmode -output-directory %o %f"
             "bibtex %b"
             "xelatex -interaction nonstopmode -output-directory %o %f"
             "xelatex -interaction nonstopmode -output-directory %o %f"))
@@ -1614,7 +1630,7 @@ Yasnippet allows you to type an abbreviation and then expand it into a template.
 
 Yasnippet by default checks for snippets in two places: a path relative to yasnippet.el (these are the default snippets that come with the package). If I want to make my own, I can put then in .spacemacs.d/snippets and it should find them there as well.
 
-I downloads some snippets from web like [[yasnippet-snippets][yasnippet-snippets]] and [[https://github.com/howardabrams/dot-files][dot-files]], then I defined some snippets of mine.
+I downloads some snippets from web like [[https://github.com/AndreaCrotti/yasnippet-snippets][yasnippet-snippet]] and [[https://github.com/howardabrams/dot-files][dot-files]], then I defined some snippets of mine.
 
 You can use the tab key to expand a snippet once you’ve typed in the “key”. It’s pretty smart in that if tab fails for yasnippet, it then checks for whatever tab was originally bound to.
 
@@ -1863,7 +1879,7 @@ to delete all whitespace in the direction you are deleting.
   (defun lengyueyang/hexo-org-add-read-more ()
     "add <!--more-->"
     (interactive)
-    (insert "#+BEGIN_HTML\n<!--more-->\n#+END_HTML"))
+    (insert "#+BEGIN_EXPORT html\n<!--more-->\n#+END_EXPORT"))
 
   (defun lengyueyang/hexo-org-new-open-post (post-name)
     "create a hexo org post"

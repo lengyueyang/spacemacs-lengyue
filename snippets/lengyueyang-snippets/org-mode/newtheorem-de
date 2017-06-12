@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-definition
+# key: newtheorem-definition
+# --
+#+name: $1
+\begin{de}[$0]
+\end{de}
+

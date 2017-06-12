@@ -6,6 +6,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-auto-local "/home/lengyue/Documents/tex-auto")
  '(TeX-engine (quote xetex))
  '(custom-safe-themes
    (quote
@@ -13,6 +14,7 @@
  '(emms-directory "~/.emacs.d/emms/s")
  '(large-file-warning-threshold 210000000)
  '(magit-log-section-arguments (quote ("--decorate" "-n256")))
+ '(ob-ipython-driver-hostname "127.0.0.1")
  '(org-agenda-files
    (quote
     ("~/Emacs-lengyue/Data scientist/Machine learning/ML Notes-lengyue.org" "/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bioinformatics.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Booklists.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bookmark.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Data scientist.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Elfeed.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Emacs.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Life.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Linux.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Notes.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Programming.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Research.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Resume.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Tools.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Wiki-lengyue.org")))
@@ -38,10 +40,40 @@
      ("" "amssymb" t)
      ("" "capt-of" nil)
      ("" "hyperref" nil))))
+ '(org-latex-logfiles-extensions
+   (quote
+    ("aux" "bcf" "blg" "fdb_latexmk" "fls" "figlist" "idx" "log" "nav" "out" "ptc" "run.xml" "snm" "toc" "vrb" "xdv" "bbl" "el")))
  '(org-pomodoro-length 1)
  '(org-pomodoro-short-break-length 1)
  '(org-pretty-entities t)
+ '(org-preview-latex-default-process (quote imagemagick))
  '(org-preview-latex-image-directory "/home/lengyue/Documents/ltximg/")
+ '(org-preview-latex-process-alist
+   (quote
+    ((dvipng :programs
+             ("latex" "dvipng")
+             :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
+             (1.0 . 1.0)
+             :latex-compiler
+             ("latex -interaction nonstopmode -output-directory %o %f")
+             :image-converter
+             ("dvipng -fg %F -bg %B -D %D -T tight -o %O %f"))
+     (dvisvgm :programs
+              ("latex" "dvisvgm")
+              :description "dvi > svg" :message "you need to install the programs: latex and dvisvgm." :use-xcolor t :image-input-type "dvi" :image-output-type "svg" :image-size-adjust
+              (1.7 . 1.5)
+              :latex-compiler
+              ("latex -interaction nonstopmode -output-directory %o %f")
+              :image-converter
+              ("dvisvgm %f -n -b min -c %S -o %O"))
+     (imagemagick :programs
+                  ("latex" "convert")
+                  :description "pdf > png" :message "you need to install the programs: latex and imagemagick." :use-xcolor t :image-input-type "pdf" :image-output-type "png" :image-size-adjust
+                  (1.0 . 1.0)
+                  :latex-compiler
+                  ("xelatex -interaction nonstopmode -output-directory %o %f")
+                  :image-converter
+                  ("convert -density %D -trim -antialias %f -quality 100 %O")))))
  '(org-src-window-setup (quote other-window))
  '(org-startup-with-inline-images t)
  '(package-selected-packages
@@ -51,8 +83,8 @@
  '(python-indent-guess-indent-offset-verbose nil)
  '(python-indent-offset 4)
  '(python-shell-completion-native-enable nil)
- '(python-shell-interpreter "python" t)
- '(python-shell-interpreter-args "-i" t)
+ '(python-shell-interpreter "python")
+ '(python-shell-interpreter-args "-i")
  '(yasdcv-sdcv-dicts
    (quote
     (("jianminghy" "简明汉英词典" "powerword2007" t)

@@ -1,0 +1,41 @@
+# -*- mode: snippet -*-
+# name: lengyue-org-book
+# key: lengyue-org-book
+# --
+#+TITLE: $1
+#+AUTHOR: lengyueyang
+#+DATE: \today
+#+EMAIL: maoxiaowei1988@foxmail.com, maoxiaoweihl@gmail.com
+
+#+OPTIONS: H:5 num:t toc:2 \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+DESCRIPTION: $0
+#+KEYWORDS: 
+#+LANGUAGE: zh
+
+#+LATEX_CLASS: lengyue-org-book
+#+LATEX_CLASS_OPTIONS: [oneside,A4paper,12pt]
+#+LaTeX_HEADER: \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+#+LaTeX_HEADER: \renewcommand{\contentsname}{目录}
+#+LATEX_HEADER: \makeatletter \def\@maketitle{\null \begin{center} {\vskip 5em \Huge \@title} \vskip 30em {\LARGE \@author} \vskip 3em {\LARGE \@date} \end{center} \newpage} \makeatother
+#+LaTeX_HEADER: \setcounter{secnumdepth}{4}
+#+LaTeX_HEADER: \renewcommand\refname{}
+#+LaTeX_HEADER: \graphicspath{{pic/}}
+#+LaTeX_HEADER: \linespread{1.2}
+
+#+LaTeX_HEADER: \usepackage[math-style=ISO]{unicode-math}
+#+LaTeX_HEADER: \setmathfont{xits-math.otf}
+#+LaTeX_HEADER: \usepackage[slantfont, boldfont]{xeCJK}
+#+LaTeX_HEADER: \usepackage{fontspec}
+#+LaTeX_HEADER: \setCJKmainfont{WenQuanYi Micro Hei}
+#+LaTeX_HEADER: \setmainfont{WenQuanYi Micro Hei}
+
+
+
+* Reference
+\vspace{-1.5cm}
+bibliographystyle:ieeetr
+bibliography:~/Emacs-lengyue/Papers/references.bib

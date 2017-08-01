@@ -50,7 +50,7 @@
              python-enable-yapf-format-on-save t)
      ipython-notebook
      markdown
-     org
+     (org :variables org-enable-reveal-js t org-want-todo-bindings t)
      (shell :variables
             shell-default-shell 'eshell)
      (syntax-checking :variables

@@ -103,7 +103,7 @@
        )
 )
 
-(mu4e/mail-account-reset)
+;;(mu4e/mail-account-reset)
 
 ;;; Set up some common mu4e variables
 (setq mu4e-maildir "~/Documents/Mu4e"

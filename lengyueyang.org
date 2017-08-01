@@ -322,7 +322,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
          )
   )
 
-  (mu4e/mail-account-reset)
+  ;;(mu4e/mail-account-reset)
 
   ;;; Set up some common mu4e variables
   (setq mu4e-maildir "~/Documents/Mu4e"

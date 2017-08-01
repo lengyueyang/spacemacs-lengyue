@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: table
+# key: table
+# --
+
+#+CAPTION: $1
+#+NAME: tab:$0
+#+ATTR_LATEX: :environment tabular :float t :booktabs t

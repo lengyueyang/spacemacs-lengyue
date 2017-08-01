@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: figure
+# key: figure
+# --
+#+CAPTION: $1
+#+NAME: fig:$0
+#+ATTR_LATEX: :float t :width 0.7\textwidth :placement

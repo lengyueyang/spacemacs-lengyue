@@ -195,6 +195,7 @@
       smtpmail-smtp-service         465
       smtpmail-smtp-user "maoxiaowei1988@qq.com")
 
+;; (mu4e/mail-account-reset)
 (setq message-kill-buffer-on-exit t)
 
 ;; save attachment to my desktop (this can also be a function)  

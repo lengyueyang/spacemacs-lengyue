@@ -103,7 +103,7 @@
        )
 )
 
-(mu4e/mail-account-reset)
+;;(mu4e/mail-account-reset)
 
 ;;; Set up some common mu4e variables
 (setq mu4e-maildir "~/Documents/Mu4e"
@@ -195,6 +195,7 @@
       smtpmail-smtp-service         465
       smtpmail-smtp-user "maoxiaowei1988@qq.com")
 
+;; (mu4e/mail-account-reset)
 (setq message-kill-buffer-on-exit t)
 
 ;; save attachment to my desktop (this can also be a function)  
@@ -541,12 +542,12 @@
      )
   )
 
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)  ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+;; (defun org-summary-todo (n-done n-not-done)
+;;   "Switch entry to DONE when all subentries are done, to TODO otherwise."
+;;   (let (org-log-done org-log-states)  ; turn off logging
+;;     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
-(add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+;; (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
 
 ;;   ;;used by org-clock-sum-today-by-tags
 ;; (defun filter-by-tags ()
@@ -1042,9 +1043,17 @@ belongs as a list."
 
 (setq reftex-default-bibliography '("~/Emacs-lengyue/Papers/references.bib"))
 (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
-      org-ref-pdf-directory "~/Emacs-lengyue/Papers/"
+      org-ref-pdf-directory "~/Emacs-lengyue/Papers/pdf/"
       org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
 (setq org-ref-completion-library 'org-ref-ivy-cite)
+
+(setq bibtex-autokey-year-length 4
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-year-title-separator "-"
+      bibtex-autokey-titleword-separator "-"
+      bibtex-autokey-titlewords 2
+      bibtex-autokey-titlewords-stretch 1
+      bibtex-autokey-titleword-length 5)
 
 (setq yas-snippet-dirs
       '("~/.spacemacs.d/snippets/lengyueyang-snippets"

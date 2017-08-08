@@ -272,7 +272,7 @@
 
 (setq large-file-warning-threshold 300000000)
 (defun spacemacs/check-large-file ()
-  (when (> (buffer-size) 500000)
+  (when (> (buffer-size) 50000000)
     (progn (fundamental-mode)
            (hl-line-mode -1)))
   (if (and (executable-find "wc")

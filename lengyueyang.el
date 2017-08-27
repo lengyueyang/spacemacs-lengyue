@@ -736,6 +736,8 @@
 (add-to-list 'org-latex-packages-alist
              '("" "amssymb" t))
 (add-to-list 'org-latex-packages-alist
+             '("" "extarrows" t))
+(add-to-list 'org-latex-packages-alist
              '("" "capt-of" t))
 (add-to-list 'org-latex-packages-alist
              '("figuresright" "rotating" t))

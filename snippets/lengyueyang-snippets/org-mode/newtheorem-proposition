@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: newtheorem-definition
-# key: newtheorem-definition
+# name: newtheorem-proposition
+# key: newtheorem-proposition
 # --
 #+name: $1
 \begin{proposition}[$0]

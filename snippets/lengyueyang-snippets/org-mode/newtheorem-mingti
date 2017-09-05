@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-mingti
+# key: newtheorem-mingti
+# --
+#+name: $1
+\begin{mingti}[$0]
+\end{mingti}
+

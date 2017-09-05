@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: newtheorem-proposition
+# key: newtheorem-proposition
+# --
+#+name: $1
+\begin{proposition}[$0]
+\end{proposition}
+

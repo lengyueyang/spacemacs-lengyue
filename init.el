@@ -105,6 +105,7 @@
                                       crux
                                       emms
                                       company-math
+                                      org-edit-latex
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)

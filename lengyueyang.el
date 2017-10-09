@@ -76,44 +76,176 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
+;; (add-to-load-path "~/.spacemacs.d/package/mu4e")
+
+;; (require 'mu4e)
+
+;; (setq mu4e-account-alist
+;;       '(("Gmail"
+;;          ;; Under each account, set the account-specific variables you want.
+;;          (mu4e-sent-messages-behavior delete)
+;;          (mu4e-sent-folder "/Gmail/[Gmail].Sent Mail")
+;;          (mu4e-drafts-folder "/Gmail/[Gmail].Drafts")
+;;          (user-mail-address "maoxiaoweihl@gmail.com")
+;;          (user-full-name "Mao Xiaowei")
+;;          (smtpmail-stream-type ssl)
+;;          (smtpmail-smtp-service 465)
+;;          )
+;;         ("Foxmail"
+;;          (mu4e-sent-messages-behavior sent)
+;;          (mu4e-sent-folder "/Foxmail/Sent Messages")
+;;          (mu4e-drafts-folder "/Foxmail/Drafts")
+;;          (user-mail-address "maoxiaowei1988@foxmail.com")
+;;          (user-full-name "Mao Xiaowei")
+;;          (smtpmail-stream-type ssl)
+;;          (smtpmail-smtp-service 465)
+;;          )
+;;         ;; ("Lengyue-163"
+;;         ;;  (mu4e-sent-messages-behavior sent)
+;;         ;;  (mu4e-sent-folder "/Lengyue-163/Sent Items")
+;;         ;;  (mu4e-drafts-folder "/Lengyue-163/Drafts")
+;;         ;;  (user-mail-address "zanghuahong@163.com")
+;;         ;;  (user-full-name "Mao Xiaowei"))
+;;        )
+;; )
+
+;; ;;(mu4e/mail-account-reset)
+
+;; ;;; Set up some common mu4e variables
+;; (setq mu4e-maildir "~/Documents/Mu4e"
+;;       mu4e-trash-folder "/Gmail/Trash"
+;;       mu4e-refile-folder "/Gmail/Archive"
+;;       ;; mu4e-get-mail-command "mbsync -a"
+;;       mu4e-update-interval nil
+;;       mu4e-compose-signature-auto-include nil
+;;       mu4e-view-show-images t
+;;       mu4e-view-show-addresses t)
+
+;; ;;; Mail directory shortcuts
+;; (setq mu4e-maildir-shortcuts
+;;       '(
+;;         ("/Foxmail/INBOX" . ?f)
+;;         ("/Foxmail/Drafts" . ?d)
+;;         ("/Foxmail/Sent Messages" . ?s)
+;;         ("/Gmail/INBOX" . ?g)
+;;         ;; ("/Gmail/[Gmail].All Mail" . ?a)
+;;         ("/Gmail/[Gmail].Drafts" . ?r)
+;;         ("/Gmail/[Gmail].Sent Mail" . ?e)
+;;         ;;("/Gmail/[Gmail].Trash" . ?t)
+;;         ;; ("/Lengyue-163/INBOX" . ?i)
+;;         ))
+
+;; ;;; Bookmarks
+;; (setq mu4e-bookmarks
+;;       `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+;;         ("date:today..now" "Today's messages" ?t)
+;;         ("date:7d..now" "Last 7 days" ?w)
+;;         ("mime:image/*" "Messages with images" ?p)
+;;         (,(mapconcat 'identity
+;;                      (mapcar
+;;                       (lambda (maildir)
+;;                         (concat "maildir:" (car maildir)))
+;;                       mu4e-maildir-shortcuts) " OR ")
+;;          "All inboxes" ?i)))
+
+;; (mu4e-alert-set-default-style 'libnotify)
+;; (alert-add-rule :category "mu4e-alert" :style 'fringe :predicate (lambda (_) (string-match-p "^mu4e-" (symbol-name major-mode))) :continue t)
+;; (mu4e-alert-enable-notifications)
+;; ;; (setq mu4e-alert-email-notification-types '(count))
+;; (setq mu4e-alert-email-notification-types '(subjects))
+
+;; ;; (setq mu4e-enable-notifications t)
+;; ;; (with-eval-after-load 'mu4e-alert
+;;   ;; Enable Desktop notifications
+;;   ;; (mu4e-alert-set-default-style 'notifications)) ; For linux
+;;   ;; (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
+;;   ;; (mu4e-alert-set-default-style 'notifier))   ; For Mac OSX (through the
+;;                                         ; terminal notifier app)
+;; ;; (mu4e-alert-set-default-style 'growl))      ; Alternative for Mac OSX
+
+;; ;; (setq mu4e-enable-mode-line t)
+
+;; (setq mu4e-get-mail-command "offlineimap")
+;; ;; Fetch mail in 60 sec interval
+;; (setq mu4e-update-interval 1200)
+
+;; (require 'mu4e-contrib)
+;; (setq mu4e-html2text-command 'mu4e-shr2text)
+;; ;; try to emulate some of the eww key-bindings
+;; (add-hook 'mu4e-view-mode-hook
+;;           (lambda ()
+;;             (local-set-key (kbd "<tab>") 'shr-next-link)
+;;             (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+
+;; ;; something about ourselves
+;; (require 'smtpmail)  
+;; (setq user-mail-address "maoxiaowei1988@foxmail.com"  
+;;       user-full-name "Xiaowei, Mao"
+;;       smtpmail-stream-type 'starttls
+;;       starttls-use-gnutls t
+;;       mu4e-compose-signature  
+;;       (concat  
+;;        "Xiaowei Mao\n"  
+;;        "Email: maoxiaoweihl@gmail.com\n"  
+;;        "Email: maoxiaowei1988@foxmail.com\n"  
+;;        "Blog: http://lengyueyang.github.io\n"  
+;;        "\n")  
+;;       mu4e-compose-signature-auto-include t  
+;;       )  
+
+;; (setq send-mail-function            'smtpmail-send-it
+;;       message-send-mail-function    'smtpmail-send-it
+;;       smtpmail-auth-credentials     (expand-file-name "~/.authinfo")
+;;       smtpmail-stream-type          'ssl
+;;       smtpmail-smtp-server          "smtp.qq.com"
+;;       smtpmail-smtp-service         465
+;;       smtpmail-smtp-user "maoxiaowei1988@qq.com")
+
+;; ;; (mu4e/mail-account-reset)
+;; (setq message-kill-buffer-on-exit t)
+
+;; ;; save attachment to my desktop (this can also be a function)  
+;; (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")
+
 (add-to-load-path "~/.spacemacs.d/package/mu4e")
 
 (require 'mu4e)
 
-(setq mu4e-account-alist
-      '(("Gmail"
-         ;; Under each account, set the account-specific variables you want.
-         (mu4e-sent-messages-behavior delete)
-         (mu4e-sent-folder "/Gmail/[Gmail].Sent Mail")
-         (mu4e-drafts-folder "/Gmail/[Gmail].Drafts")
-         (user-mail-address "maoxiaoweihl@gmail.com")
-         (user-full-name "Mao Xiaowei"))
-        ("Foxmail"
-         (mu4e-sent-messages-behavior sent)
-         (mu4e-sent-folder "/Foxmail/Sent Messages")
-         (mu4e-drafts-folder "/Foxmail/Drafts")
-         (user-mail-address "maoxiaowei1988@foxmail.com")
-         (user-full-name "Mao Xiaowei"))
-        ;; ("Lengyue-163"
-        ;;  (mu4e-sent-messages-behavior sent)
-        ;;  (mu4e-sent-folder "/Lengyue-163/Sent Items")
-        ;;  (mu4e-drafts-folder "/Lengyue-163/Drafts")
-        ;;  (user-mail-address "zanghuahong@163.com")
-        ;;  (user-full-name "Mao Xiaowei"))
-       )
-)
+;; I want my format=flowed thank you very much
+;; mu4e sets up visual-line-mode and also fill (M-q) to do the right thing
+;; each paragraph is a single long line; at sending, emacs will add the
+;; special line continuation characters.
+(setq mu4e-compose-format-flowed t)
 
-;;(mu4e/mail-account-reset)
+;; every new email composition gets its own frame! (window)
+(setq mu4e-compose-in-new-frame t)
+
+;; give me ISO(ish) format date-time stamps in the header list
+(setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
+
+;; show full addresses in view message (instead of just names)
+;; toggle per name with M-RET
+(setq mu4e-view-show-addresses 't)
 
 ;;; Set up some common mu4e variables
 (setq mu4e-maildir "~/Documents/Mu4e"
       mu4e-trash-folder "/Gmail/Trash"
       mu4e-refile-folder "/Gmail/Archive"
-      ;; mu4e-get-mail-command "mbsync -a"
-      mu4e-update-interval nil
-      mu4e-compose-signature-auto-include nil
-      mu4e-view-show-images t
-      mu4e-view-show-addresses t)
+      mu4e-sent-folder   "/Foxmail/Sent Messages"
+      mu4e-drafts-folder "/Foxmail/Drafts")
+
+(require 'smtpmail)  
+(setq
+ send-mail-function 'smtpmail-send-it
+ message-send-mail-function 'smtpmail-send-it
+ smtpmail-auth-credentials     (expand-file-name "~/.authinfo")
+ smtpmail-smtp-server "smtp.qq.com"
+ smtpmail-smtp-service 465
+ smtpmail-stream-type 'ssl
+ )
+
+;; don't keep message buffers around
+(setq message-kill-buffer-on-exit t)
 
 ;;; Mail directory shortcuts
 (setq mu4e-maildir-shortcuts
@@ -128,6 +260,74 @@
         ;;("/Gmail/[Gmail].Trash" . ?t)
         ;; ("/Lengyue-163/INBOX" . ?i)
         ))
+
+;; the list of all of my e-mail addresses
+(setq mu4e-user-mail-address-list '("maoxiaowei1988@foxmail.com"
+                                    "maoxiaoweihl@gmail.com"))
+
+;; the headers to show in the headers list -- a pair of a field
+;; and its width, with `nil' meaning 'unlimited'
+;; (better only use that for the last field.
+;; These are the defaults:
+(setq mu4e-headers-fields
+      '( (:date          .  25)    ;; alternatively, use :human-date
+         (:flags         .   6)
+         (:from          .  22)
+         (:subject       .  nil))) ;; alternatively, use :thread-subject
+
+(setq mu4e-get-mail-command "offlineimap")
+;; Fetch mail in 60 sec interval
+(setq mu4e-update-interval 1200)
+
+
+;; (mu4e/mail-account-reset)
+(setq message-kill-buffer-on-exit t)
+
+;; save attachment to my desktop (this can also be a function)  
+(setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
+
+(setq mu4e-contexts
+      `(
+        ,(make-mu4e-context
+           :name "maoxiaowei1988@foxmail.com"
+           :enter-func (lambda () (mu4e-message "Enter maoxiaowei1988@foxmail.com.com context"))
+           :leave-func (lambda () (mu4e-message "Leave maoxiaowei1988@foxmail.com.com context"))
+           :match-func (lambda (msg)
+                         (when msg 
+                           (mu4e-message-contact-field-matches msg 
+                                                               :to "maoxiaowei1988@foxmail.com")))
+           :vars '( ( user-mail-address       . "maoxiaowei1988@foxmail.com" )
+                    ( user-full-name          . "Mao Xiaowei" )
+                    ( smtpmail-smtp-server    . "smtp.qq.com" )
+                    ( mu4e-compose-signature  .
+                                              (concat
+                                               "Xiaowei Mao\n"
+                                               "Email: maoxiaoweihl@gmail.com\n"
+                                               "Email: maoxiaowei1988@foxmail.com\n"
+                                               "Blog: http://lengyueyang.github.io\n"
+                                               "Github: https://github.com/lengyueyang\n"))))  
+        ,(make-mu4e-context
+           :name "maoxiaoweihl@gmail.com"
+           :enter-func (lambda () (mu4e-message "Enter maoxiaoweihl@gmail.com context"))
+           :leave-func (lambda () (mu4e-message "Leave maoxiaoweihl@gmail.com context"))
+           ;; we match based on the contact-fields of the message (that we are replying to)
+           ;; https://www.djcbsoftware.nl/code/mu/mu4e/What-are-contexts.html#What-are-contexts
+           :match-func (lambda (msg)
+                         (when msg 
+                           (mu4e-message-contact-field-matches msg 
+                                                               :to "maoxiaoweihl@gmail.com")))
+           :vars '( ( user-mail-address      . "maoxiaoweihl@gmail.com"  )
+                    ( user-full-name         . "Mao Xiaowei" )
+                    ( smtpmail-smtp-server   . "smtp.gmail.com" )
+                    ( mu4e-compose-signature .
+                                             (concat
+                                              "Xiaowei Mao\n"
+                                              "Email: maoxiaoweihl@gmail.com\n"
+                                              "Email: maoxiaowei1988@foxmail.com\n"
+                                              "Blog: http://lengyueyang.github.io\n"
+                                              "Github: https://github.com/lengyueyang\n"))))
+       )
+)
 
 ;;; Bookmarks
 (setq mu4e-bookmarks
@@ -148,58 +348,76 @@
 ;; (setq mu4e-alert-email-notification-types '(count))
 (setq mu4e-alert-email-notification-types '(subjects))
 
-;; (setq mu4e-enable-notifications t)
-;; (with-eval-after-load 'mu4e-alert
-  ;; Enable Desktop notifications
-  ;; (mu4e-alert-set-default-style 'notifications)) ; For linux
-  ;; (mu4e-alert-set-default-style 'libnotify))  ; Alternative for linux
-  ;; (mu4e-alert-set-default-style 'notifier))   ; For Mac OSX (through the
-                                        ; terminal notifier app)
-;; (mu4e-alert-set-default-style 'growl))      ; Alternative for Mac OSX
+(setq mu4e-enable-mode-line t)
 
-;; (setq mu4e-enable-mode-line t)
+;; start with the first (default) context; 
+(setq mu4e-context-policy 'pick-first)
 
-(setq mu4e-get-mail-command "offlineimap")
-;; Fetch mail in 60 sec interval
-(setq mu4e-update-interval 1200)
+;; compose with the current context if no context matches;
+(setq mu4e-compose-context-policy nil)
 
-(require 'mu4e-contrib)
-(setq mu4e-html2text-command 'mu4e-shr2text)
-;; try to emulate some of the eww key-bindings
-(add-hook 'mu4e-view-mode-hook
-          (lambda ()
-            (local-set-key (kbd "<tab>") 'shr-next-link)
-            (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+;; don't save messages to Sent Messages, Gmail/IMAP takes care of this
+(setq mu4e-sent-messages-behavior 'delete)
 
-;; something about ourselves
-(require 'smtpmail)  
-(setq user-mail-address "maoxiaowei1988@foxmail.com"  
-      user-full-name "Xiaowei, Mao"
-      smtpmail-stream-type 'starttls
-      starttls-use-gnutls t
-      mu4e-compose-signature  
-      (concat  
-       "Xiaowei Mao\n"  
-       "Email: maoxiaoweihl@gmail.com\n"  
-       "Email: maoxiaowei1988@foxmail.com\n"  
-       "Blog: http://lengyueyang.github.io\n"  
-       "\n")  
-      mu4e-compose-signature-auto-include t  
-      )  
+(require 'org-mu4e)
+;; (require 'org-mime)
 
-(setq send-mail-function            'smtpmail-send-it
-      message-send-mail-function    'smtpmail-send-it
-      smtpmail-auth-credentials     (expand-file-name "~/.authinfo")
-      smtpmail-stream-type          'tls
-      smtpmail-smtp-server          "smtp.qq.com"
-      smtpmail-smtp-service         465
-      smtpmail-smtp-user "maoxiaowei1988@qq.com")
+;; Use org-mode(mine) to html
+(defun mu4e-toggle-org-mode ()
+  (interactive)
+  (cond
+   ((eq major-mode 'mu4e-view-mode) (mu4e-org-mode))
+   ((eq major-mode 'mu4e-org-mode) (mu4e-view-mode))
+   ((eq major-mode 'mu4e-compose-mode) (org-mu4e-compose-org-mode))
+   ((eq major-mode 'org-mu4e-compose-org-mode) (mu4e-compose-mode))))
 
-;; (mu4e/mail-account-reset)
-(setq message-kill-buffer-on-exit t)
 
-;; save attachment to my desktop (this can also be a function)  
-(setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")
+(with-eval-after-load 'mu4e-view
+  (spacemacs/set-leader-keys-for-major-mode 'mu4e-view-mode
+    "to" 'mu4e-toggle-org-mode))
+
+
+(with-eval-after-load 'mu4e-utils
+  (spacemacs/set-leader-keys-for-major-mode 'mu4e-org-mode
+    "to" 'mu4e-toggle-org-mode))
+
+(with-eval-after-load 'mu4e-compose
+  (spacemacs/set-leader-keys-for-major-mode 'mu4e-compose-mode "to" 'mu4e-toggle-org-mode))
+
+
+(with-eval-after-load 'org-mu4e
+  (setq org-mu4e-convert-to-html t)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mu4e-compose-org-mode "to" 'mu4e-toggle-org-mode)
+  (defun org~mu4e-mime-convert-to-html ()
+    "Convert the current body to html."
+    (unless (fboundp 'org-export-string-as)
+      (mu4e-error "require function 'org-export-string-as not found."))
+    (let* ((begin
+            (save-excursion
+              (goto-char (point-min))
+              (search-forward mail-header-separator)))
+           (end (point-max))
+           (raw-body (buffer-substring begin end))
+           (tmp-file (make-temp-name (expand-file-name "mail"
+                                                       temporary-file-directory)))
+           (org-export-skip-text-before-1st-heading nil)
+           (org-export-htmlize-output-type 'inline-css)
+           (org-export-preserve-breaks t)
+           (org-export-with-LaTeX-fragments
+            (if (executable-find "dvipng") 'dvipng
+              (mu4e-message "Cannot find dvipng, ignore inline LaTeX") nil))
+           (html-and-images
+            (org~mu4e-mime-replace-images
+             (org-export-string-as raw-body 'html nil)
+             tmp-file))
+           (html-images (cdr html-and-images))
+           (html (car html-and-images)))
+      (delete-region begin end)
+      (save-excursion
+        (goto-char begin)
+        (newline)
+        (insert (org~mu4e-mime-multipart
+                 raw-body html (mapconcat 'identity html-images "\n")))))))
 
 (defun my/dabbrev-friend-buffer (other-buffer)
   (cond ( ;; ignore very large files
@@ -391,7 +609,7 @@
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-(add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
+;; (add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
 (require 'org-edit-latex)
 (add-hook 'org-mode-hook 'org-edit-latex-mode)
 

@@ -281,6 +281,8 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
 ** Mu4e
 
+*** Configuration with Mu4e 0.9.1
+
 - [[https://github.com/larstvei/dot-emacs][larstvei/dot-emacs: My Emacs configurations written in Org mode]]
 - [[http://wenshanren.org/?p=111][mu4e: an E-mail Client for Emacs | 肉山博客 (Wenshan's Blog)]]
 - [[http://coldnew.github.io/blog/2016/01-02_mu4e/][在 emacs 下使用 mu4e 收發郵件 | coldnew's blog]]
@@ -427,6 +429,8 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;; ;; save attachment to my desktop (this can also be a function)  
   ;; (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
 #+END_SRC
+
+*** Configuration with Mu4e 0.9.18
 
 - https://www.djcbsoftware.nl/code/mu/mu4e/index.html#SEC_Contents
 - http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/
@@ -587,74 +591,235 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;; don't save messages to Sent Messages, Gmail/IMAP takes care of this
   (setq mu4e-sent-messages-behavior 'delete)
 
+  (add-hook 'message-mode-hook 'turn-on-flyspell 'append)
+  (add-hook 'mu4e-view-mode-hook
+            (lambda()
+              (mu4e-view-toggle-hide-cited)
+              ;; try to emulate some of the eww key-bindings
+              (local-set-key (kbd "<tab>") 'shr-next-link)
+              (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+
 #+END_SRC
 
-Org-mime configuration
+*** Org-mime and Org-contacts configuration
 
 https://github.com/org-mime/org-mime/blob/master/org-mime.el
 http://kitchingroup.cheme.cmu.edu/blog/2016/10/29/Sending-html-emails-from-org-mode-with-org-mime/
 
+
+#+BEGIN_SRC emacs-lisp
+  (setq mu4e-org-contacts-file  "~/Emacs-lengyue/Wiki-lengyue/Contacts.org")
+  (add-to-list 'mu4e-headers-actions
+               '("org-contact-add" . mu4e-action-add-org-contact) t)
+  (add-to-list 'mu4e-view-actions
+               '("org-contact-add" . mu4e-action-add-org-contact) t)
+
+  (require 'ivy)
+  (add-to-load-path "~/.spacemacs.d/package/org-mime")
+  (require 'org-mime)
+  ;; for gnus – this is set by default
+  (setq org-mime-library 'mml)
+  ;; OR for Wanderlust (WL)
+  ;; (setq org-mime-library 'semi)
+  ;; OR for VM – not yet supported
+  ;; (setq org-mime-library 'vm)
+
+  (add-hook 'message-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c M-o") 'org-mime-htmlize)))
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize)))
+
+  (add-hook 'org-mime-html-hook
+            (lambda ()
+              (org-mime-change-element-style
+               "pre" (format "color: %s; background-color: %s; padding: 0.5em;"
+                             "#E6E1DC" "#232323"))))
+
+  ;; the following can be used to nicely offset block quotes in email bodies
+  (add-hook 'org-mime-html-hook
+            (lambda ()
+              (org-mime-change-element-style
+               "blockquote" "border-left: 2px solid gray; padding-left: 4px;")))
+
+  (add-hook 'org-mime-html-hook
+            (lambda ()
+              (while (re-search-forward "@\\([^@]*\\)@" nil t)
+                (replace-match "<span style=\"color:red\">\\1</span>"))))
+
+  (setq org-mime-export-options '(:section-numbers nil
+                                                   :with-author nil
+                                                   :with-toc nil))
+  ;; here we set aliases for groups.
+  (setq email-groups
+        '(("ms" . "email1, email2")
+          ("phd" . "email3, email4")))
+
+  (setq mu4e-compose-complete-only-personal nil)
+
+  (defun org-contacts-open-from-email (email)
+    "Open org-contact with matching EMAIL. If no match, create new
+  entry with prompts for first and last name."
+    (let ((contact (catch 'contact
+         (loop for contact in  (org-contacts-db)
+         do
+         (when (string= email (cdr (assoc "EMAIL" (elt contact 2))))
+           (throw 'contact contact))))))
+
+      (unless contact
+      (set-buffer (find-file-noselect (ido-completing-read
+               "Select org-contact file: "
+               org-contacts-files)))
+      (goto-char (point-max))
+      (insert (format  "\n* %s %s\n"
+           (read-input "First name: ")
+           (read-input "Last name: ")))
+      (org-entry-put (point) "EMAIL" email)
+      (save-buffer))
+
+      (when contact
+        (find-file  (cdr (assoc "FILE" (elt contact 2))))
+        (goto-char (elt contact 1))
+        (show-subtree))))
+
+  (defun org-contacts-tag-selection (selection)
+    "Prompts you for a tag, and tags each entry in org-contacts
+  that has a matching email in `helm-marked-candidates'. Ignore
+  emails that are not in an org-contact file. I am not sure what
+  the best thing to do there is. Probably prompt for a file, and
+  add an entry to the end of it."
+    (save-excursion
+      (let ((tag (read-input "Tag: ")))
+        (loop for email in (helm-marked-candidates)
+        do
+        (let ((contact (catch 'contact
+             (loop for contact in  (org-contacts-db)
+             do
+             (when (string=
+              email
+              (cdr (assoc
+              "EMAIL"
+              (elt contact 2))))
+               (throw 'contact contact))))))
+          ;; add new contact and tag it
+          (unless contact
+      (set-buffer (find-file-noselect (ido-completing-read
+               "Select org-contact file: "
+               org-contacts-files)))
+      (goto-char (point-max))
+      (insert (format  "\n* %s %s\n"
+           (read-input "First name: ")
+           (read-input "Last name: ")))
+      (org-entry-put (point) "EMAIL" email)
+      (org-set-tags-to (list tag))
+      (save-buffer))
+          ;; update tags on existing entry
+          (when contact
+      (find-file-noselect  (cdr (assoc "FILE" (elt contact 2))))
+                  (set-buffer (marker-buffer (elt contact 1)))
+      (goto-char (elt contact 1))
+      (org-set-tags-to (append (org-get-tags) (list tag)))))))))
+
+
+  (defun j-insert-emails ()
+    "Helm interface to email addresses"
+    (interactive)
+
+    (helm :sources `(((name . "Email address candidates")
+         (candidates . ,(append
+             ;; my aliases
+             email-groups
+             ;; org-contacts
+             (loop for contact in (org-contacts-db)
+             collect
+             (cons (format
+              "%s %s %s <%s> org-contact"
+              (cdr (assoc "FIRSTNAME" (elt contact 2)))
+              (cdr (assoc "LASTNAME" (elt contact 2)))
+              (cdr (assoc "TAGS" (elt contact 2)))
+              (cdr (assoc "EMAIL" (elt contact 2))))
+                   (cdr (assoc "EMAIL" (elt contact 2)))))
+             ;; mu contacts
+             (loop for contact in mu4e~contacts-for-completion
+             collect (cons contact contact))))
+         ;; only action is to insert string at point.
+         (action . (("insert" . (lambda (x)
+                (insert
+                 (mapconcat
+                  'identity
+                  (helm-marked-candidates)
+                  ","))))
+              ("open" . org-contacts-open-from-email)
+              ("tag"  . org-contacts-tag-selection)))))))
+
+  ;; Finally, let us bind this to something probably convenient. I use c-c ] for
+  ;; citations. Lets try that in compose mode.
+  (define-key mu4e-compose-mode-map "\C-c]" 'j-insert-emails)
+#+END_SRC
+
+
 #+BEGIN_SRC emacs-lisp
 
-    (require 'org-mu4e)
-    ;; (require 'org-mime)
+  ;; (require 'org-mu4e)
+  ;; ;; (require 'org-mime)
 
-    ;; Use org-mode(mine) to html
-    (defun mu4e-toggle-org-mode ()
-      (interactive)
-      (cond
-       ((eq major-mode 'mu4e-view-mode) (mu4e-org-mode))
-       ((eq major-mode 'mu4e-org-mode) (mu4e-view-mode))
-       ((eq major-mode 'mu4e-compose-mode) (org-mu4e-compose-org-mode))
-       ((eq major-mode 'org-mu4e-compose-org-mode) (mu4e-compose-mode))))
-
-
-    (with-eval-after-load 'mu4e-view
-      (spacemacs/set-leader-keys-for-major-mode 'mu4e-view-mode
-        "to" 'mu4e-toggle-org-mode))
+  ;; ;; Use org-mode(mine) to html
+  ;; (defun mu4e-toggle-org-mode ()
+  ;;   (interactive)
+  ;;   (cond
+  ;;    ((eq major-mode 'mu4e-view-mode) (mu4e-org-mode))
+  ;;    ((eq major-mode 'mu4e-org-mode) (mu4e-view-mode))
+  ;;    ((eq major-mode 'mu4e-compose-mode) (org-mu4e-compose-org-mode))
+  ;;    ((eq major-mode 'org-mu4e-compose-org-mode) (mu4e-compose-mode))))
 
 
-    (with-eval-after-load 'mu4e-utils
-      (spacemacs/set-leader-keys-for-major-mode 'mu4e-org-mode
-        "to" 'mu4e-toggle-org-mode))
-
-    (with-eval-after-load 'mu4e-compose
-      (spacemacs/set-leader-keys-for-major-mode 'mu4e-compose-mode "to" 'mu4e-toggle-org-mode))
+  ;; (with-eval-after-load 'mu4e-view
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'mu4e-view-mode
+  ;;     "to" 'mu4e-toggle-org-mode))
 
 
-    (with-eval-after-load 'org-mu4e
-      (setq org-mu4e-convert-to-html t)
-      (spacemacs/set-leader-keys-for-major-mode 'org-mu4e-compose-org-mode "to" 'mu4e-toggle-org-mode)
-      (defun org~mu4e-mime-convert-to-html ()
-        "Convert the current body to html."
-        (unless (fboundp 'org-export-string-as)
-          (mu4e-error "require function 'org-export-string-as not found."))
-        (let* ((begin
-                (save-excursion
-                  (goto-char (point-min))
-                  (search-forward mail-header-separator)))
-               (end (point-max))
-               (raw-body (buffer-substring begin end))
-               (tmp-file (make-temp-name (expand-file-name "mail"
-                                                           temporary-file-directory)))
-               (org-export-skip-text-before-1st-heading nil)
-               (org-export-htmlize-output-type 'inline-css)
-               (org-export-preserve-breaks t)
-               (org-export-with-LaTeX-fragments
-                (if (executable-find "dvipng") 'dvipng
-                  (mu4e-message "Cannot find dvipng, ignore inline LaTeX") nil))
-               (html-and-images
-                (org~mu4e-mime-replace-images
-                 (org-export-string-as raw-body 'html nil)
-                 tmp-file))
-               (html-images (cdr html-and-images))
-               (html (car html-and-images)))
-          (delete-region begin end)
-          (save-excursion
-            (goto-char begin)
-            (newline)
-            (insert (org~mu4e-mime-multipart
-                     raw-body html (mapconcat 'identity html-images "\n")))))))
+  ;; (with-eval-after-load 'mu4e-utils
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'mu4e-org-mode
+  ;;     "to" 'mu4e-toggle-org-mode))
+
+  ;; (with-eval-after-load 'mu4e-compose
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'mu4e-compose-mode "to" 'mu4e-toggle-org-mode))
+
+
+  ;; (with-eval-after-load 'org-mu4e
+  ;;   (setq org-mu4e-convert-to-html t)
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'org-mu4e-compose-org-mode "to" 'mu4e-toggle-org-mode)
+  ;;   (defun org~mu4e-mime-convert-to-html ()
+  ;;     "Convert the current body to html."
+  ;;     (unless (fboundp 'org-export-string-as)
+  ;;       (mu4e-error "require function 'org-export-string-as not found."))
+  ;;     (let* ((begin
+  ;;             (save-excursion
+  ;;               (goto-char (point-min))
+  ;;               (search-forward mail-header-separator)))
+  ;;            (end (point-max))
+  ;;            (raw-body (buffer-substring begin end))
+  ;;            (tmp-file (make-temp-name (expand-file-name "mail"
+  ;;                                                        temporary-file-directory)))
+  ;;            (org-export-skip-text-before-1st-heading nil)
+  ;;            (org-export-htmlize-output-type 'inline-css)
+  ;;            (org-export-preserve-breaks t)
+  ;;            (org-export-with-LaTeX-fragments
+  ;;             (if (executable-find "dvipng") 'dvipng
+  ;;               (mu4e-message "Cannot find dvipng, ignore inline LaTeX") nil))
+  ;;            (html-and-images
+  ;;             (org~mu4e-mime-replace-images
+  ;;              (org-export-string-as raw-body 'html nil)
+  ;;              tmp-file))
+  ;;            (html-images (cdr html-and-images))
+  ;;            (html (car html-and-images)))
+  ;;       (delete-region begin end)
+  ;;       (save-excursion
+  ;;         (goto-char begin)
+  ;;         (newline)
+  ;;         (insert (org~mu4e-mime-multipart
+  ;;                  raw-body html (mapconcat 'identity html-images "\n")))))))
 
 
 #+END_SRC
@@ -1347,26 +1512,39 @@ A complete agenda and capture configuration
 
 #+BEGIN_SRC emacs-lisp
 
-  (define-key global-map (kbd "<f9>") 'org-capture)
-  (spacemacs/set-leader-keys "oc" 'org-capture)
+    (define-key global-map (kbd "<f9>") 'org-capture)
+    (spacemacs/set-leader-keys "oc" 'org-capture)
 
-  (setq org-capture-templates
-        '(("b" "Blog Ideas" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("s" "Someday/Maybe" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
-           "* SOMEDAY %?\n%i%U"
-           :empty-lines 1)
-          ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("r" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
-           "* TODO %?\n%i%U"
-           :empty-lines 1)
-          ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
-           "* %c :website:\n%?\n%U %:initial"
-           :empty-lines 1)
-          ))
+    (setq org-capture-templates
+          '(("b" "Blog Ideas" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
+             "* TODO %?\n%i%U"
+             :empty-lines 1)
+            ("c" "Contacts" entry (file "~/Emacs-lengyue/Wiki-lengyue/Contacts.org")
+             "* %(org-contacts-template-name)
+  :PROPERTIES:
+  :EMAIL: %(org-contacts-template-email)
+  :PHONE:
+  :ALIAS:
+  :NICKNAME:
+  :IGNORE:
+  :ICON:
+  :NOTE:
+  :ADDRESS:
+  :BIRTHDAY:
+  :END:")
+            ("s" "Someday/Maybe" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
+             "* SOMEDAY %?\n%i%U"
+             :empty-lines 1)
+            ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
+             "* TODO %?\n%i%U"
+             :empty-lines 1)
+            ("r" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
+             "* TODO %?\n%i%U"
+             :empty-lines 1)
+            ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+             "* %c :website:\n%?\n%U %:initial"
+             :empty-lines 1)
+            ))
 
 
 #+END_SRC

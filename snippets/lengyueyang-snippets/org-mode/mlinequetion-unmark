@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: mlinequetion-unmarked
+# key: mlinequetion-ummarked
+# --
+\begin{equation*}
+\begin{split}
+$0 & \\\\
+ & \\\\
+\end{split}
+\end{equation*}

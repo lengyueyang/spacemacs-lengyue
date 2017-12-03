@@ -105,6 +105,7 @@
                                       crux
                                       emms
                                       company-math
+                                      org-edit-latex
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)
@@ -190,13 +191,14 @@
    ))
 
 (defun dotspacemacs/user-init ()
-  ;;(setq configuration-layer--elpa-archives
-  ;;    '(("melpa-cn" . "https://elpa.zilongshanren.com/melpa/")
-  ;;      ("org-cn"   . "https://elpa.zilongshanren.com/org/")
-  ;;      ("gnu-cn"   . "https://elpa.zilongshanren.com/gnu/")))
+  (setq configuration-layer--elpa-archives
+      '(("melpa-cn" . "https://elpa.zilongshanren.com/melpa/")
+        ("org-cn"   . "https://elpa.zilongshanren.com/org/")
+        ("gnu-cn"   . "https://elpa.zilongshanren.com/gnu/")))
   )
 
 (defun dotspacemacs/user-config ()
+  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
   (require 'ob-tangle)
   (org-babel-load-file
     (expand-file-name "lengyueyang.org"

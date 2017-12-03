@@ -68,13 +68,13 @@
 
 (global-set-key (kbd "<f5>") 'deft)
 (setq deft-extensions '("txt" "tex" "org" "mk" "makedown"))
-(setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
+(setq deft-directory "~/MEGA/Emacs-lengyue/Wiki-lengyue")
 
 (use-package elfeed-org
   :ensure t
   :config
   (elfeed-org)
-  (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
+  (setq rmh-elfeed-org-files (list "~/MEGA/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
 ;; (add-to-load-path "~/.spacemacs.d/package/mu4e")
 
@@ -112,7 +112,7 @@
 ;; ;;(mu4e/mail-account-reset)
 
 ;; ;;; Set up some common mu4e variables
-;; (setq mu4e-maildir "~/Documents/Mu4e"
+;; (setq mu4e-maildir "~/MEGA/Emacs-lengyue/Data Collection/Mu4e"
 ;;       mu4e-trash-folder "/Gmail/Trash"
 ;;       mu4e-refile-folder "/Gmail/Archive"
 ;;       ;; mu4e-get-mail-command "mbsync -a"
@@ -228,7 +228,7 @@
 (setq mu4e-view-show-addresses 't)
 
 ;;; Set up some common mu4e variables
-(setq mu4e-maildir "~/Documents/Mu4e"
+(setq mu4e-maildir "~/MEGA/Emacs-lengyue/Data-collection/Mu4e"
       mu4e-trash-folder "/Gmail/Trash"
       mu4e-refile-folder "/Gmail/Archive"
       mu4e-sent-folder   "/Foxmail/Sent Messages"
@@ -284,7 +284,7 @@
 (setq message-kill-buffer-on-exit t)
 
 ;; save attachment to my desktop (this can also be a function)  
-(setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
+(setq mu4e-attachment-dir "~/MEGA/Emacs-lengyue/Data-collection/Mu4e/Attachment")  
 
 (setq mu4e-contexts
       `(
@@ -367,7 +367,7 @@
             (local-set-key (kbd "<tab>") 'shr-next-link)
             (local-set-key (kbd "<backtab>") 'shr-previous-link)))
 
-(setq mu4e-org-contacts-file  "~/Emacs-lengyue/Wiki-lengyue/Contacts.org")
+(setq mu4e-org-contacts-file  "~/MEGA/Emacs-lengyue/Wiki-lengyue/Contacts.org")
 (add-to-list 'mu4e-headers-actions
              '("org-contact-add" . mu4e-action-add-org-contact) t)
 (add-to-list 'mu4e-view-actions
@@ -745,6 +745,9 @@ add an entry to the end of it."
   (goto-char (point-min))
   (while t (eval (read (current-buffer)))))
 
+(setq url-gateway-method 'socks)
+(setq socks-server '("Default server" "127.0.0.1" 1080 5))
+
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
 (require 'org-habit)
@@ -765,6 +768,11 @@ add an entry to the end of it."
 (setq org-image-actual-width (quote (600)))
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+
+;; (add-to-load-path "~/Downloads")
+
+;; (require 'org-freemind)
 
 ;; (add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
 (require 'org-edit-latex)
@@ -876,8 +884,8 @@ add an entry to the end of it."
 
 (eval-after-load 'org
   '(progn
-     (setq org-agenda-files (quote ("~/Emacs-lengyue/GTD-lengyue"
-                                    "~/Emacs-lengyue/Wiki-lengyue")))
+     (setq org-agenda-files (quote ("~/MEGA/Emacs-lengyue/GTD-lengyue"
+                                    "~/MEGA/Emacs-lengyue/Wiki-lengyue")))
 
      (setq org-todo-keywords
            (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
@@ -898,7 +906,7 @@ add an entry to the end of it."
                    )))
 
      (setq org-refile-targets
-           '(("~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
+           '(("~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
 
      (setq org-log-into-drawer t)
      (setq org-agenda-custom-commands
@@ -970,10 +978,10 @@ add an entry to the end of it."
   (spacemacs/set-leader-keys "oc" 'org-capture)
 
   (setq org-capture-templates
-        '(("b" "Blog Ideas" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
+        '(("b" "Blog Ideas" entry (file+headline "~/MEGA/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
            "* TODO %?\n%i%U"
            :empty-lines 1)
-          ("c" "Contacts" entry (file "~/Emacs-lengyue/Wiki-lengyue/Contacts.org")
+          ("c" "Contacts" entry (file "~/MEGA/Emacs-lengyue/Wiki-lengyue/Contacts.org")
            "* %(org-contacts-template-name)
 :PROPERTIES:
 :EMAIL: %(org-contacts-template-email)
@@ -986,16 +994,16 @@ add an entry to the end of it."
 :ADDRESS:
 :BIRTHDAY:
 :END:")
-          ("s" "Someday/Maybe" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
+          ("s" "Someday/Maybe" entry (file+headline "~/MEGA/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
            "* SOMEDAY %?\n%i%U"
            :empty-lines 1)
-          ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
+          ("m" "Myself Tasks" entry (file+headline "~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
            "* TODO %?\n%i%U"
            :empty-lines 1)
-          ("r" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
+          ("r" "Work Related Tasks" entry (file+headline "~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
            "* TODO %?\n%i%U"
            :empty-lines 1)
-          ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+          ("w" "Web site" entry (file "~/MEGA/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
            "* %c :website:\n%?\n%U %:initial"
            :empty-lines 1)
           ))
@@ -1431,10 +1439,10 @@ belongs as a list."
   (org-archive-subtree-hierarchical)
 )
 
-(setq reftex-default-bibliography '("~/Emacs-lengyue/Papers/references.bib"))
-(setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
-      org-ref-pdf-directory "~/Emacs-lengyue/Papers/pdf/"
-      org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+(setq reftex-default-bibliography '("~/MEGA/Emacs-lengyue/Papers/references.bib"))
+(setq org-ref-default-bibliography '("~/MEGA/Emacs-lengyue/Papers/references.bib")
+      org-ref-pdf-directory "~/MEGA/Emacs-lengyue/Papers/pdf/"
+      org-ref-bibliography-notes "~/MEGA/Emacs-lengyue/Papers/notes.org")
 (setq org-ref-completion-library 'org-ref-ivy-cite)
 
 (setq bibtex-autokey-year-length 4
@@ -1575,17 +1583,17 @@ This function skips over horizontal and vertical whitespace."
 (require 'blog-admin)
 
 ;;  (setq blog-admin-backend-type 'org-page)
-;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
+;;  (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/source")
 ;;  (setq blog-admin-backend-new-post-in-drafts t)
 ;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
 ;;  (setq blog-admin-backend-org-page-drafts "_drafts")
 
-;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
+;;  (setq op/repository-directory "~/MEGA/Emacs-lengyue/Blog-lengyue/source")
 ;;  (setq op/site-domain "http://lengyueyang.github.io") 
 ;;  (setq op/personal-disqus-shortname "lengyueyang")
 
 (setq blog-admin-backend-type 'hexo)
-(setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
+(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/")
 (setq blog-admin-backend-new-post-in-drafts t)
 (setq blog-admin-backend-new-post-with-same-name-dir t)
 
@@ -1593,7 +1601,7 @@ This function skips over horizontal and vertical whitespace."
 
 (require'cl)
 
-(setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
+(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue")
 
 (defun lengyueyang/hexo-publish (commit-msg)
   "git add . & git commit & git push & hexo d"

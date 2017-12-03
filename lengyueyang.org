@@ -217,7 +217,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
 
   (global-set-key (kbd "<f5>") 'deft)
   (setq deft-extensions '("txt" "tex" "org" "mk" "makedown"))
-  (setq deft-directory "~/Emacs-lengyue/Wiki-lengyue")
+  (setq deft-directory "~/MEGA/Emacs-lengyue/Wiki-lengyue")
 
 #+END_SRC
 
@@ -231,7 +231,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
     :ensure t
     :config
     (elfeed-org)
-    (setq rmh-elfeed-org-files (list "~/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
+    (setq rmh-elfeed-org-files (list "~/MEGA/Emacs-lengyue/Wiki-lengyue/Elfeed.org")))
 
 #+END_SRC
 
@@ -274,8 +274,8 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;;          (address "address@gmail.com"))))
 
   ;; ;; store email in ~/gmail directory
-  ;; (setq nnml-directory "~/Documents/Gnus")
-  ;; (setq message-directory "~/Documents/Gnus")
+  ;; (setq nnml-directory "~/MEGA/Emacs-lengyue/Data Collection/Gnus")
+  ;; (setq message-directory "~/MEGA/Emacs-lengyue/Data Collection/Gnus")
 
 #+END_SRC
 
@@ -334,7 +334,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   ;; ;;(mu4e/mail-account-reset)
 
   ;; ;;; Set up some common mu4e variables
-  ;; (setq mu4e-maildir "~/Documents/Mu4e"
+  ;; (setq mu4e-maildir "~/MEGA/Emacs-lengyue/Data Collection/Mu4e"
   ;;       mu4e-trash-folder "/Gmail/Trash"
   ;;       mu4e-refile-folder "/Gmail/Archive"
   ;;       ;; mu4e-get-mail-command "mbsync -a"
@@ -460,7 +460,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq mu4e-view-show-addresses 't)
 
   ;;; Set up some common mu4e variables
-  (setq mu4e-maildir "~/Documents/Mu4e"
+  (setq mu4e-maildir "~/MEGA/Emacs-lengyue/Data-collection/Mu4e"
         mu4e-trash-folder "/Gmail/Trash"
         mu4e-refile-folder "/Gmail/Archive"
         mu4e-sent-folder   "/Foxmail/Sent Messages"
@@ -516,7 +516,7 @@ Include the configuration of spacemacs itself layers and better use of its defau
   (setq message-kill-buffer-on-exit t)
 
   ;; save attachment to my desktop (this can also be a function)  
-  (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")  
+  (setq mu4e-attachment-dir "~/MEGA/Emacs-lengyue/Data-collection/Mu4e/Attachment")  
 
   (setq mu4e-contexts
         `(
@@ -608,7 +608,8 @@ http://kitchingroup.cheme.cmu.edu/blog/2016/10/29/Sending-html-emails-from-org-m
 
 
 #+BEGIN_SRC emacs-lisp
-  (setq mu4e-org-contacts-file  "~/Emacs-lengyue/Wiki-lengyue/Contacts.org")
+
+  (setq mu4e-org-contacts-file  "~/MEGA/Emacs-lengyue/Wiki-lengyue/Contacts.org")
   (add-to-list 'mu4e-headers-actions
                '("org-contact-add" . mu4e-action-add-org-contact) t)
   (add-to-list 'mu4e-view-actions
@@ -1210,6 +1211,14 @@ A really nice command help me to find error on elisp buffer.
 
 #+END_SRC
 
+** Emacs socks proxy
+
+
+#+BEGIN_SRC emacs-lisp
+  (setq url-gateway-method 'socks)
+  (setq socks-server '("Default server" "127.0.0.1" 1080 5))
+#+END_SRC
+
 * Org-mode configuration
 
 This part is the customization to org-mode.
@@ -1238,6 +1247,11 @@ This part is the customization to org-mode.
   (setq org-image-actual-width (quote (600)))
 
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+
+  ;; (add-to-load-path "~/Downloads")
+
+  ;; (require 'org-freemind)
 
 #+END_SRC
 
@@ -1416,8 +1430,8 @@ A complete agenda and capture configuration
 
   (eval-after-load 'org
     '(progn
-       (setq org-agenda-files (quote ("~/Emacs-lengyue/GTD-lengyue"
-                                      "~/Emacs-lengyue/Wiki-lengyue")))
+       (setq org-agenda-files (quote ("~/MEGA/Emacs-lengyue/GTD-lengyue"
+                                      "~/MEGA/Emacs-lengyue/Wiki-lengyue")))
 
        (setq org-todo-keywords
              (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
@@ -1438,7 +1452,7 @@ A complete agenda and capture configuration
                      )))
 
        (setq org-refile-targets
-             '(("~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
+             '(("~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
 
        (setq org-log-into-drawer t)
        (setq org-agenda-custom-commands
@@ -1516,10 +1530,10 @@ A complete agenda and capture configuration
     (spacemacs/set-leader-keys "oc" 'org-capture)
 
     (setq org-capture-templates
-          '(("b" "Blog Ideas" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
+          '(("b" "Blog Ideas" entry (file+headline "~/MEGA/Emacs-lengyue/Wiki-lengyue/Notes.org" "Blog Ideas")
              "* TODO %?\n%i%U"
              :empty-lines 1)
-            ("c" "Contacts" entry (file "~/Emacs-lengyue/Wiki-lengyue/Contacts.org")
+            ("c" "Contacts" entry (file "~/MEGA/Emacs-lengyue/Wiki-lengyue/Contacts.org")
              "* %(org-contacts-template-name)
   :PROPERTIES:
   :EMAIL: %(org-contacts-template-email)
@@ -1532,16 +1546,16 @@ A complete agenda and capture configuration
   :ADDRESS:
   :BIRTHDAY:
   :END:")
-            ("s" "Someday/Maybe" entry (file+headline "~/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
+            ("s" "Someday/Maybe" entry (file+headline "~/MEGA/Emacs-lengyue/Wiki-lengyue/Notes.org" "Someday/Maybe")
              "* SOMEDAY %?\n%i%U"
              :empty-lines 1)
-            ("m" "Myself Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
+            ("m" "Myself Tasks" entry (file+headline "~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Myself Tasks")
              "* TODO %?\n%i%U"
              :empty-lines 1)
-            ("r" "Work Related Tasks" entry (file+headline "~/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
+            ("r" "Work Related Tasks" entry (file+headline "~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "Work Related Tasks")
              "* TODO %?\n%i%U"
              :empty-lines 1)
-            ("w" "Web site" entry (file "~/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
+            ("w" "Web site" entry (file "~/MEGA/Emacs-lengyue/Wiki-lengyue/Bookmark.org")
              "* %c :website:\n%?\n%U %:initial"
              :empty-lines 1)
             ))
@@ -2031,10 +2045,10 @@ An abbreviated link looks like
 
 #+BEGIN_SRC emacs-lisp
 
-  (setq reftex-default-bibliography '("~/Emacs-lengyue/Papers/references.bib"))
-  (setq org-ref-default-bibliography '("~/Emacs-lengyue/Papers/references.bib")
-        org-ref-pdf-directory "~/Emacs-lengyue/Papers/pdf/"
-        org-ref-bibliography-notes "~/Emacs-lengyue/Papers/notes.org")
+  (setq reftex-default-bibliography '("~/MEGA/Emacs-lengyue/Papers/references.bib"))
+  (setq org-ref-default-bibliography '("~/MEGA/Emacs-lengyue/Papers/references.bib")
+        org-ref-pdf-directory "~/MEGA/Emacs-lengyue/Papers/pdf/"
+        org-ref-bibliography-notes "~/MEGA/Emacs-lengyue/Papers/notes.org")
   (setq org-ref-completion-library 'org-ref-ivy-cite)
 
   (setq bibtex-autokey-year-length 4
@@ -2270,17 +2284,17 @@ to delete all whitespace in the direction you are deleting.
   (require 'blog-admin)
 
   ;;  (setq blog-admin-backend-type 'org-page)
-  ;;  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/source")
+  ;;  (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/source")
   ;;  (setq blog-admin-backend-new-post-in-drafts t)
   ;;  (setq blog-admin-backend-new-post-with-same-name-dir t)
   ;;  (setq blog-admin-backend-org-page-drafts "_drafts")
 
-  ;;  (setq op/repository-directory "~/Emacs-lengyue/Blog-lengyue/source")
+  ;;  (setq op/repository-directory "~/MEGA/Emacs-lengyue/Blog-lengyue/source")
   ;;  (setq op/site-domain "http://lengyueyang.github.io") 
   ;;  (setq op/personal-disqus-shortname "lengyueyang")
 
   (setq blog-admin-backend-type 'hexo)
-  (setq blog-admin-backend-path "~/Emacs-lengyue/Blog-lengyue/")
+  (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/")
   (setq blog-admin-backend-new-post-in-drafts t)
   (setq blog-admin-backend-new-post-with-same-name-dir t)
 
@@ -2294,7 +2308,7 @@ to delete all whitespace in the direction you are deleting.
 
   (require'cl)
 
-  (setq hexo-dir "~/Emacs-lengyue/Blog-lengyue")
+  (setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue")
 
   (defun lengyueyang/hexo-publish (commit-msg)
     "git add . & git commit & git push & hexo d"

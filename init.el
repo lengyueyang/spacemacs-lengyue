@@ -198,6 +198,7 @@
   )
 
 (defun dotspacemacs/user-config ()
+  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
   (require 'ob-tangle)
   (org-babel-load-file
     (expand-file-name "lengyueyang.org"

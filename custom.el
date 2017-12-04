@@ -6,7 +6,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(TeX-auto-local "/home/lengyue/Documents/tex-auto")
+ '(TeX-auto-local "/home/lengyue/MEGA/Emacs-lengyue/Data-collection/tex-auto")
  '(TeX-engine (quote xetex))
  '(custom-safe-themes
    (quote
@@ -48,7 +48,7 @@
  '(org-pomodoro-short-break-length 1)
  '(org-pretty-entities t)
  '(org-preview-latex-default-process (quote imagemagick))
- '(org-preview-latex-image-directory "/home/lengyue/Documents/ltximg/")
+ '(org-preview-latex-image-directory "/home/lengyue/MEGA/Emacs-lengyue/Data-collection/ltximg/")
  '(org-preview-latex-process-alist
    (quote
     ((dvipng :programs

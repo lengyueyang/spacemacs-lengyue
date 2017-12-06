@@ -167,6 +167,16 @@ org related keybindings in Org-mode configuration part.
 
 Include the configuration of spacemacs itself layers and better use of its defaults layers.
 
+** Semantic
+
+#+BEGIN_SRC emacs-lisp
+  (use-package semantic
+    :config
+    (setq-mode-local emacs-lisp-mode
+                     semanticdb-find-default-throttle
+                     (default-value 'semanticdb-find-default-throttle)))
+#+END_SRC
+
 ** Markdown mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1215,8 +1225,8 @@ A really nice command help me to find error on elisp buffer.
 
 
 #+BEGIN_SRC emacs-lisp
-  (setq url-gateway-method 'socks)
-  (setq socks-server '("Default server" "127.0.0.1" 1080 5))
+  ;; (setq url-gateway-method 'socks)
+  ;; (setq socks-server '("Default server" "127.0.0.1" 1080 5))
 #+END_SRC
 
 * Org-mode configuration
@@ -2722,6 +2732,34 @@ to delete all whitespace in the direction you are deleting.
   (spacemacs/set-leader-keys "oen" 'emms-next)
   (spacemacs/set-leader-keys "oep" 'emms-previous)
 
+#+END_SRC
+
+** Embrace/evil-embrace
+https://github.com/cute-jumper/embrace.el
+
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-,") #'embrace-commander)
+  (spacemacs/set-leader-keys "or" 'embrace-commander)
+  (add-hook 'org-mode-hook 'embrace-org-mode-hook)
+  (evil-embrace-enable-evil-surround-integration)
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (add-to-list 'embrace-semantic-units-alist '(?e . er/mark-email))))
+  (defun embrace-org-mode-hook ()
+    (dolist (lst '((?b "{{{color(blue," . ")}}}")
+                   (?r "{{{color(red," . ")}}}")
+                   (?g "{{{color(green," . ")}}}")
+                   (?/ "/" . "/")))
+      (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+  (add-hook 'org-mode-hook 'embrace-org-mode-hook)
+  ;; (embrace-add-pair key left right)
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (embrace-add-pair ?b "{{{color(blue," . ")}}}")
+  ;;             (embrace-add-pair ?r "{{{color(red," . ")}}}")
+  ;;             (embrace-add-pair ?g "{{{color(greem," . ")}}}")
+  ;;             ))
 #+END_SRC
 
 * Other customization

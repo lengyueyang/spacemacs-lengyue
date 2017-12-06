@@ -106,6 +106,8 @@
                                       emms
                                       company-math
                                       org-edit-latex
+                                      embrace
+                                      evil-embrace
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)

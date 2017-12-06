@@ -34,6 +34,12 @@
 (spacemacs/set-leader-keys "omd" 'bookmark-delete)
 (spacemacs/set-leader-keys "omj" 'counsel-bookmark)
 
+(use-package semantic
+  :config
+  (setq-mode-local emacs-lisp-mode
+                   semanticdb-find-default-throttle
+                   (default-value 'semanticdb-find-default-throttle)))
+
 (when (configuration-layer/layer-usedp 'markdown)
   (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.md$" . gfm-mode) auto-mode-alist))
@@ -745,8 +751,8 @@ add an entry to the end of it."
   (goto-char (point-min))
   (while t (eval (read (current-buffer)))))
 
-(setq url-gateway-method 'socks)
-(setq socks-server '("Default server" "127.0.0.1" 1080 5))
+;; (setq url-gateway-method 'socks)
+;; (setq socks-server '("Default server" "127.0.0.1" 1080 5))
 
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
@@ -2008,6 +2014,28 @@ Return the previous point-max before adding."
 (spacemacs/set-leader-keys "oes" 'emms-stop)
 (spacemacs/set-leader-keys "oen" 'emms-next)
 (spacemacs/set-leader-keys "oep" 'emms-previous)
+
+(global-set-key (kbd "C-,") #'embrace-commander)
+(spacemacs/set-leader-keys "or" 'embrace-commander)
+(add-hook 'org-mode-hook 'embrace-org-mode-hook)
+(evil-embrace-enable-evil-surround-integration)
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (add-to-list 'embrace-semantic-units-alist '(?e . er/mark-email))))
+(defun embrace-org-mode-hook ()
+  (dolist (lst '((?b "{{{color(blue," . ")}}}")
+                 (?r "{{{color(red," . ")}}}")
+                 (?g "{{{color(green," . ")}}}")
+                 (?/ "/" . "/")))
+    (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+(add-hook 'org-mode-hook 'embrace-org-mode-hook)
+;; (embrace-add-pair key left right)
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (embrace-add-pair ?b "{{{color(blue," . ")}}}")
+;;             (embrace-add-pair ?r "{{{color(red," . ")}}}")
+;;             (embrace-add-pair ?g "{{{color(greem," . ")}}}")
+;;             ))
 
 (require 'fill-column-indicator)
 (setq fci-rule-column 80)

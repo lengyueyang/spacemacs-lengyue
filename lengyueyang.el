@@ -753,6 +753,36 @@ add an entry to the end of it."
 
 ;; (setq url-gateway-method 'socks)
 ;; (setq socks-server '("Default server" "127.0.0.1" 1080 5))
+(defcustom my-proxy "127.0.0.1:8118"
+  "Set network proxy."
+  :type 'string)
+;; Configure network proxy
+(defun show-proxy ()
+  "Show http/https proxy."
+  (interactive)
+  (if url-proxy-services
+      (message "Current proxy is \"%s\"" my-proxy)
+    (message "No proxy")))
+
+(defun set-proxy ()
+  "Set http/https proxy."
+  (interactive)
+  (setq url-proxy-services `(("http" . ,my-proxy)
+                             ("https" . ,my-proxy)))
+  (show-proxy))
+
+(defun unset-proxy ()
+  "Unset http/https proxy."
+  (interactive)
+  (setq url-proxy-services nil)
+  (show-proxy))
+
+(defun toggle-proxy ()
+  "Toggle http/https proxy."
+  (interactive)
+  (if url-proxy-services
+      (unset-proxy)
+    (set-proxy)))
 
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 

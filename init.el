@@ -108,6 +108,7 @@
                                       org-edit-latex
                                       embrace
                                       evil-embrace
+                                      ov
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)

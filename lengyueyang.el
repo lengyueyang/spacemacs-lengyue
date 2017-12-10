@@ -784,6 +784,57 @@ add an entry to the end of it."
       (unset-proxy)
     (set-proxy)))
 
+(add-to-load-path "~/.spacemacs.d/package/ov-highlighter")
+(require 'ov-highlighter)
+;; (use-package ov-highlighter
+;;   :config
+;;   (progn
+;;     (setq ov-highlight-disable-save t)
+;;     ;; Gruvbox scheme
+;;     (ov-make-highlight "red" '(:background "#9d0006"))
+;;     (ov-make-highlight "green" '(:background "#79740e"))
+;;     (ov-make-highlight "yellow" '(:background "#b57614"))
+;;     (ov-make-highlight "blue" '(:background "#076678"))
+;;     (ov-make-highlight "purple" '(:background "#8f3f71"))
+;;     (ov-make-highlight "aqua" '(:background "#427b58"))
+;;     (ov-make-highlight "orange" '(:background "#af3a03"))
+;;     (ov-make-highlight "red-fg" '(:foreground "red"))
+;;     (ov-make-highlight "green-fg" '(:foreground "green"))
+;;     (ov-make-highlight "blue-fg" '(:foreground "blue"))
+;;     (defhydra yxl-ov-highlighter (:hint nil :color blue)
+;;       ("r" ov-highlight-red)
+;;       ("g" ov-highlight-green)
+;;       ("y" ov-highlight-yellow)
+;;       ("b" ov-highlight-blue)
+;;       ("p" ov-highlight-purple)
+;;       ("a" ov-highlight-aqua)
+;;       ("o" ov-highlight-orange)
+
+;;       ("c" ov-highlight-color)
+;;       ("f" ov-highlight-foreground)
+
+;;       ("[" ov-highlight-decrease-font-size :color red)
+;;       ("]" ov-highlight-increase-font-size :color red)
+;;       ("F" ov-highlight-font)
+
+;;       ("B" ov-highlight-bold)
+;;       ("I" ov-highlight-italic)
+;;       ("U" ov-highlight-underline)
+;;       ("S" ov-highlight-strikethrough)
+;;       ("X" ov-highlight-box)
+
+;;       ("k" ov-highlight-clear)
+;;       ("K" ov-highlight-clear-all)
+;;       ("q" nil "quit"))))
+(ov-make-highlight "green-fg" '(:foreground "green"))
+(ov-make-highlight "blue-fg" '(:foreground "blue"))
+(spacemacs/declare-prefix "ov" "ov-highlighter")
+(spacemacs/set-leader-keys "ovo" 'ov-highlighter/body)
+(spacemacs/set-leader-keys "ovr" 'ov-highlight-red-fg)
+(spacemacs/set-leader-keys "ovb" 'ov-highlight-blue-fg)
+(spacemacs/set-leader-keys "ovg" 'ov-highlight-green-fg)
+(spacemacs/set-leader-keys "ovc" 'ov-highlight-clear)
+
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
 (require 'org-habit)

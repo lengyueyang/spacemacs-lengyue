@@ -856,10 +856,8 @@ add an entry to the end of it."
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-
-;; (add-to-load-path "~/Downloads")
-
-;; (require 'org-freemind)
+(add-to-load-path "~/.spacemacs.d/package/ox-ipynb")
+(require 'ox-ipynb)
 
 ;; (add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
 (require 'org-edit-latex)

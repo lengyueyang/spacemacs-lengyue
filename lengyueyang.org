@@ -1260,7 +1260,6 @@ A really nice command help me to find error on elisp buffer.
 
 ** Highlight
 
-
 #+BEGIN_SRC emacs-lisp
 
   (add-to-load-path "~/.spacemacs.d/package/ov-highlighter")
@@ -1316,7 +1315,6 @@ A really nice command help me to find error on elisp buffer.
 
 #+END_SRC
 
-
 * Org-mode configuration
 
 This part is the customization to org-mode.
@@ -1346,10 +1344,8 @@ This part is the customization to org-mode.
 
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-
-  ;; (add-to-load-path "~/Downloads")
-
-  ;; (require 'org-freemind)
+  (add-to-load-path "~/.spacemacs.d/package/ox-ipynb")
+  (require 'ox-ipynb)
 
 #+END_SRC
 

@@ -1666,6 +1666,7 @@ This function skips over horizontal and vertical whitespace."
 ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
 
 (require 'blog-admin)
+(spacemacs/set-leader-keys "ob" 'blog-admin-start)
 
 ;;  (setq blog-admin-backend-type 'org-page)
 ;;  (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/source")
@@ -1677,12 +1678,16 @@ This function skips over horizontal and vertical whitespace."
 ;;  (setq op/site-domain "http://lengyueyang.github.io") 
 ;;  (setq op/personal-disqus-shortname "lengyueyang")
 
-(setq blog-admin-backend-type 'hexo)
-(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/")
-(setq blog-admin-backend-new-post-in-drafts t)
-(setq blog-admin-backend-new-post-with-same-name-dir t)
+;; (setq blog-admin-backend-type 'hexo)
+;; (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/")
+;; (setq blog-admin-backend-new-post-in-drafts t)
+;; (setq blog-admin-backend-new-post-with-same-name-dir t)
 
-(spacemacs/set-leader-keys "ob" 'blog-admin-start)
+(setq blog-admin-backend-type 'nikola)
+(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
+(setq blog-admin-backend-new-post-in-drafts t)
+(setq blog-admin-backend-nikola-executable "/usr/bin/nikola") ;; path to nikola executable
+(setq blog-admin-backend-nikola-config-file "conf.py") ;; conf.py is default
 
 (require'cl)
 

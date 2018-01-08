@@ -2403,7 +2403,7 @@ to delete all whitespace in the direction you are deleting.
 
 ** Hexo configuration
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (require'cl)
 
@@ -2459,6 +2459,26 @@ to delete all whitespace in the direction you are deleting.
                                     nil)
                  (message (format "The article has been moved to %s" dest-dir))))
       (message "You have to run this in a hexo article buffer or dired"))
+
+#+END_SRC
+
+** Nikola configuration
+
+#+BEGIN_SRC emacs-lisp
+
+  (setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
+
+  (defun lengyueyang/Nikola-publish (commit-msg)
+    "git add . & git commit & git push & hexo d"
+    (interactive "sInput commit message:")
+    (async-shell-command (format "cd %s ; git add . ; git commit -m \"%s\" ; nikola clean; nikola build; nikola build; nikola github_deploy"
+                                 hexo-dir
+                                 commit-msg)))
+
+  (defun lengyueyang/Nikola-org-add-read-more ()
+    "add <!--more-->"
+    (interactive)
+    (insert "{{{TEASER_END}}}"))
 
 #+END_SRC
 

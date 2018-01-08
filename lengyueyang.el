@@ -1689,60 +1689,19 @@ This function skips over horizontal and vertical whitespace."
 (setq blog-admin-backend-nikola-executable "/usr/bin/nikola") ;; path to nikola executable
 (setq blog-admin-backend-nikola-config-file "conf.py") ;; conf.py is default
 
-(require'cl)
+(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
 
-(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue")
-
-(defun lengyueyang/hexo-publish (commit-msg)
+(defun lengyueyang/Nikola-publish (commit-msg)
   "git add . & git commit & git push & hexo d"
   (interactive "sInput commit message:")
-  (async-shell-command (format "cd %s ;git add . ;git commit -m \"%s\" ;git push ;hexo clean; hexo g; hexo d -g"
+  (async-shell-command (format "cd %s ; git add . ; git commit -m \"%s\" ; nikola clean; nikola build; nikola build; nikola github_deploy"
                                hexo-dir
                                commit-msg)))
 
-(defun lengyueyang/hexo-org-add-read-more ()
+(defun lengyueyang/Nikola-org-add-read-more ()
   "add <!--more-->"
   (interactive)
-  (insert "#+BEGIN_EXPORT html\n<!--more-->\n#+END_EXPORT"))
-
-(defun lengyueyang/hexo-org-new-open-post (post-name)
-  "create a hexo org post"
-  (interactive "sInput post name:")
-  (find-file (format "%s/source/_posts/%s.org" hexo-dir post-name))
-  (insert (format "#+TITLE: %s
-#+DATE: %s
-#+LAYOUT: post
-#+TAGS:
-#+CATEGORIES:
-"  post-name (format-time-string "<%Y-%m-%d %a %H:%M>"))))
-
-(defun lengyueyang/hexo-org-source ()
-  "use dired open hexo source dir"
-  (interactive)
-  (ido-find-file-in-dir (format "%s/source/" hexo-dir))
-  )
-
-(defun lengyueyang/hexo-move-article ()
-  "Move current file between _post and _draft;
-You can run this function in dired or a hexo article."
-  (interactive)
-  (if (string-match "/\\(_posts/\\|_drafts/\\)$" default-directory)
-      (let* ((parent-dir (file-truename (concat default-directory "../")))
-             (dest-dir (if (string-match "_drafts/$" default-directory) "_posts/" "_drafts/"))))
-        (cond (or (eq major-mode 'markdown-mode) (eq major-mode 'org-mode))
-               (let* ((cur-file (buffer-file-name))
-                      (new-file (concat parent-dir dest-dir (buffer-name))))
-                 (save-buffer)
-                 (kill-buffer)
-                 (rename-file cur-file new-file)
-                 (find-file new-file)
-                 (message (format "Now in %s" dest-dir))))
-              ((eq major-mode 'dired-mode)
-               (dired-rename-file (dired-get-filename nil)
-                                  (concat parent-dir dest-dir (dired-get-filename t))
-                                  nil)
-               (message (format "The article has been moved to %s" dest-dir))))
-    (message "You have to run this in a hexo article buffer or dired"))
+  (insert "{{{TEASER_END}}}"))
 
 ;; https://github.com/tumashu/emacs-helper/blob/master/eh-emms.el
 

@@ -1790,6 +1790,21 @@ This function skips over horizontal and vertical whitespace."
   (interactive)
   (insert "{{{TEASER_END}}}"))
 
+(defun lengyueyang/Nikola-license ()
+  "add <!--license-->"
+  (interactive)
+  (insert """
+* Creative Commons licensing
+#+BEGIN_QUOTE
+TITLE:  \\\\
+AUTHOR: lengyueyang \\\\
+DATE: \\\\
+UPDATED: \\\\
+LICENSE: This work is licensed under a [[http://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License]], Commercial use is not, Any reprint, please indicate the reprint address and author.
+https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
+#+END_QUOTE
+"""))
+
 ;; https://github.com/tumashu/emacs-helper/blob/master/eh-emms.el
 
 (use-package emms

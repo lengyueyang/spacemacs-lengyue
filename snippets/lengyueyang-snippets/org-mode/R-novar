@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: R-novar
+# key: R-novar
+# --
+#+BEGIN_SRC R :results output :exports both
+
+$0
+
+#+END_SRC
+

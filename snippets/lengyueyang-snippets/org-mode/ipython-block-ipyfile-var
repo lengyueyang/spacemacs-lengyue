@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: ipython-block-ipyfile-var
+# key: py-ipyfile-var
+# --
+#+NAME: $1
+#+BEGIN_SRC ipython :session :ipyfile ${1:file}.png :exports both :async t :results raw drawer :var ${2:data/table=}
+
+$0
+
+#+END_SRC

@@ -2,7 +2,7 @@
 # name: newtheorem-theroem
 # key: newtheorem-theroem
 # --
-#+name: $1
-\begin{thm}[$0]
+#+name: ${1:name}
+\begin{thm}[$1]
 \end{thm}
-
+$0

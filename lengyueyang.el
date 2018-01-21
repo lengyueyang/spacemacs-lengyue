@@ -34,6 +34,8 @@
 (spacemacs/set-leader-keys "omd" 'bookmark-delete)
 (spacemacs/set-leader-keys "omj" 'counsel-bookmark)
 
+(global-set-key (kbd "<f7>") 'org-download-screenshot)
+
 (use-package semantic
   :config
   (setq-mode-local emacs-lisp-mode
@@ -614,8 +616,8 @@ add an entry to the end of it."
             kill-buffer-query-functions))
 
 ;; (spacemacs//set-monospaced-font "Inconsolata" "Source Han Sans CN" 16 20)
-(spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
-;; (spacemacs//set-monospaced-font "Fira Mono" "Wenquanyi Micro Hei" 16 20)
+;; (spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
+(spacemacs//set-monospaced-font "Fira Mono" "Wenquanyi Micro Hei" 16 20)
 ;; (spacemacs//set-monospaced-font "DejaVu Sans Mono" "Source Han Sans CN" 16 20)
 
 (dolist (command '(yank yank-pop))
@@ -912,7 +914,7 @@ add an entry to the end of it."
     (add-to-list 'org-structure-template-alist
                  '("sh" "#+BEGIN_SRC sh\n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
-                 '("pl" "#+BEGIN_SRC plantuml :file \n\n?\n\n #+END_SRC"))
+                 '("pl" "#+BEGIN_SRC :file \n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
                  '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
@@ -940,10 +942,6 @@ add an entry to the end of it."
   (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
 (add-hook 'org-mode-hook #'lengyueyang/org-ispell)
 
-(defun lengyueyang/post-init-org-bullets ()
-  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
-(add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
-
 (require 'org-notify)
 (org-notify-start)
 (org-notify-add 'appt
@@ -966,6 +964,10 @@ add an entry to the end of it."
   (setq org-pomodoro-short-break-length 5)
   (setq org-pomodoro-long-break-length 30)
 )
+;; (add-hook 'org-pomodoro-break-finished-hook
+;;           (lambda ()
+;;             (interactive)
+;;             (org-pomodoro '(16)))
 
 (eval-after-load 'org
   '(progn
@@ -1167,7 +1169,17 @@ add an entry to the end of it."
 ;; (setq org-babel-python-command "/usr/bin/ipython --pylab --pdb --nosep")
 (setq python-shell-prompt-detect-failure-warning nil)
 
-(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+(defun lengyueyang/post-init-org-bullets ()
+  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+(add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
+
+;; (require 'org-bullets)
+;; ;; make available "org-bullet-face" such that I can control the font size individually
+;; (setq org-bullets-face-name (quote org-bullet-face))
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀" "✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
 
 ;;org-mode export to latex
 (require 'ox-latex)
@@ -1800,8 +1812,7 @@ TITLE:  \\\\
 AUTHOR: lengyueyang \\\\
 DATE: \\\\
 UPDATED: \\\\
-LICENSE: This work is licensed under a [[http://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License]], Commercial use is not, Any reprint, please indicate the reprint address and author.
-https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
+LICENSE: The blog is licensed under a [[http://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License]], commercial use is not allowed, for any reprint, please indicate address and signature.
 #+END_QUOTE
 """))
 

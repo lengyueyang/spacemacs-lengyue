@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: R-figure
+# key: R-figure
+# --
+#+NAME: $1
+#+BEGIN_SRC R :exports both :results output graphics :file ${1:file}.png :width 400
+
+$0
+
+#+END_SRC

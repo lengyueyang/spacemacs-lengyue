@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: R-var
+# key: R-var
+# --
+#+BEGIN_SRC R :results output :exports both :var ${1:data/table=}
+
+$0
+
+#+END_SRC
+

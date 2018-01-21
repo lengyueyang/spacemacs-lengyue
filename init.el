@@ -143,11 +143,11 @@
                                ;; "Source Code Pro"
                                ;; "DejaVu Sans Mono"
                                ;; "Source Han Sans CN"
-                               ;;"WenQuanYi Micro Hei Mono"
+                               ;; "WenQuanYi Micro Hei Mono"
                                :size 16
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.0)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-command-key "SPC"
    dotspacemacs-ex-command-key ":"

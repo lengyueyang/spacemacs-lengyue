@@ -2,6 +2,9 @@
 # name: ipython-block-ipyfile
 # key: py-ipyfile
 # --
-#+BEGIN_SRC ipython :session :ipyfile $1.png :exports both :async t :results raw drawer
+#+NAME: $1
+#+BEGIN_SRC ipython :session :ipyfile ${1:file}.png :exports both :async t :results raw drawer
+
 $0
+
 #+END_SRC

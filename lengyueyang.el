@@ -34,6 +34,14 @@
 (spacemacs/set-leader-keys "omd" 'bookmark-delete)
 (spacemacs/set-leader-keys "omj" 'counsel-bookmark)
 
+(global-set-key (kbd "<f7>") 'org-download-screenshot)
+
+(use-package semantic
+  :config
+  (setq-mode-local emacs-lisp-mode
+                   semanticdb-find-default-throttle
+                   (default-value 'semanticdb-find-default-throttle)))
+
 (when (configuration-layer/layer-usedp 'markdown)
   (setq auto-mode-alist (cons '("\\.text$" . gfm-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.md$" . gfm-mode) auto-mode-alist))
@@ -608,8 +616,8 @@ add an entry to the end of it."
             kill-buffer-query-functions))
 
 ;; (spacemacs//set-monospaced-font "Inconsolata" "Source Han Sans CN" 16 20)
-(spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
-;; (spacemacs//set-monospaced-font "Fira Mono" "Wenquanyi Micro Hei" 16 20)
+;; (spacemacs//set-monospaced-font "Fira Mono" "Source Han Sans CN" 16 20)
+(spacemacs//set-monospaced-font "Fira Mono" "Wenquanyi Micro Hei" 16 20)
 ;; (spacemacs//set-monospaced-font "DejaVu Sans Mono" "Source Han Sans CN" 16 20)
 
 (dolist (command '(yank yank-pop))
@@ -745,8 +753,89 @@ add an entry to the end of it."
   (goto-char (point-min))
   (while t (eval (read (current-buffer)))))
 
-(setq url-gateway-method 'socks)
-(setq socks-server '("Default server" "127.0.0.1" 1080 5))
+;; (setq url-gateway-method 'socks)
+;; (setq socks-server '("Default server" "127.0.0.1" 1080 5))
+(defcustom my-proxy "127.0.0.1:8118"
+  "Set network proxy."
+  :type 'string)
+;; Configure network proxy
+(defun show-proxy ()
+  "Show http/https proxy."
+  (interactive)
+  (if url-proxy-services
+      (message "Current proxy is \"%s\"" my-proxy)
+    (message "No proxy")))
+
+(defun set-proxy ()
+  "Set http/https proxy."
+  (interactive)
+  (setq url-proxy-services `(("http" . ,my-proxy)
+                             ("https" . ,my-proxy)))
+  (show-proxy))
+
+(defun unset-proxy ()
+  "Unset http/https proxy."
+  (interactive)
+  (setq url-proxy-services nil)
+  (show-proxy))
+
+(defun toggle-proxy ()
+  "Toggle http/https proxy."
+  (interactive)
+  (if url-proxy-services
+      (unset-proxy)
+    (set-proxy)))
+
+(add-to-load-path "~/.spacemacs.d/package/ov-highlighter")
+(require 'ov-highlighter)
+;; (use-package ov-highlighter
+;;   :config
+;;   (progn
+;;     (setq ov-highlight-disable-save t)
+;;     ;; Gruvbox scheme
+;;     (ov-make-highlight "red" '(:background "#9d0006"))
+;;     (ov-make-highlight "green" '(:background "#79740e"))
+;;     (ov-make-highlight "yellow" '(:background "#b57614"))
+;;     (ov-make-highlight "blue" '(:background "#076678"))
+;;     (ov-make-highlight "purple" '(:background "#8f3f71"))
+;;     (ov-make-highlight "aqua" '(:background "#427b58"))
+;;     (ov-make-highlight "orange" '(:background "#af3a03"))
+;;     (ov-make-highlight "red-fg" '(:foreground "red"))
+;;     (ov-make-highlight "green-fg" '(:foreground "green"))
+;;     (ov-make-highlight "blue-fg" '(:foreground "blue"))
+;;     (defhydra yxl-ov-highlighter (:hint nil :color blue)
+;;       ("r" ov-highlight-red)
+;;       ("g" ov-highlight-green)
+;;       ("y" ov-highlight-yellow)
+;;       ("b" ov-highlight-blue)
+;;       ("p" ov-highlight-purple)
+;;       ("a" ov-highlight-aqua)
+;;       ("o" ov-highlight-orange)
+
+;;       ("c" ov-highlight-color)
+;;       ("f" ov-highlight-foreground)
+
+;;       ("[" ov-highlight-decrease-font-size :color red)
+;;       ("]" ov-highlight-increase-font-size :color red)
+;;       ("F" ov-highlight-font)
+
+;;       ("B" ov-highlight-bold)
+;;       ("I" ov-highlight-italic)
+;;       ("U" ov-highlight-underline)
+;;       ("S" ov-highlight-strikethrough)
+;;       ("X" ov-highlight-box)
+
+;;       ("k" ov-highlight-clear)
+;;       ("K" ov-highlight-clear-all)
+;;       ("q" nil "quit"))))
+(ov-make-highlight "green-fg" '(:foreground "green"))
+(ov-make-highlight "blue-fg" '(:foreground "blue"))
+(spacemacs/declare-prefix "ov" "ov-highlighter")
+(spacemacs/set-leader-keys "ovo" 'ov-highlighter/body)
+(spacemacs/set-leader-keys "ovr" 'ov-highlight-red-fg)
+(spacemacs/set-leader-keys "ovb" 'ov-highlight-blue-fg)
+(spacemacs/set-leader-keys "ovg" 'ov-highlight-green-fg)
+(spacemacs/set-leader-keys "ovc" 'ov-highlight-clear)
 
 ;; (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
@@ -769,10 +858,8 @@ add an entry to the end of it."
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 
-
-;; (add-to-load-path "~/Downloads")
-
-;; (require 'org-freemind)
+(add-to-load-path "~/.spacemacs.d/package/ox-ipynb")
+(require 'ox-ipynb)
 
 ;; (add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
 (require 'org-edit-latex)
@@ -827,7 +914,7 @@ add an entry to the end of it."
     (add-to-list 'org-structure-template-alist
                  '("sh" "#+BEGIN_SRC sh\n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
-                 '("pl" "#+BEGIN_SRC plantuml :file \n\n?\n\n #+END_SRC"))
+                 '("pl" "#+BEGIN_SRC :file \n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
                  '("ipa" "#+BEGIN_SRC ipython :session :exports both :results output \n\n?\n\n #+END_SRC"))
     (add-to-list 'org-structure-template-alist
@@ -855,10 +942,6 @@ add an entry to the end of it."
   (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
 (add-hook 'org-mode-hook #'lengyueyang/org-ispell)
 
-(defun lengyueyang/post-init-org-bullets ()
-  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
-(add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
-
 (require 'org-notify)
 (org-notify-start)
 (org-notify-add 'appt
@@ -881,6 +964,10 @@ add an entry to the end of it."
   (setq org-pomodoro-short-break-length 5)
   (setq org-pomodoro-long-break-length 30)
 )
+;; (add-hook 'org-pomodoro-break-finished-hook
+;;           (lambda ()
+;;             (interactive)
+;;             (org-pomodoro '(16)))
 
 (eval-after-load 'org
   '(progn
@@ -1082,7 +1169,17 @@ add an entry to the end of it."
 ;; (setq org-babel-python-command "/usr/bin/ipython --pylab --pdb --nosep")
 (setq python-shell-prompt-detect-failure-warning nil)
 
-(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+(defun lengyueyang/post-init-org-bullets ()
+  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+(add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
+
+;; (require 'org-bullets)
+;; ;; make available "org-bullet-face" such that I can control the font size individually
+;; (setq org-bullets-face-name (quote org-bullet-face))
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀" "✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
 
 ;;org-mode export to latex
 (require 'ox-latex)
@@ -1453,6 +1550,93 @@ belongs as a list."
       bibtex-autokey-titlewords-stretch 1
       bibtex-autokey-titleword-length 5)
 
+(defun org-renumber-environment (orig-func &rest args)
+  (let ((results '()) 
+  (counter -1)
+  (numberp))
+
+    (setq results (loop for (begin .  env) in 
+      (org-element-map (org-element-parse-buffer) 'latex-environment
+        (lambda (env)
+          (cons
+           (org-element-property :begin env)
+           (org-element-property :value env))))
+      collect
+      (cond
+       ((and (string-match "\\\\begin{equation}" env)
+             (not (string-match "\\\\tag{" env)))
+        (incf counter)
+        (cons begin counter))
+       ((string-match "\\\\begin{align}" env)
+        (prog2
+            (incf counter)
+            (cons begin counter)			    
+          (with-temp-buffer
+            (insert env)
+            (goto-char (point-min))
+            ;; \\ is used for a new line. Each one leads to a number
+            (incf counter (count-matches "\\\\$"))
+            ;; unless there are nonumbers.
+            (goto-char (point-min))
+            (decf counter (count-matches "\\nonumber")))))
+       (t
+        (cons begin nil)))))
+
+    (when (setq numberp (cdr (assoc (point) results)))
+      (setf (car args)
+      (concat
+       (format "\\setcounter{equation}{%s}\n" numberp)
+       (car args)))))
+
+  (apply orig-func args))
+
+(advice-add 'org-create-formula-image :around #'org-renumber-environment)
+
+;; (advice-remove 'org-create-formula-image #'org-renumber-environment)
+
+;; specify the justification you want
+(plist-put org-format-latex-options :justify 'center)
+
+(defun org-justify-fragment-overlay (beg end image imagetype)
+  "Adjust the justification of a LaTeX fragment.
+The justification is set by :justify in
+`org-format-latex-options'. Only equations at the beginning of a
+line are justified."
+  (cond
+   ;; Centered justification
+   ((and (eq 'center (plist-get org-format-latex-options :justify)) 
+   (= beg (line-beginning-position)))
+    (let* ((img (create-image image 'imagemagick t))
+     (width (car (image-size img)))
+     (offset (floor (- (/ (window-text-width) 2) (/ width 2)))))
+      (overlay-put (ov-at) 'before-string (make-string offset ? ))))
+   ;; Right justification
+   ((and (eq 'right (plist-get org-format-latex-options :justify)) 
+   (= beg (line-beginning-position)))
+    (let* ((img (create-image image 'imagemagick t))
+     (width (car (image-display-size (overlay-get (ov-at) 'display))))
+     (offset (floor (- (window-text-width) width (- (line-end-position) end)))))
+      (overlay-put (ov-at) 'before-string (make-string offset ? ))))))
+
+(defun org-latex-fragment-tooltip (beg end image imagetype)
+  "Add the fragment tooltip to the overlay and set click function to toggle it."
+  (overlay-put (ov-at) 'help-echo
+         (concat (buffer-substring beg end)
+           "mouse-1 to toggle."))
+  (overlay-put (ov-at) 'local-map (let ((map (make-sparse-keymap)))
+            (define-key map [mouse-1]
+              `(lambda ()
+           (interactive)
+           (org-remove-latex-fragment-image-overlays ,beg ,end)))
+            map)))
+
+;; advise the function to a
+(advice-add 'org--format-latex-make-overlay :after 'org-justify-fragment-overlay)
+(advice-add 'org--format-latex-make-overlay :after 'org-latex-fragment-tooltip)
+
+;; (advice-remove 'org--format-latex-make-overlay 'org-justify-fragment-overlay)
+;; (advice-remove 'org--format-latex-make-overlay 'org-latex-fragment-tooltip)
+
 (setq yas-snippet-dirs
       '("~/.spacemacs.d/snippets/lengyueyang-snippets"
         "~/.spacemacs.d/snippets/dot-files-snippets/"
@@ -1581,6 +1765,7 @@ This function skips over horizontal and vertical whitespace."
 ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
 
 (require 'blog-admin)
+(spacemacs/set-leader-keys "ob" 'blog-admin-start)
 
 ;;  (setq blog-admin-backend-type 'org-page)
 ;;  (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/source")
@@ -1592,67 +1777,44 @@ This function skips over horizontal and vertical whitespace."
 ;;  (setq op/site-domain "http://lengyueyang.github.io") 
 ;;  (setq op/personal-disqus-shortname "lengyueyang")
 
-(setq blog-admin-backend-type 'hexo)
-(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/")
+;; (setq blog-admin-backend-type 'hexo)
+;; (setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/")
+;; (setq blog-admin-backend-new-post-in-drafts t)
+;; (setq blog-admin-backend-new-post-with-same-name-dir t)
+
+(setq blog-admin-backend-type 'nikola)
+(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
 (setq blog-admin-backend-new-post-in-drafts t)
-(setq blog-admin-backend-new-post-with-same-name-dir t)
+(setq blog-admin-backend-nikola-executable "/usr/bin/nikola") ;; path to nikola executable
+(setq blog-admin-backend-nikola-config-file "conf.py") ;; conf.py is default
 
-(spacemacs/set-leader-keys "ob" 'blog-admin-start)
+(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
 
-(require'cl)
-
-(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue")
-
-(defun lengyueyang/hexo-publish (commit-msg)
+(defun lengyueyang/Nikola-publish (commit-msg)
   "git add . & git commit & git push & hexo d"
   (interactive "sInput commit message:")
-  (async-shell-command (format "cd %s ;git add . ;git commit -m \"%s\" ;git push ;hexo clean; hexo g; hexo d -g"
+  (async-shell-command (format "cd %s ; git add . ; git commit -m \"%s\" ; nikola clean; nikola build; nikola clean; nikola build; nikola github_deploy"
                                hexo-dir
                                commit-msg)))
 
-(defun lengyueyang/hexo-org-add-read-more ()
+(defun lengyueyang/Nikola-org-add-read-more ()
   "add <!--more-->"
   (interactive)
-  (insert "#+BEGIN_EXPORT html\n<!--more-->\n#+END_EXPORT"))
+  (insert "{{{TEASER_END}}}"))
 
-(defun lengyueyang/hexo-org-new-open-post (post-name)
-  "create a hexo org post"
-  (interactive "sInput post name:")
-  (find-file (format "%s/source/_posts/%s.org" hexo-dir post-name))
-  (insert (format "#+TITLE: %s
-#+DATE: %s
-#+LAYOUT: post
-#+TAGS:
-#+CATEGORIES:
-"  post-name (format-time-string "<%Y-%m-%d %a %H:%M>"))))
-
-(defun lengyueyang/hexo-org-source ()
-  "use dired open hexo source dir"
+(defun lengyueyang/Nikola-license ()
+  "add <!--license-->"
   (interactive)
-  (ido-find-file-in-dir (format "%s/source/" hexo-dir))
-  )
-
-(defun lengyueyang/hexo-move-article ()
-  "Move current file between _post and _draft;
-You can run this function in dired or a hexo article."
-  (interactive)
-  (if (string-match "/\\(_posts/\\|_drafts/\\)$" default-directory)
-      (let* ((parent-dir (file-truename (concat default-directory "../")))
-             (dest-dir (if (string-match "_drafts/$" default-directory) "_posts/" "_drafts/"))))
-        (cond (or (eq major-mode 'markdown-mode) (eq major-mode 'org-mode))
-               (let* ((cur-file (buffer-file-name))
-                      (new-file (concat parent-dir dest-dir (buffer-name))))
-                 (save-buffer)
-                 (kill-buffer)
-                 (rename-file cur-file new-file)
-                 (find-file new-file)
-                 (message (format "Now in %s" dest-dir))))
-              ((eq major-mode 'dired-mode)
-               (dired-rename-file (dired-get-filename nil)
-                                  (concat parent-dir dest-dir (dired-get-filename t))
-                                  nil)
-               (message (format "The article has been moved to %s" dest-dir))))
-    (message "You have to run this in a hexo article buffer or dired"))
+  (insert """
+* Creative Commons licensing
+#+BEGIN_QUOTE
+TITLE:  \\\\
+AUTHOR: lengyueyang \\\\
+DATE: \\\\
+UPDATED: \\\\
+LICENSE: The blog is licensed under a [[http://creativecommons.org/licenses/by-sa/4.0/][Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License]], commercial use is not allowed, for any reprint, please indicate address and signature.
+#+END_QUOTE
+"""))
 
 ;; https://github.com/tumashu/emacs-helper/blob/master/eh-emms.el
 
@@ -2008,6 +2170,28 @@ Return the previous point-max before adding."
 (spacemacs/set-leader-keys "oes" 'emms-stop)
 (spacemacs/set-leader-keys "oen" 'emms-next)
 (spacemacs/set-leader-keys "oep" 'emms-previous)
+
+(global-set-key (kbd "C-,") #'embrace-commander)
+(spacemacs/set-leader-keys "or" 'embrace-commander)
+(add-hook 'org-mode-hook 'embrace-org-mode-hook)
+(evil-embrace-enable-evil-surround-integration)
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (add-to-list 'embrace-semantic-units-alist '(?e . er/mark-email))))
+(defun embrace-org-mode-hook ()
+  (dolist (lst '((?b "{{{color(blue," . ")}}}")
+                 (?r "{{{color(red," . ")}}}")
+                 (?g "{{{color(green," . ")}}}")
+                 (?/ "/" . "/")))
+    (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+(add-hook 'org-mode-hook 'embrace-org-mode-hook)
+;; (embrace-add-pair key left right)
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (embrace-add-pair ?b "{{{color(blue," . ")}}}")
+;;             (embrace-add-pair ?r "{{{color(red," . ")}}}")
+;;             (embrace-add-pair ?g "{{{color(greem," . ")}}}")
+;;             ))
 
 (require 'fill-column-indicator)
 (setq fci-rule-column 80)

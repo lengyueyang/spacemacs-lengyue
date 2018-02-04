@@ -2,7 +2,7 @@
 # name: newtheorem-definition
 # key: newtheorem-definition
 # --
-#+name: $1
-\begin{de}[$0]
+#+name: ${1:name}
+\begin{de}[$1]
 \end{de}
-
+$0

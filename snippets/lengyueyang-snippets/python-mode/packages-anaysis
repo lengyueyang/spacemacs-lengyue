@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name: packages-analysis
+# key: packages-analysis
+# --
+%matplotlib inline
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(context='notebook',
+        style='darkgrid', 
+        palette='bright',
+        font_scale=1.5,
+        color_codes=True)
+%config InlineBackend.figure_format = 'png'
+
+black_style ={
+ 'axes.edgecolor': '#3f3f3f',
+ 'axes.facecolor': '#504040',
+ 'axes.labelcolor': '.85',
+ 'figure.facecolor': '#3f3f3f',
+ 'grid.color': 'gray',
+ 'xtick.color': '.85',
+ 'ytick.color': '.85',
+
+}
+sns.set_style(rc=black_style)

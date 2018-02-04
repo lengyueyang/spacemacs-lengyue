@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: nikola-readmore
+# key: nikola-readmore
+# --
+{{{TEASER_END}}}

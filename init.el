@@ -43,7 +43,7 @@
      (latex :variables latex-enable-auto-fill t)
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode)
-     (ess :variables ess-enable-smart-equals t)
+     (ess :variables ess-disable-underscore-assign t)
      racket
      (python :variables
              python-test-runner '(nose pytest)

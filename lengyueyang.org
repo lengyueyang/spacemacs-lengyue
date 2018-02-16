@@ -2330,6 +2330,12 @@ they work nicely with version control systems.
 
 #+BEGIN_SRC emacs-lisp
 
+  ;; (defun add-ess-smart-S-assign ()
+  ;;   (interactive)
+  ;;   (insert " <- "))
+
+  ;; (global-set-key (kbd "C-;") 'add-ess-smart-S-assign)
+
   (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'R-mode-hook 'smartparens-mode)
   (add-hook 'R-mode-hook 'flycheck-mode)

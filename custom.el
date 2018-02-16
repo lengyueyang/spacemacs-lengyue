@@ -89,7 +89,8 @@
  '(python-shell-interpreter-args "-i")
  '(safe-local-variable-values
    (quote
-    ((org-download-image-dir . "~MEGA/Emacs-lengyue/Data scientist/Math and Statistics Skills/MSimg")
+    ((org-download-image-dir . "~/MEGA/Emacs-lengyue/Data-scientist/Data science/Dsimg")
+     (org-download-image-dir . "~MEGA/Emacs-lengyue/Data scientist/Math and Statistics Skills/MSimg")
      (org-download-image-dir . "~/MEGA/Emacs-lengyue/Wiki-lengyue/img")
      (org-download-image-dir . "~/Emacs-lengyue/Wiki-lengyue/img")
      (org-download-image-dir . "~/Documents/test/img")

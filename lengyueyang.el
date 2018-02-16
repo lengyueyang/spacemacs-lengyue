@@ -1661,6 +1661,12 @@ line are justified."
   (add-hook 'prog-mode-hook (editorconfig-mode 1))
   (add-hook 'text-mode-hook (editorconfig-mode 1)))
 
+;; (defun add-ess-smart-S-assign ()
+;;   (interactive)
+;;   (insert " <- "))
+
+;; (global-set-key (kbd "C-;") 'add-ess-smart-S-assign)
+
 (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'R-mode-hook 'smartparens-mode)
 (add-hook 'R-mode-hook 'flycheck-mode)

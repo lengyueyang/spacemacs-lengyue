@@ -9,7 +9,7 @@
    dotspacemacs-ask-for-lazy-installation nil
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
-   '(
+   '(vimscript
      (auto-completion :variables
                       ;;                 auto-completion-return-key-behavior 'complete
                       ;;                 auto-completion-tab-key-behavior 'cycle
@@ -43,11 +43,13 @@
      (latex :variables latex-enable-auto-fill t)
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode)
-     (ess :variables ess-enable-smart-equals t)
+     (ess :variables ess-disable-underscore-assign t)
      racket
      (python :variables
+             python-backend 'anaconda
              python-test-runner '(nose pytest)
-             python-enable-yapf-format-on-save t)
+             ;; python-enable-yapf-format-on-save t
+             )
      ipython-notebook
      markdown
      (org :variables org-enable-reveal-js t org-want-todo-bindings t)
@@ -86,8 +88,13 @@
      (clojure :variables clojure-enable-fancify-symbols t)
      gnus
      (mu4e :variables
-           mu4e-installation-path "/usr/share/emacs/site-lisp/mu4e"
-           mu4e-account-alist t)
+           mu4e-installation-path "/usr/share/emacs/site-lisp/mu"
+           mu4e-use-maildirs-extension t
+           mu4e-enable-async-operations t
+           mu4e-enable-mode-line t
+           mu4e-spacemacs-layout-name "@Mu4e"
+           mu4e-spacemacs-layout-binding "m"
+           )
      elfeed
      octave
      )
@@ -109,6 +116,8 @@
                                       embrace
                                       evil-embrace
                                       ov
+                                      cliphist
+                                      el-get
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '(exec-path-from-shell)
@@ -127,11 +136,12 @@
                                 (projects . 7))
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(
                          spacemacs-light
                          solarized-light
-                         solarized-dark
+                         spacemacs-dark
                          leuven
+                         solarized-dark
                          monokai
                          zenburn)
    dotspacemacs-colorize-cursor-according-to-state t

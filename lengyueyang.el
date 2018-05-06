@@ -36,6 +36,17 @@
 
 (global-set-key (kbd "<f7>") 'org-download-screenshot)
 
+(setq system-time-locale "en_US")
+(set-language-environment "UTF-8")
+(setq-default default-buffer-file-coding-system 'utf-8)
+;; (setq coding-system-for-write 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(prefer-coding-system 'gb18030)
+(prefer-coding-system 'utf-8)
+
 (use-package semantic
   :config
   (setq-mode-local emacs-lisp-mode
@@ -215,7 +226,7 @@
 ;; ;; save attachment to my desktop (this can also be a function)  
 ;; (setq mu4e-attachment-dir "/home/lengyue/Documents/Mu4e/Attachment")
 
-(add-to-load-path "~/.spacemacs.d/package/mu4e")
+;; (add-to-load-path "~/.spacemacs.d/package/mu4e")
 
 (require 'mu4e)
 
@@ -283,7 +294,7 @@
          (:from          .  22)
          (:subject       .  nil))) ;; alternatively, use :thread-subject
 
-(setq mu4e-get-mail-command "offlineimap")
+(setq mu4e-get-mail-command "proxychains offlineimap")
 ;; Fetch mail in 60 sec interval
 (setq mu4e-update-interval 1200)
 
@@ -1139,7 +1150,7 @@ add an entry to the end of it."
       'org-babel-load-languages
       '((perl . t)
         (ruby . t)
-        (sh . t)
+        (shell . t)
         (js . t)
         (python . t)
         (ipython . t)
@@ -1762,7 +1773,7 @@ This function skips over horizontal and vertical whitespace."
   :init
   (progn
     ;; start pangu-spacing globally
-    (global-pangu-spacing-mode 1)
+    (global-pangu-spacing-mode -1)
     ;; Always insert `real' space in org-mode.
     (add-hook 'org-mode-hook
               '(lambda ()
@@ -1789,12 +1800,12 @@ This function skips over horizontal and vertical whitespace."
 ;; (setq blog-admin-backend-new-post-with-same-name-dir t)
 
 (setq blog-admin-backend-type 'nikola)
-(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
+(setq blog-admin-backend-path "~/MEGA/Emacs-lengyue/Blog-lengyue")
 (setq blog-admin-backend-new-post-in-drafts t)
 (setq blog-admin-backend-nikola-executable "/usr/bin/nikola") ;; path to nikola executable
 (setq blog-admin-backend-nikola-config-file "conf.py") ;; conf.py is default
 
-(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue/Nikola")
+(setq hexo-dir "~/MEGA/Emacs-lengyue/Blog-lengyue")
 
 (defun lengyueyang/Nikola-publish (commit-msg)
   "git add . & git commit & git push & hexo d"

@@ -9,7 +9,8 @@
    dotspacemacs-ask-for-lazy-installation nil
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
-   '(vimscript
+   '(csv
+     vimscript
      (auto-completion :variables
                       ;;                 auto-completion-return-key-behavior 'complete
                       ;;                 auto-completion-tab-key-behavior 'cycle

@@ -971,9 +971,9 @@ add an entry to the end of it."
   :commands (org-pomodoro)
   :config
   (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
-  (setq org-pomodoro-length 25)
-  (setq org-pomodoro-short-break-length 5)
-  (setq org-pomodoro-long-break-length 30)
+  (setq org-pomodoro-length 20)
+  (setq org-pomodoro-short-break-length 10)
+  (setq org-pomodoro-long-break-length 50)
 )
 ;; (add-hook 'org-pomodoro-break-finished-hook
 ;;           (lambda ()
@@ -983,7 +983,8 @@ add an entry to the end of it."
 (eval-after-load 'org
   '(progn
      (setq org-agenda-files (quote ("~/MEGA/Emacs-lengyue/GTD-lengyue"
-                                    "~/MEGA/Emacs-lengyue/Wiki-lengyue")))
+                                    "~/MEGA/Emacs-lengyue/Wiki-lengyue"
+                                    "~/MEGA/Kangfuzi")))
 
      (setq org-todo-keywords
            (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
@@ -1183,10 +1184,13 @@ add an entry to the end of it."
 ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
 (defun lengyueyang/post-init-org-bullets ()
-  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+  (setq org-bullets-bullet-list '(
+                                  "☰" "☷" "⋗" "⇀"
+                                  )))
 (add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
 
 ;; (require 'org-bullets)
+
 ;; ;; make available "org-bullet-face" such that I can control the font size individually
 ;; (setq org-bullets-face-name (quote org-bullet-face))
 ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))

@@ -1520,9 +1520,9 @@ https://emacs-china.org/t/agenda-view/1392
     :commands (org-pomodoro)
     :config
     (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
-    (setq org-pomodoro-length 25)
-    (setq org-pomodoro-short-break-length 5)
-    (setq org-pomodoro-long-break-length 30)
+    (setq org-pomodoro-length 20)
+    (setq org-pomodoro-short-break-length 10)
+    (setq org-pomodoro-long-break-length 50)
   )
   ;; (add-hook 'org-pomodoro-break-finished-hook
   ;;           (lambda ()
@@ -1541,97 +1541,98 @@ A complete agenda and capture configuration
 
 #+BEGIN_SRC emacs-lisp
 
-  (eval-after-load 'org
-    '(progn
-       (setq org-agenda-files (quote ("~/MEGA/Emacs-lengyue/GTD-lengyue"
-                                      "~/MEGA/Emacs-lengyue/Wiki-lengyue")))
+   (eval-after-load 'org
+     '(progn
+        (setq org-agenda-files (quote ("~/MEGA/Emacs-lengyue/GTD-lengyue"
+                                       "~/MEGA/Emacs-lengyue/Wiki-lengyue"
+                                       "~/MEGA/Kangfuzi")))
 
-       (setq org-todo-keywords
-             (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
-                     (sequence "SOMEDAY(S)" "|" "WAITING(w@/!)"  "MEETING(m)" "PHONE(p)")
-                     (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
-                     )))
+        (setq org-todo-keywords
+              (quote ((sequence "TODO(t)" "STARTED(s)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")
+                      (sequence "SOMEDAY(S)" "|" "WAITING(w@/!)"  "MEETING(m)" "PHONE(p)")
+                      (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+                      )))
 
-       (setq org-todo-keyword-faces
-             (quote (
-                     ("STARTED" :foreground "magenta" :weight bold)
-       ;;               ("NEXT" :foreground "blue" :weight bold)
-       ;;               ("DONE" :foreground "forest green" :weight bold)
-                     ("WAITING" :foreground "red" :weight bold)
-       ;;               ("HOLD" :foreground "magenta" :weight bold)
-       ;;               ("CANCELLED" :foreground "forest green" :weight bold)
-       ;;               ("MEETING" :foreground "forest green" :weight bold)
-                     ;;               ("PHONE" :foreground "forest green" :weight bold)
-                     )))
+        (setq org-todo-keyword-faces
+              (quote (
+                      ("STARTED" :foreground "magenta" :weight bold)
+        ;;               ("NEXT" :foreground "blue" :weight bold)
+        ;;               ("DONE" :foreground "forest green" :weight bold)
+                      ("WAITING" :foreground "red" :weight bold)
+        ;;               ("HOLD" :foreground "magenta" :weight bold)
+        ;;               ("CANCELLED" :foreground "forest green" :weight bold)
+        ;;               ("MEETING" :foreground "forest green" :weight bold)
+                      ;;               ("PHONE" :foreground "forest green" :weight bold)
+                      )))
 
-       (setq org-refile-targets
-             '(("~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
+        (setq org-refile-targets
+              '(("~/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" :maxlevel . 1)))
 
-       (setq org-log-into-drawer t)
-       (setq org-agenda-custom-commands
-          '(
-            ("b" "Blog idea" tags-todo "BLOG")
-            ("s" "Someday" todo "SOMEDAY")
-            ("S" "Started" todo "STARTED")
-            ("w" "Waiting" todo "WAITING")
-            ("d" . " 任务安排 ")
-            ("da" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
-            ("db" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
-            ("dc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
-            ("p" . " 项目安排 ")
-            ("W" "Weekly Review" tags-todo "PROJECT")
-              ))
-       )
-    )
+        (setq org-log-into-drawer t)
+        (setq org-agenda-custom-commands
+           '(
+             ("b" "Blog idea" tags-todo "BLOG")
+             ("s" "Someday" todo "SOMEDAY")
+             ("S" "Started" todo "STARTED")
+             ("w" "Waiting" todo "WAITING")
+             ("d" . " 任务安排 ")
+             ("da" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
+             ("db" " 重要且不紧急的任务 " tags-todo "+PRIORITY=\"B\"")
+             ("dc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
+             ("p" . " 项目安排 ")
+             ("W" "Weekly Review" tags-todo "PROJECT")
+               ))
+        )
+     )
 
-  ;; (defun org-summary-todo (n-done n-not-done)
-  ;;   "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  ;;   (let (org-log-done org-log-states)  ; turn off logging
-  ;;     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+   ;; (defun org-summary-todo (n-done n-not-done)
+   ;;   "Switch entry to DONE when all subentries are done, to TODO otherwise."
+   ;;   (let (org-log-done org-log-states)  ; turn off logging
+   ;;     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
-  ;; (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+   ;; (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
 
-  ;;   ;;used by org-clock-sum-today-by-tags
-  ;; (defun filter-by-tags ()
-  ;;     (let ((head-tags (org-get-tags-at)))
-  ;;       (member current-tag head-tags)))
+   ;;   ;;used by org-clock-sum-today-by-tags
+   ;; (defun filter-by-tags ()
+   ;;     (let ((head-tags (org-get-tags-at)))
+   ;;       (member current-tag head-tags)))
 
 
-  ;; (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-  ;;     (interactive "P")
-  ;;     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-  ;;            (files (org-add-archive-files (org-agenda-files)))
-  ;;            (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
-  ;;            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-  ;;            (output-string "")
-  ;;            (tstart (or tstart
-  ;;                        (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
-  ;;                        (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
-  ;;                        (org-time-today)))
-  ;;            (tend (or tend
-  ;;                      (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
-  ;;                      (+ tstart 86400)))
-  ;;            h m file item prompt donesomething)
-  ;;       (while (setq file (pop files))
-  ;;         (setq org-agenda-buffer (if (file-exists-p file)
-  ;;                                     (org-get-agenda-file-buffer file)
-  ;;                                   (error "No such file %s" file)))
-  ;;         (with-current-buffer org-agenda-buffer
-  ;;           (dolist (current-tag include-tags)
-  ;;             (org-clock-sum tstart tend'filter-by-tags)
-  ;;             (setcdr (assoc current-tag tags-time-alist)
-  ;;                     (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-  ;;       (while (setq item (pop tags-time-alist))
-  ;;         (unless (equal (cdr item) 0)
-  ;;           (setq donesomething t)
-  ;;           (setq h (/ (cdr item) 60)
-  ;;                 m (- (cdr item) (* 60 h)))
-  ;;           (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-  ;;       (unless donesomething
-  ;;         (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-  ;;       (unless noinsert
-  ;;         (insert output-string))
-  ;;       output-string))
+   ;; (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+   ;;     (interactive "P")
+   ;;     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
+   ;;            (files (org-add-archive-files (org-agenda-files)))
+   ;;            (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG" "LIFE" "PROJECT"))
+   ;;            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
+   ;;            (output-string "")
+   ;;            (tstart (or tstart
+   ;;                        (and timerange (equal timerange-numeric-value 4) (- (org-time-today) 86400))
+   ;;                        (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "Start Date/Time:"))
+   ;;                        (org-time-today)))
+   ;;            (tend (or tend
+   ;;                      (and timerange (equal timerange-numeric-value 16) (org-read-date nil nil nil "End Date/Time:"))
+   ;;                      (+ tstart 86400)))
+   ;;            h m file item prompt donesomething)
+   ;;       (while (setq file (pop files))
+   ;;         (setq org-agenda-buffer (if (file-exists-p file)
+   ;;                                     (org-get-agenda-file-buffer file)
+   ;;                                   (error "No such file %s" file)))
+   ;;         (with-current-buffer org-agenda-buffer
+   ;;           (dolist (current-tag include-tags)
+   ;;             (org-clock-sum tstart tend'filter-by-tags)
+   ;;             (setcdr (assoc current-tag tags-time-alist)
+   ;;                     (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
+   ;;       (while (setq item (pop tags-time-alist))
+   ;;         (unless (equal (cdr item) 0)
+   ;;           (setq donesomething t)
+   ;;           (setq h (/ (cdr item) 60)
+   ;;                 m (- (cdr item) (* 60 h)))
+   ;;           (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
+   ;;       (unless donesomething
+   ;;         (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
+   ;;       (unless noinsert
+   ;;         (insert output-string))
+   ;;       output-string))
 
 #+END_SRC
 
@@ -1775,10 +1776,13 @@ A complete agenda and capture configuration
 #+BEGIN_SRC emacs-lisp
 
   (defun lengyueyang/post-init-org-bullets ()
-    (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+    (setq org-bullets-bullet-list '(
+                                    "☰" "☷" "⋗" "⇀"
+                                    )))
   (add-hook 'org-mode-hook #'lengyueyang/post-init-org-bullets)
 
   ;; (require 'org-bullets)
+
   ;; ;; make available "org-bullet-face" such that I can control the font size individually
   ;; (setq org-bullets-face-name (quote org-bullet-face))
   ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))

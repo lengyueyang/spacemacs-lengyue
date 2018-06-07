@@ -48,7 +48,7 @@
      racket
      (python :variables
              python-backend 'anaconda
-             python-test-runner '(nose pytest)
+             python-test-runner '(pytest)
              ;; python-enable-yapf-format-on-save t
              )
      ipython-notebook

@@ -308,7 +308,7 @@
 (setq mu4e-contexts
       `(
         ,(make-mu4e-context
-           :name "maoxiaowei1988@foxmail.com"
+           :name "Foxmail_lengyue"
            :enter-func (lambda () (mu4e-message "Enter maoxiaowei1988@foxmail.com.com context"))
            :leave-func (lambda () (mu4e-message "Leave maoxiaowei1988@foxmail.com.com context"))
            :match-func (lambda (msg)
@@ -326,7 +326,7 @@
                                                "Blog: http://lengyueyang.github.io\n"
                                                "Github: https://github.com/lengyueyang\n"))))  
         ,(make-mu4e-context
-           :name "maoxiaoweihl@gmail.com"
+           :name "Gmail_lengyue"
            :enter-func (lambda () (mu4e-message "Enter maoxiaoweihl@gmail.com context"))
            :leave-func (lambda () (mu4e-message "Leave maoxiaoweihl@gmail.com context"))
            ;; we match based on the contact-fields of the message (that we are replying to)

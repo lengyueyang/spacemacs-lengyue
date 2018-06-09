@@ -9,95 +9,151 @@
    dotspacemacs-ask-for-lazy-installation nil
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
-   '(csv
-     vimscript
-     (auto-completion :variables
-                      ;;                 auto-completion-return-key-behavior 'complete
-                      ;;                 auto-completion-tab-key-behavior 'cycle
-                      ;;                 auto-completion-complete-with-key-sequence nil
-                      ;;                 auto-completion-complete-with-key-sequence-delay 0
-                      ;;                 auto-completion-private-snippets-directory nil
-                      auto-completion-enable-snippets-in-popup t
-                      ;;                 auto-completion-enable-help-tooltip t
-                      auto-completion-enable-sort-by-usage t
-                      :disabled-for org markdown)
-     better-defaults
-     (chinese :packages youdao-dictionary
-              :variables chinese-enable-youdao-dict t)
-     emacs-lisp
-     (git :variables
-          git-magit-status-fullscreen t
-          magit-push-always-verify nil
-          magit-save-repository-buffers 'dontask
-          magit-revert-buffers 'silent
-          magit-refs-show-commit-count 'all
-          magit-revision-show-gravatars nil)
-     github
-     javascript
-     (typescript :variables
-                 typescript-fmt-on-save nil
-                 typescript-fmt-tool 'typescript-formatter)
-     bibtex
-     ;; helm
-     ivy
-     yaml
-     (latex :variables latex-enable-auto-fill t)
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode)
-     (ess :variables ess-disable-underscore-assign t)
-     racket
-     (python :variables
-             python-backend 'anaconda
-             python-test-runner '(pytest)
-             ;; python-enable-yapf-format-on-save t
-             )
-     ipython-notebook
-     markdown
-     (org :variables org-enable-reveal-js t org-want-todo-bindings t)
-     (shell :variables
-            shell-default-shell 'eshell)
+   '(
+     ;; ---chat---
+     (slack :variables slack-spacemacs-layout-name "@Slack"
+            slack-spacemacs-layout-binding "s")
+     jabber
+     (erc :variables  erc-spacemacs-layout-name "@ERC"
+          erc-spacemacs-layout-binding "e")
+     ;; ---checkers---
+     (spell-checking :variables
+                     spell-checking-enable-by-default t)
      (syntax-checking :variables
                       syntax-checking-enable-by-default t
                       syntax-checking-enable-tooltips t)
-     (spell-checking :variables
-                     spell-checking-enable-by-default t)
-     version-control
-     (colors :variables
-             colors-enable-nyan-cat-progress-bar t)
-     nlinum
-     pandoc
-     semantic
-     graphviz
-     (ranger :variables ranger-show-preview t)
-     pdf-tools
-     prodigy
-     search-engine
-     (vinegar :variables vinegar-reuse-dired-buffer t)
-     (spacemacs-layouts :variables layouts-enable-autosave nil
-                        layouts-autosave-delay 300)
+     ;; ---completion---
+     (auto-completion :variables
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-private-snippets-directory t
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-sort-by-usage t
+                      :disabled-for org markdown)
+     (ivy :variables ivy-enable-advanced-buffer-information t)
+     ;; templates
+     ;; helm
+     ;; ---emacs---
+     (better-defaults :variables
+                      better-defaults-move-to-beginning-of-code-first t
+                      better-defaults-move-to-end-of-code-first nil)
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
-     restclient
-     (gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts ess)
-     docker
-     deft
-     shaders
-     react
-     (ruby :variables ruby-version-manager 'chruby)
-     ruby-on-rails
-     lua
-     html
-     (clojure :variables clojure-enable-fancify-symbols t)
-     gnus
+     (org :variables
+          org-enable-github-support t
+          org-enable-bootstrap-support t
+          org-enable-reveal-js t
+          ;; org-enable-org-journal-support t
+          ;; org-projectile-file "TODOs.org"
+          org-want-todo-bindings t)
+     semantic
+     (typography :variables typography-enable-typographic-editing t)
+     ;; ---email---
      (mu4e :variables
            mu4e-installation-path "/usr/share/emacs/site-lisp/mu"
            mu4e-use-maildirs-extension t
            mu4e-enable-async-operations t
            mu4e-enable-mode-line t
            mu4e-spacemacs-layout-name "@Mu4e"
-           mu4e-spacemacs-layout-binding "m"
-           )
-     elfeed
+           mu4e-spacemacs-layout-binding "m")
+     gnus
+     ;; ---filetree---
+     (treemacs :variables treemacs-use-follow-mode t
+               treemacs-use-filewatch-mode t
+               treemacs-use-collapsed-directories 3)
+     ;; ---fonts---
+     unicode-fonts
+     ;; ---frameworks---
+     ruby-on-rails
+     django
+     ;; ---fun---
+     emoji
+     ;; ---intl---
+     (chinese :packages youdao-dictionary
+              :variables chinese-enable-youdao-dict t)
+     ;; ---lang---
+     bibtex
+     (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-clang-support t
+            c-c++-enable-clang-format-on-save t
+            c-c++-enable-rtags-support t
+            c-c++-enable-google-style t
+            c-c++-enable-auto-newline t)
+     emacs-lisp
+     (ess :variables ess-disable-underscore-assign t)
+     graphviz
+     hy
+     ipython-notebook
+     (javascript :variables javascript-backend 'tern)
+     json
+     (latex :variables latex-enable-auto-fill t)
+     lua
+     (markdown :variables markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
      octave
+     plantuml
+     (python :variables
+             python-backend 'anaconda
+             python-test-runner '(pytest)
+             ;; python-enable-yapf-format-on-save t
+             )
+     racket
+     (ruby :variables ruby-version-manager 'chruby)
+     ;; rust
+     scheme
+     semantic-web
+     ;; semweb
+     sql
+     (typescript :variables
+                 typescript-fmt-on-save nil
+                 typescript-fmt-tool 'typescript-formatter)
+     yaml
+     vimscript
+     (clojure :variables clojure-enable-fancify-symbols t)
+     html
+     csv
+     ;; restructuredtext
+     ;; ---readers---
+     dash
+     deft
+     elfeed
+     pdf
+     ;; ---source-control---
+     (git :variables
+          git-magit-status-fullscreen t)
+     github
+     (version-control :variables
+                      version-control-diff-tool 'diff-hl)
+     ;; ---tags---
+     (gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts ess)
+     ;; ---colors---
+     (colors :variables
+             colors-enable-nyan-cat-progress-bar t)
+     theming
+     ;; ---tools---
+     command-log
+     docker
+     imenu-list
+     pandoc
+     pass
+     prodigy
+     (ranger :variables ranger-show-preview t)
+     (rebox :variables rebox-enable-in-text-mode t)
+     (restclient :variables restclient-use-org t)
+     (shell :variables
+            shell-default-shell 'eshell
+            shell-enable-smart-eshell t)
+     ;; sphinx
+     systemd
+     tern
+     web-beautify
+     ;; ---veb-services---
+     search-engine
+     ;; ---others---
+     (spacemacs-layouts :variables layouts-enable-autosave nil
+                        layouts-autosave-delay 300)
      )
    dotspacemacs-additional-packages '(
                                       nodejs-repl

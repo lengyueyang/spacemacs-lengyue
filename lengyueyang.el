@@ -871,6 +871,9 @@ add an entry to the end of it."
 
 (add-to-load-path "~/.spacemacs.d/package/ox-ipynb")
 (require 'ox-ipynb)
+(setq
+ x-select-enable-clipboard nil
+ x-select-enable-primary t)
 
 ;; (add-to-load-path "~/.spacemacs.d/package/org-edit-latex")
 (require 'org-edit-latex)

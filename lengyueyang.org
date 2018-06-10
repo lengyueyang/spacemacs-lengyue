@@ -1371,6 +1371,10 @@ This part is the customization to org-mode.
 
   (add-to-load-path "~/.spacemacs.d/package/ox-ipynb")
   (require 'ox-ipynb)
+  (setq
+   x-select-enable-clipboard nil
+   x-select-enable-primary t)
+
 
 #+END_SRC
 

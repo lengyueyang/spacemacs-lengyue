@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: file_w_json
+# key: file_w_json
+# --
+with open('.${1: file_dir}', 'w') as file:
+    for var in ${2: write_class}:
+        var_json = json.dumps(var, ensure_ascii=False)
+        file.write(var_json)
+        file.write('\n')

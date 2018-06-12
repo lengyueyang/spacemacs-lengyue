@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: file_r_json_split
+# key: file_r_json_split
+# --
+${1: file_result} = list()
+with open('.$5', 'r') as file:
+    for line in file:
+        line = line.strip()
+        line_split = re.split('${3: split_code}', line)
+        line_split[${4: json_load_number}] = json.loads(line_split[$4])
+        $1.append(line_split)

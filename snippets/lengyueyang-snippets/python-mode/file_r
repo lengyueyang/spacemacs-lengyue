@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: file_r
+# key: file_r
+# --
+${1: file_result} = list()
+with open('.$2', 'r') as file:
+    for line in file:
+        line = line.strip()
+        $1.append(line)

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: file_w_json_mutil
+# key: file_w_json_mutil
+# --
+with open('.${1: file_dir}', 'w') as file:
+    for var in ${2: write_class}:
+        file.write(var[0])
+        f.write('\t')
+        var_json = json.dumps(, ensure_ascii=False)
+        file.write(var_json)
+        file.write('\n')

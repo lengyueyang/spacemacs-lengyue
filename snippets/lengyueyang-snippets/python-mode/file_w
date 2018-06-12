@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: file_w
+# key: file_w
+# --
+with open('.${1: file_dir}', 'w') as file:
+    for var in ${2: write_class}:
+        file.write(line)
+        file.write('\n')

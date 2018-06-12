@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: file_r_json
+# key: file_r_json
+# --
+${1: file_result} = list()
+with open('.$2', 'r') as file:
+    for line in file:
+        line = line.strip()
+        line = json.loads(line)
+        $1.append(line)

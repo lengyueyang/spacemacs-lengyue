@@ -9,7 +9,7 @@
    dotspacemacs-ask-for-lazy-installation nil
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
-   '(
+   '(haskell
      ;; ---chat---
      (slack :variables slack-spacemacs-layout-name "@Slack"
             slack-spacemacs-layout-binding "s")
@@ -145,6 +145,7 @@
      (shell :variables
             shell-default-shell 'eshell
             shell-enable-smart-eshell t)
+     vagrant
      ;; sphinx
      systemd
      tern
@@ -194,9 +195,9 @@
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(
+                         ;; spacemacs-dark
                          spacemacs-light
                          solarized-light
-                         spacemacs-dark
                          leuven
                          solarized-dark
                          monokai
@@ -251,7 +252,7 @@
    dotspacemacs-smooth-scrolling t
    dotspacemacs-line-numbers t
    dotspacemacs-folding-method 'evil
-   dotspacemacs-smartparens-strict-mode t
+   dotspacemacs-smartparens-strict-mode nil
    dotspacemacs-smart-closing-parenthesis t
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil

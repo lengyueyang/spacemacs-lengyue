@@ -654,7 +654,7 @@ add an entry to the end of it."
              (indent-region (region-beginning) (region-end) nil))))))
 
 (global-prettify-symbols-mode 1)
-(setq-default fill-column 80)
+;; (setq-default fill-column 80)
 (defadvice find-file (before make-directory-maybe
                              (filename &optional wildcards) activate)
   "Create parent directory if not exists while visiting file."
@@ -1115,7 +1115,7 @@ add an entry to the end of it."
 (setq org-confirm-babel-evaluate nil)
 
 (setq org-plantuml-jar-path
-      (expand-file-name "/opt/plantuml/plantuml.jar"))
+      (expand-file-name "/usr/bin/plantuml"))
 ;; (setq org-ditta-jar-path
 ;;  (expand-file-name "/usr/share/java/ditaa/ditaa-0_9.jar"))
 
@@ -1715,8 +1715,6 @@ line are justified."
   :defer t
   )
 
-(sp-local-pair '(emacs-lisp-mode lisp-interaction-mode) "'" nil :actions nil)
-
 (req-package emmet-mode
   :config
   (progn
@@ -1772,16 +1770,6 @@ This function skips over horizontal and vertical whitespace."
     (add-hook 'python-mode-hook #'modi/turn-off-hungry-delete-mode)
     ;; and in minibuffer
     (add-hook 'minibuffer-setup-hook #'modi/turn-off-hungry-delete-mode)))
-
-(req-package pangu-spacing
-  :init
-  (progn
-    ;; start pangu-spacing globally
-    (global-pangu-spacing-mode -1)
-    ;; Always insert `real' space in org-mode.
-    (add-hook 'org-mode-hook
-              '(lambda ()
-                 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))))
 
 ;; (add-to-load-path "~/.spacemacs.d/package/blog-admin")
 

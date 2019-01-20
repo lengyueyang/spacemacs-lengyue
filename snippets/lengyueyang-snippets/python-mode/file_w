@@ -2,7 +2,7 @@
 # name: file_w
 # key: file_w
 # --
-with open('.${1: file_dir}', 'w') as file:
-    for var in ${2: write_class}:
-        file.write(line)
+with open('.${2: file_dir}', 'w') as file:
+    for var in ${1: class}:
+        file.write(var)
         file.write('\n')

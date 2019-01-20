@@ -2,9 +2,9 @@
 # name: file_w_mutil
 # key: file_w_mutil
 # --
-with open('.${1: file_dir}', 'w') as file:
-    for var in ${2: write_class}:
-        file.write(line[0])
+with open('.${2: file_dir}', 'w') as file:
+    for var in ${1: write_class}:
+        file.write(var[0])
         file.write('\t')
-        file.write(line[1])
+        file.write(var[1])
         file.write('\n')

@@ -6,18 +6,18 @@ ${1: list_1_name} = list()
 ${2: unique_name} = list()
 i = 0
 while (i < len(${3: list_to_deal})):
-    line_i = $3[i]:
+    line_i = $3[i]
     name_i = ${4: item_name}
     if name_i not in $2:
-        $2.append(name_i.copy())
+        $2.append(name_i)
         $1.append(line_i.copy())
         j = i + 1
-        while (i < len($3)):
+        while (j < len($3)):
             line_j = $3[j]
             name_j = $4
             if name_i == name_j:
-                $[-1]${$: code_here}
+                {5: code_here}
             j = j + 1
     if i % 1000 == 0:
-    prin('{} of len()'.format(i, len($1)))
+        print('{} of {}'.format(i, len($3)))
     i = i + 1

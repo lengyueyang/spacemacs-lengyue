@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name: kfz_shangxian_element
+# key: kfz_shangxian_element
+# --
+***${1: change} TODO [/] 高频疾病梳理, 并与康夫子疾病标准做对照, 给出未诊断疾病列表
+- [ ] 高频疾病整理
+- [ ] 康夫子标准疾病名称对照
+- [ ] 未诊断疾病列表
+
+***$1 TODO [/] dis2exam, dis2diff 数据抽取并review, 加入数据库
+- [ ] 抽取dis2exam, dis2diff数据, 并给医学进行review
+- [ ] 医学review返回数据处理入库
+
+***$1 TODO [/] dis2operation 手术数据抽取并review, 加入数据库
+- [ ] 抽取dis2exam, dis2diff数据, 并给医学进行review
+- [ ] 医学review返回数据处理入库
+
+***$1 TODO 医院药品数据对照
+
+***$1 TODO 医院疾病数据对照
+
+***$1 TODO 医院检查检验数据对照
+
+***$1 TODO [/] 科室演示场景寻找
+- [ ] 数据补充完整后, 医学同学寻找科室演示场景
+- [ ] 针对返回场景确实数据, 补充数据, 再测评
+

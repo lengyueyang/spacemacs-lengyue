@@ -214,7 +214,7 @@
                                :size 16
                                :weight normal
                                :width normal
-                               :powerline-scale 1.0)
+                               :powerline-scale 1)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-command-key "SPC"
    dotspacemacs-ex-command-key ":"
@@ -251,7 +251,7 @@
    dotspacemacs-smooth-scrolling t
    dotspacemacs-line-numbers t
    dotspacemacs-folding-method 'evil
-   dotspacemacs-smartparens-strict-mode t
+   dotspacemacs-smartparens-strict-mode nil
    dotspacemacs-smart-closing-parenthesis t
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil

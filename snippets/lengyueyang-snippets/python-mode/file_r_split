@@ -6,5 +6,5 @@ ${1: file_result} = list()
 with open('.$4', 'r') as file:
     for line in file:
         line = line.strip()
-        line_split = re.split('${3: split_code}', line)
+        line_split = re.split('\t', line)
         $1.append(line_split)

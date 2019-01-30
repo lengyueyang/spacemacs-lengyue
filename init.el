@@ -150,8 +150,9 @@
      systemd
      tern
      web-beautify
-     ;; ---veb-services---
+     ;; ---web-services---
      search-engine
+     restclient
      ;; ---others---
      (spacemacs-layouts :variables layouts-enable-autosave nil
                         layouts-autosave-delay 300)

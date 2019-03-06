@@ -2206,7 +2206,7 @@ Return the previous point-max before adding."
 ;;             ))
 
 (require 'fill-column-indicator)
-(setq fci-rule-column 80)
+;; (setq fci-rule-column 80)
 (add-hook 'prog-mode-hook 'fci-mode)
 
 (add-hook 'git-commit-mode-hook 'fci-mode)
@@ -2218,6 +2218,10 @@ Return the previous point-max before adding."
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
+
+
+(add-hook 'text-mode-hook 'turn-off-auto-fill)
+(add-hook 'org-mode-hook 'turn-off-auto-fill)
 
 (defun lengyueyang/hotspots ()
   "helm interface to my hotspots, which includes my locations,

@@ -3045,7 +3045,7 @@ This part is some customization not belong to the anterior part.
 #+BEGIN_SRC emacs-lisp
 
   (require 'fill-column-indicator)
-  (setq fci-rule-column 80)
+  ;; (setq fci-rule-column 80)
   (add-hook 'prog-mode-hook 'fci-mode)
 
   (add-hook 'git-commit-mode-hook 'fci-mode)
@@ -3070,6 +3070,9 @@ This part is some customization not belong to the anterior part.
   (add-hook 'R-mode-hook (lambda () (setq truncate-lines nil)))
   (add-hook 'python-mode-hook (lambda () (setq truncate-lines nil)))
 
+
+  (add-hook 'text-mode-hook 'turn-off-auto-fill)
+  (add-hook 'org-mode-hook 'turn-off-auto-fill)
 #+END_SRC
 
 ** Hotspots

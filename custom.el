@@ -19,7 +19,7 @@
  '(ob-ipython-driver-hostname "127.0.0.1")
  '(org-agenda-files
    (quote
-    ("~/Emacs-lengyue/Data scientist/Machine learning/ML Notes-lengyue.org" "/home/lengyue/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bioinformatics.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Booklists.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Bookmark.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Data scientist.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Elfeed.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Emacs.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Life.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Linux.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Notes.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Programming.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Research.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Resume.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Tools.org" "/home/lengyue/Emacs-lengyue/Wiki-lengyue/Wiki-lengyue.org")))
+    ("/home/lengyue/MEGA/Emacs-lengyue/GTD-lengyue/GTD-lengyue.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Bioinformatics.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Booklists.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Bookmark.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Contacts.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Data scientist.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Elfeed.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Emacs.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Life.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Linux.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Notes.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Programming.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Research.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Resume.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Tools.org" "/home/lengyue/MEGA/Emacs-lengyue/Wiki-lengyue/Wiki-lengyue.org")))
  '(org-agenda-skip-scheduled-if-deadline-is-shown (quote repeated-after-deadline))
  '(org-babel-python-command "python")
  '(org-edit-latex-create-master nil)
@@ -92,7 +92,8 @@
  '(python-shell-interpreter-args "-i")
  '(safe-local-variable-values
    (quote
-    ((org-download-image-dir . "~/MEGA/Kangfuzi/Data/Data_collection/kfz_img")
+    ((org-download-image-dir . "./img")
+     (org-download-image-dir . "~/MEGA/Kangfuzi/Data/Data_collection/kfz_img")
      (typescript-backend . tide)
      (typescript-backend . lsp)
      (javascript-backend . tern)
